@@ -4,6 +4,11 @@ import babel from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 
+const globals = {
+  react: 'React',
+  'react-dom': 'ReactDOM'
+}
+
 const componentsPath = path.join(__dirname, 'src/components')
 
 const files = fs.readdirSync(componentsPath)
@@ -33,11 +38,14 @@ const config = {
       exports: 'named',
       preserveModules: false,
       dir: 'lib',
+      globals
     },
     {
       format: 'es',
+      exports: 'named',
       preserveModules: true,
       dir: 'es',
+      globals
     }
   ],
   plugins: [
