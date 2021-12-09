@@ -12,7 +12,7 @@
   "typings": "typings/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && rollup -c",
+    "build": "rollup -c && tsc -p tsconfig.build.json",
     "preview": "vite preview"
   },
   "dependencies": {

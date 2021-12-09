@@ -8,6 +8,8 @@ const globals = {
   react: 'React',
   'react-dom': 'ReactDOM'
 }
+fs.rmSync('lib', { recursive: true, force: true })
+fs.rmSync('es', { recursive: true, force: true })
 
 const componentsPath = path.join(__dirname, 'src/components')
 
