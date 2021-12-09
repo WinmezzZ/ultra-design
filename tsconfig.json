@@ -13,12 +13,15 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": "./",
+    "declarationDir": "es",
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "paths": {
       "ultra-ui": ["components/*"]
     }
   },
-  "include": ["components"]
+  "include": ["components"],
+  "exclude": ["**/__tests__/**", "node_modules", "**/*.md", "src/.umi"]
 }

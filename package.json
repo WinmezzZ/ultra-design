@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "dumi dev",
     "build:doc": "dumi build",
-    "build:types": "tsc -p tsconfig.build.json",
+    "build:types": "tsc",
     "build:packages": "rollup -c",
     "build": "npm run build:packages && npm run build:types"
   },
@@ -25,6 +25,7 @@
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
+    "@babel/runtime": "^7.16.3",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
@@ -35,7 +36,6 @@
     "dumi": "^1.1.35",
     "rollup": "^2.60.2",
     "rollup-plugin-dts": "^4.0.1",
-    "typescript": "^4.4.4",
-    "vite": "^2.7.0"
+    "typescript": "^4.4.4"
   }
 }

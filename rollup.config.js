@@ -1,8 +1,15 @@
 import path from 'path'
 import fs from 'fs'
-import babel from '@rollup/plugin-babel'
+import babel, { getBabelOutputPlugin } from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
+import pkg from './package.json'
+
+const external = [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})]
+
+// IMPORTANT DO THIS!!! 
+// see https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
+external.push(/@babel\/runtime/)
 
 const globals = {
   react: 'React',
@@ -32,21 +39,20 @@ const componentEnties = files.map(name => {
 
 /** @type{import('rollup').RollupOptions*/
 const config = {
-  external: ['react', 'react-dom'],
+  external: external,
   input: componentEnties,
   output: [
     {
       format: 'cjs',
       preserveModules: true,
       dir: 'lib',
-      exports: 'default',
+      exports: 'named',
       globals
     },
     {
       format: 'es',
       preserveModules: true,
       dir: 'es',
-      exports: 'named',
       globals
     }
   ],
@@ -54,20 +60,14 @@ const config = {
     babel({
       exclude: 'node_modules/**',
       extensions,
-      babelHelpers: 'runtime',
+      babelHelpers: "runtime",
       "presets": [
-        [
-          "@babel/preset-env", 
-          {
-            "modules": false,
-            "useBuiltIns": false
-          }
-        ],
+        "@babel/preset-env",
         "@babel/preset-react",
         "@babel/preset-typescript"
       ],
-      "plugins": [
-        "@babel/plugin-transform-runtime"
+      plugins: [
+        ["@babel/plugin-transform-runtime",  { useESModules: true }]
       ]
     }),
     resolve({

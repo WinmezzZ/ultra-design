@@ -1,4 +1,8 @@
 import { FC } from "react";
+import getElementById from '../utils/getElementById';
+import Text from "../text";
+
+export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger'
 
 export interface ButtonProps {
   /**
@@ -14,11 +18,17 @@ export interface ButtonProps {
   size?: Size
 }
 
-export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger'
-
 const Button: FC<ButtonProps> = (props) => {
   const { theme, size, ...rest } = props
-  return <button {...rest} />
+
+  console.log(getElementById('1'))
+  return <button {...rest}>
+    <Text></Text>
+  </button>
+}
+
+Button.defaultProps = {
+  theme: 'light'
 }
 
 export default Button
