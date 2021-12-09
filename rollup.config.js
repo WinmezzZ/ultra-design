@@ -11,7 +11,7 @@ const globals = {
 fs.rmSync('lib', { recursive: true, force: true })
 fs.rmSync('es', { recursive: true, force: true })
 
-const componentsPath = path.join(__dirname, 'src/components')
+const componentsPath = path.join(__dirname, 'components')
 
 const files = fs.readdirSync(componentsPath)
 
