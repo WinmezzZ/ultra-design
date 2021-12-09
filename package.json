@@ -2,21 +2,18 @@
   "name": "ultra-ui",
   "version": "0.0.0",
   "files": [
-    "dist",
     "lib",
     "es"
   ],
   "main": "lib/index.js",
   "module": "es/index.js",
-  "unpkg": "dist/index.js",
-  "typings": "typings/index.d.ts",
+  "typings": "es/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && rollup -c",
+    "build": "rollup -c && tsc -p tsconfig.build.json",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "@geist-ui/react": "^2.2.0",
+  "peerDependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
