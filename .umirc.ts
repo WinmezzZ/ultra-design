@@ -8,10 +8,10 @@ export default defineConfig({
   outputPath: 'docs-dist',
   mode: 'site',
   resolve: {
-    includes: ['docs', 'src/components'],
+    includes: ['docs', 'components'],
   },
   alias: {
-    'ultra-ui': path.resolve(__dirname, 'src/components')
+    'ultra-ui': path.resolve(__dirname, 'components')
   },
   navs: [
     null,
