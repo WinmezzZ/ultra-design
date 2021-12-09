@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-export interface ButtonProps {
+export interface InputProps {
   /**
    * @description.zh-CN 主题色
    * @description.en-US theme color
@@ -16,9 +16,9 @@ export interface ButtonProps {
 
 export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger'
 
-const Button: FC<ButtonProps> = (props) => {
+const Input: FC<InputProps> = (props) => {
   const { theme, size, ...rest } = props
-  return <button {...rest} />
+  return <input {...rest} />
 }
 
-export default Button
+export default Input

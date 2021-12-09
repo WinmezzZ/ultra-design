@@ -9,8 +9,10 @@
   "module": "es/index.js",
   "typings": "es/index.d.ts",
   "scripts": {
-    "dev": "vite",
-    "build": "rollup -c && tsc -p tsconfig.build.json",
+    "dev": "dumi dev",
+    "build:doc": "dumi build",
+    "build:type": "tsc -p tsconfig.build.json",
+    "build": "rollup -c && npm run build:type",
     "preview": "vite preview"
   },
   "peerDependencies": {
@@ -30,6 +32,7 @@
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@vitejs/plugin-react": "^1.0.7",
+    "dumi": "^1.1.35",
     "rollup": "^2.60.2",
     "typescript": "^4.4.4",
     "vite": "^2.7.0"

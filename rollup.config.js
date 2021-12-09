@@ -9,6 +9,9 @@ const globals = {
   'react-dom': 'ReactDOM'
 }
 
+fs.rmSync('./lib', { recursive: true, force: true })
+fs.rmSync('./es', { recursive: true, force: true })
+
 const componentsPath = path.join(__dirname, 'src/components')
 
 const files = fs.readdirSync(componentsPath)
@@ -36,7 +39,7 @@ const config = {
     {
       format: 'commonjs',
       exports: 'named',
-      preserveModules: false,
+      preserveModules: true,
       dir: 'lib',
       globals
     },
@@ -52,7 +55,21 @@ const config = {
     babel({
       exclude: 'node_modules/**',
       extensions,
-      babelHelpers: 'runtime'
+      babelHelpers: 'runtime',
+      presets: [
+        [
+          '@babel/preset-env', 
+          {
+            "modules": false,
+            "useBuiltIns": false
+          }
+        ],
+        '@babel/preset-react',
+        '@babel/preset-typescript'
+      ],
+      plugins: [
+        '@babel/plugin-transform-runtime'
+      ]
     }),
     resolve({
       extensions
