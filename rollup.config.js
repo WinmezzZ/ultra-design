@@ -8,8 +8,8 @@ const globals = {
   react: 'React',
   'react-dom': 'ReactDOM'
 }
-fs.rmSync('lib', { recursive: true, force: true })
-fs.rmSync('es', { recursive: true, force: true })
+fs.rmSync('./lib', { recursive: true, force: true })
+fs.rmSync('./es', { recursive: true, force: true })
 
 const componentsPath = path.join(__dirname, 'components')
 
@@ -36,17 +36,17 @@ const config = {
   input: componentEnties,
   output: [
     {
-      format: 'commonjs',
-      exports: 'named',
-      preserveModules: false,
+      format: 'cjs',
+      preserveModules: true,
       dir: 'lib',
+      exports: 'default',
       globals
     },
     {
       format: 'es',
-      exports: 'named',
       preserveModules: true,
       dir: 'es',
+      exports: 'named',
       globals
     }
   ],
@@ -54,7 +54,21 @@ const config = {
     babel({
       exclude: 'node_modules/**',
       extensions,
-      babelHelpers: 'runtime'
+      babelHelpers: 'runtime',
+      "presets": [
+        [
+          "@babel/preset-env", 
+          {
+            "modules": false,
+            "useBuiltIns": false
+          }
+        ],
+        "@babel/preset-react",
+        "@babel/preset-typescript"
+      ],
+      "plugins": [
+        "@babel/plugin-transform-runtime"
+      ]
     }),
     resolve({
       extensions
