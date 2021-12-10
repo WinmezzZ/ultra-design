@@ -19,7 +19,7 @@
     "emitDeclarationOnly": true,
     "baseUrl": ".",
     "paths": {
-      "ultra-ui": ["./components/index.ts"]
+      "ultra-design": ["./components/index.ts"]
     }
   },
   "include": ["./components"],

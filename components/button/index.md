@@ -11,7 +11,7 @@ Demo:
 
 ```tsx
 import React from 'react';
-import { Button, ConfigProvider  } from 'ultra-ui'
+import { Button, ConfigProvider  } from 'ultra-design'
 
 export default () => <ConfigProvider size="mini"><Button>BUtton</Button></ConfigProvider> ;
 ```

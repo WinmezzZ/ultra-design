@@ -2,7 +2,7 @@ import { defineConfig } from 'dumi';
 import path from 'path';
 
 export default defineConfig({
-  title: 'ultra-ui',
+  title: 'ultra-design',
   favicon: 'https://cdn.hyyar.com/favicon.ico',
   logo: 'https://cdn.hyyar.com/logo.jpg',
   outputPath: 'docs-dist',
@@ -11,13 +11,13 @@ export default defineConfig({
     includes: ['docs', 'components'],
   },
   alias: {
-    'ultra-ui': path.resolve(__dirname, 'components')
+    'ultra-design': path.resolve(__dirname, 'components')
   },
   navs: [
     null,
     {
       title: 'Github',
-      path: 'https://github.com/WinmezzZ/ultra-ui',
+      path: 'https://github.com/WinmezzZ/ultra-design',
     },
   ],
   // more config: https://d.umijs.org/config

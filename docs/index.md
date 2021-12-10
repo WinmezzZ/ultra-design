@@ -1,7 +1,7 @@
 ---
 hero:
-  title: ultra-ui
-  desc: ultra-ui site example
+  title: ultra-design
+  desc: ultra-design site example
   actions:
     - text: Getting Started
       link: /components
@@ -18,4 +18,4 @@ features:
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](https://d.umijs.org)
 ---
 
-## Hello ultra-ui!
+## Hello ultra-design!

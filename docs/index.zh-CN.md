@@ -1,7 +1,7 @@
 ---
 hero:
-  title: ultra-ui
-  desc: ultra-ui 文档
+  title: ultra-design
+  desc: ultra-design 文档
   actions:
     - text: 起步
       link: /components
@@ -18,4 +18,4 @@ features:
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](https://d.umijs.org)
 ---
 
-## Hello ultra-ui!
+## Hello ultra-design!

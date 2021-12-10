@@ -11,7 +11,7 @@ Demo:
 
 ```tsx
 import React from 'react';
-import { Button } from 'ultra-ui';
+import { Button } from 'ultra-design';
 
 export default () => <Button>按钮</Button>;
 ```
