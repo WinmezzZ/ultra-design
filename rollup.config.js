@@ -1,11 +1,11 @@
 import path from 'path'
 import fs from 'fs'
-import babel, { getBabelOutputPlugin } from '@rollup/plugin-babel'
+import babel from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import pkg from './package.json'
 
-const external = [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})]
+const external = [...Object.keys(pkg.devDependencies || {}), ...Object.keys(pkg.peerDependencies || {})]
 
 // IMPORTANT DO THIS!!! 
 // see https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
@@ -67,7 +67,7 @@ const config = {
         "@babel/preset-typescript"
       ],
       plugins: [
-        ["@babel/plugin-transform-runtime",  { useESModules: true }]
+        "@babel/plugin-transform-runtime"
       ]
     }),
     resolve({

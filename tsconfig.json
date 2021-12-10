@@ -14,14 +14,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "baseUrl": "./",
     "declarationDir": "es",
     "declaration": true,
     "emitDeclarationOnly": true,
+    "baseUrl": "./",
     "paths": {
-      "ultra-ui": ["components/*"]
+      "ultra-ui": ["components/index.ts"]
     }
   },
   "include": ["components"],
-  "exclude": ["**/__tests__/**", "node_modules", "**/*.md", "src/.umi"]
+  "exclude": ["**/__tests__/**", "node_modules", "**/*.md", ".umi"]
 }
