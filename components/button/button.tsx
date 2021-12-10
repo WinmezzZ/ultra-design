@@ -1,34 +1,24 @@
+import PropTypes from 'prop-types';
+import { ComponentCommonProps, componentDefaultProps } from '../../components/config-provider';
+import { useConfigContext } from '../../components/config-provider/useConfigContext';
 import { FC } from 'react';
-import Text from '../text';
 
 export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger';
 
-export interface ButtonProps {
-  /**
-   * @description.zh-CN 主题色
-   * @description.en-US theme color
-   */
-  theme?: 'dark' | 'light';
-  /**
-   * @description.zh-CN 尺寸
-   * @description.en-US size
-   * @default 'middle'
-   */
-  size?: Size;
-}
+export interface ButtonProps extends ComponentCommonProps {}
 
 const Button: FC<ButtonProps> = props => {
-  const { theme, size, ...rest } = props;
+  const { children, ...commonProps } = props;
 
-  return (
-    <button {...rest}>
-      <Text></Text>
-    </button>
-  );
+  const configContext = useConfigContext();
+
+  const commonContext = { ...configContext, ...commonProps };
+
+  return <button>{children}</button>;
 };
 
 Button.defaultProps = {
-  theme: 'light',
+  ...componentDefaultProps,
 };
 
 export default Button;

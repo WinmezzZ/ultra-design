@@ -11,9 +11,9 @@ Demo:
 
 ```tsx
 import React from 'react';
-import { Button } from 'ultra-ui'
+import { Button, ConfigProvider  } from 'ultra-ui'
 
-export default () => <Button>BUtton</Button>;
+export default () => <ConfigProvider size="mini"><Button>BUtton</Button></ConfigProvider> ;
 ```
 
 <API src="./index.ts" />

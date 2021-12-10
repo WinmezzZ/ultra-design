@@ -17,11 +17,11 @@
     "declarationDir": "es",
     "declaration": true,
     "emitDeclarationOnly": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "ultra-ui": ["components/index.ts"]
+      "ultra-ui": ["./components/index.ts"]
     }
   },
-  "include": ["components"],
+  "include": ["./components"],
   "exclude": ["**/__tests__/**", "node_modules", "**/*.md", ".umi"]
 }

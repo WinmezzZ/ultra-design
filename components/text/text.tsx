@@ -1,6 +1,8 @@
 import { FC } from 'react';
 
-export interface TextProps {}
+export interface TextProps {
+  color: string;
+}
 
 const Text: FC<TextProps> = props => {
   return <span {...props} />;
