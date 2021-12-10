@@ -37,11 +37,9 @@ const ConfigProvider: FC<ConfigContextOptions> = props => {
 
   const config: ConfigContextOptions = { ...configContextOptions, ...rest };
 
-  return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
-};
+  console.log(config);
 
-ConfigProvider.defaultProps = {
-  ...componentDefaultProps,
+  return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
 };
 
 export default ConfigProvider;

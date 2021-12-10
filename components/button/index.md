@@ -1,5 +1,6 @@
 ---
 nav:
+  title: Components
   path: /components
 group:
   title: Basic
@@ -11,9 +12,9 @@ Demo:
 
 ```tsx
 import React from 'react';
-import { Button, ConfigProvider  } from 'ultra-design'
+import { Button,   } from 'ultra-design'
 
-export default () => <ConfigProvider size="mini"><Button>BUtton</Button></ConfigProvider> ;
+export default () => <Button>Button</Button>
 ```
 
 <API src="./index.ts" />

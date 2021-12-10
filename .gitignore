@@ -6,3 +6,4 @@ lib
 dist-ssr
 *.local
 .umi
+docs-dist

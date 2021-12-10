@@ -22,6 +22,6 @@
       "ultra-design": ["./components/index.ts"]
     }
   },
-  "include": ["./components"],
+  "include": ["./components", "env.d.ts"],
   "exclude": ["**/__tests__/**", "node_modules", "**/*.md", ".umi"]
 }

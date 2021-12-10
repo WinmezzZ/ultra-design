@@ -20,5 +20,12 @@ export default defineConfig({
       path: 'https://github.com/WinmezzZ/ultra-design',
     },
   ],
+  extraBabelPresets: [
+    ['@umijs/deps/compiled/babel/preset-react', { runtime: 'automatic', importSource: '@emotion/react' }]
+  ],
+  extraBabelPlugins: [
+    ['@emotion/babel-plugin']
+  ],
+  ssr: {}
   // more config: https://d.umijs.org/config
 });

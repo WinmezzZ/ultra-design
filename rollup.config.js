@@ -10,6 +10,7 @@ const external = [...Object.keys(pkg.devDependencies || {}), ...Object.keys(pkg.
 // IMPORTANT DO THIS!!!
 // see https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
 external.push(/@babel\/runtime/);
+external.push(/@emotion/);
 
 const globals = {
   react: 'React',
@@ -66,7 +67,11 @@ const config = {
       exclude: 'node_modules/**',
       extensions,
       babelHelpers: 'runtime',
-      presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+      presets: [
+        '@babel/preset-env',
+        ['@babel/preset-react', { runtime: 'automatic', importSource: '@emotion/react' }],
+        '@babel/preset-typescript',
+      ],
       plugins: ['@babel/plugin-transform-runtime', 'babel-plugin-typescript-to-proptypes'],
     }),
     resolve({
