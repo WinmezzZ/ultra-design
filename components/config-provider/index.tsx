@@ -1,14 +1,9 @@
 import { createContext, FC } from 'react';
-import { Theme } from './theme';
+import { defaultTheme, Theme } from './theme';
 
 export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger';
 
 export interface ComponentCommonProps {
-  /**
-   * @description.zh-CN 主题色
-   * @description.en-US theme color
-   */
-  theme?: Theme;
   /**
    * @description.zh-CN 尺寸
    * @description.en-US size
@@ -17,22 +12,32 @@ export interface ComponentCommonProps {
   size?: Size;
 }
 
+export interface ConfigCommonOptions {
+  /**
+   * @description.zh-CN 主题色
+   * @description.en-US theme color
+   */
+  theme?: Theme;
+}
+
 export const componentDefaultProps: ComponentCommonProps = {
-  theme: {
-    mode: 'light',
-  },
   size: 'middle',
 };
 
-export interface ConfigContextOptions extends ComponentCommonProps {}
+const configCommonOptions: ConfigCommonOptions = {
+  theme: defaultTheme,
+};
+
+export interface ConfigContextOptions extends ComponentCommonProps, ConfigCommonOptions {}
 
 const configContextOptions = {
   ...componentDefaultProps,
+  ...configCommonOptions,
 };
 
 export const ConfigContext = createContext<ConfigContextOptions>(configContextOptions);
 
-const ConfigProvider: FC<ConfigContextOptions> = props => {
+const ConfigProvider: FC<Partial<ConfigContextOptions>> = props => {
   const { children, ...rest } = props;
 
   const config: ConfigContextOptions = { ...configContextOptions, ...rest };

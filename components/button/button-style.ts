@@ -16,7 +16,7 @@ const buttonSizeStyleMap: Record<Size, React.CSSProperties> = {
     padding: '2px 10px',
   },
   middle: {
-    height: 28,
+    height: 32,
     padding: '4px 15px',
   },
   large: {
@@ -29,7 +29,59 @@ const buttonSizeStyleMap: Record<Size, React.CSSProperties> = {
   },
 };
 
-export const buttonStyles = (props: ButtonProps) => css`
-  height: ${buttonSizeStyleMap[props.size!].height}px;
-  padding: ${buttonSizeStyleMap[props.size!].padding};
-`;
+const buttonTypeStyleMap = (props: ButtonStyleProps) => {
+  const { theme, type } = props;
+  const { mode } = props.theme!;
+
+  const { backgroundColor, textColor, borderColor, reverseTextColor } = theme![mode];
+
+  const bgColor = type === 'primary' ? theme?.style.primaryColor : backgroundColor;
+  const txtColor = type === 'primary' ? reverseTextColor : textColor;
+  const bdColor = ['text', 'primary'].includes(type as string) ? 'transparent' : borderColor;
+  let baseStyle = `
+    background-color: ${bgColor};
+    color: ${txtColor};
+    border-color: ${bdColor};
+  `;
+
+  if (type === 'text') {
+    baseStyle += `
+      border: none;
+      color: ${theme!.style.primaryColor};
+    `;
+  } else if (type === 'dashed') {
+    baseStyle += `border: 1px dashed #ccc;`;
+  } else if (type === 'primary') {
+    baseStyle += `border-color: transparent;`;
+  }
+
+  return baseStyle;
+};
+
+export const buttonStyles = (props: ButtonStyleProps) => {
+  // const { theme, type } = props;
+  // const { mode } = props.theme!;
+
+  return css`
+    height: ${buttonSizeStyleMap[props.size!].height}px;
+    padding: ${buttonSizeStyleMap[props.size!].padding};
+    box-sizing: border-box;
+    display: inline-block;
+    border-radius: ${props.theme!.style.radius}px;
+    font-weight: 400;
+    font-size: 14px;
+    user-select: none;
+    outline: none;
+    text-transform: capitalize;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    transition: background-color 200ms ease 0ms, box-shadow 200ms ease 0ms, border 200ms ease 0ms, color 200ms ease 0ms;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid transparent;
+    cursor: pointer;
+    box-shadow: 0 2px #00000004;
+    ${buttonTypeStyleMap(props)}
+  `;
+};
