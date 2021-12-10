@@ -3,11 +3,9 @@ node_modules*
 dist
 lib
 es
-.umi
+.umi/*
 *.svg
 *.ico
-*.json
 .gitignore
-*.md
 *.log
 *.lock
