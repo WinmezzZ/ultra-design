@@ -1,10 +1,9 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-export interface TextProps {
-}
+export interface TextProps {}
 
-const Text: FC<TextProps> = (props) => {
-  return <span {...props} />
-}
+const Text: FC<TextProps> = props => {
+  return <span {...props} />;
+};
 
-export default Text
+export default Text;

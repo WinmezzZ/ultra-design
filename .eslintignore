@@ -1,0 +1,13 @@
+!**/.eslintrc*
+node_modules*
+dist
+lib
+es
+.umi
+*.svg
+*.ico
+*.json
+.gitignore
+*.md
+*.log
+*.lock

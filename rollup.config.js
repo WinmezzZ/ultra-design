@@ -1,41 +1,46 @@
-import path from 'path'
-import fs from 'fs'
-import babel from '@rollup/plugin-babel'
-import resolve from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-import pkg from './package.json'
+import path from 'path';
+import fs from 'fs';
+import babel from '@rollup/plugin-babel';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import pkg from './package.json';
 
-const external = [...Object.keys(pkg.devDependencies || {}), ...Object.keys(pkg.peerDependencies || {})]
+const external = [...Object.keys(pkg.devDependencies || {}), ...Object.keys(pkg.peerDependencies || {})];
 
-// IMPORTANT DO THIS!!! 
+// IMPORTANT DO THIS!!!
 // see https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
-external.push(/@babel\/runtime/)
+external.push(/@babel\/runtime/);
 
 const globals = {
   react: 'React',
-  'react-dom': 'ReactDOM'
-}
-fs.rmSync('./lib', { recursive: true, force: true })
-fs.rmSync('./es', { recursive: true, force: true })
+  'react-dom': 'ReactDOM',
+};
 
-const componentsPath = path.join(__dirname, 'components')
+fs.rmSync('./lib', { recursive: true, force: true });
+fs.rmSync('./es', { recursive: true, force: true });
 
-const files = fs.readdirSync(componentsPath)
+const componentsPath = path.join(__dirname, 'components');
 
-const extensions = ['.js', '.jsx', '.ts', '.tsx']
+const files = fs.readdirSync(componentsPath);
 
-const componentEnties = files.map(name => {
-  const comPath = path.join(componentsPath, name)
-  const entry = path.join(comPath, 'index.ts')
+const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
-  const stat = fs.statSync(comPath)
-  if (!stat.isDirectory()) return null
+const componentEnties = files
+  .map(name => {
+    const comPath = path.join(componentsPath, name);
+    const entry = path.join(comPath, 'index.ts');
 
-  const hasFile = fs.existsSync(entry)
-  if (!hasFile) return null
-  
-  return entry
-}).filter(c => c)
+    const stat = fs.statSync(comPath);
+
+    if (!stat.isDirectory()) return null;
+
+    const hasFile = fs.existsSync(entry);
+
+    if (!hasFile) return null;
+
+    return entry;
+  })
+  .filter(c => c);
 
 /** @type{import('rollup').RollupOptions*/
 const config = {
@@ -47,34 +52,28 @@ const config = {
       preserveModules: true,
       dir: 'lib',
       exports: 'named',
-      globals
+      globals,
     },
     {
       format: 'es',
       preserveModules: true,
       dir: 'es',
-      globals
-    }
+      globals,
+    },
   ],
   plugins: [
     babel({
       exclude: 'node_modules/**',
       extensions,
-      babelHelpers: "runtime",
-      "presets": [
-        "@babel/preset-env",
-        "@babel/preset-react",
-        "@babel/preset-typescript"
-      ],
-      plugins: [
-        "@babel/plugin-transform-runtime"
-      ]
+      babelHelpers: 'runtime',
+      presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+      plugins: ['@babel/plugin-transform-runtime'],
     }),
     resolve({
-      extensions
+      extensions,
     }),
-    commonjs()
-  ]
-}
+    commonjs(),
+  ],
+};
 
-export default config
+export default config;
