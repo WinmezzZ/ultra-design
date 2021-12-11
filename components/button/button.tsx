@@ -1,5 +1,5 @@
-import { ComponentCommonProps } from '../../components/config-provider';
-import { useConfigContext } from '../../components/config-provider/useConfigContext';
+import { ComponentCommonProps } from '../config-provider';
+import { useConfigContext } from '../config-provider/useConfigContext';
 import { FC } from 'react';
 import { buttonStyles } from './button-style';
 

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Size } from 'components/config-provider';
+import { Size } from '../config-provider';
 import React from 'react';
 import { ConfigContextOptions } from 'ultra-design';
 import { ButtonProps } from '.';

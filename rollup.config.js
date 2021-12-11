@@ -5,12 +5,12 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import pkg from './package.json';
 
-const external = [...Object.keys(pkg.devDependencies || {}), ...Object.keys(pkg.peerDependencies || {})];
+const external = ['react', 'react-dom'];
 
 // IMPORTANT DO THIS!!!
 // see https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
 external.push(/@babel\/runtime/);
-external.push(/@emotion/);
+external.push(/@emotion\/react/);
 
 const globals = {
   react: 'React',
@@ -43,6 +43,8 @@ const componentEnties = files
   })
   .filter(c => c);
 
+componentEnties.push(path.resolve('components/index.ts'));
+
 /** @type{import('rollup').RollupOptions*/
 const config = {
   external: external,
@@ -67,15 +69,18 @@ const config = {
       exclude: 'node_modules/**',
       extensions,
       babelHelpers: 'runtime',
+      ignore: ['node_modules/**'],
       presets: [
-        '@babel/preset-env',
+        ['@babel/preset-env', { modules: false }],
         ['@babel/preset-react', { runtime: 'automatic', importSource: '@emotion/react' }],
         '@babel/preset-typescript',
       ],
-      plugins: ['@babel/plugin-transform-runtime', 'babel-plugin-typescript-to-proptypes'],
+      plugins: [['@babel/plugin-transform-runtime', { useEsModules: true }]],
     }),
     resolve({
+      browser: true,
       extensions,
+      resolveOnly: [/^(?!react$)/, /^(?!react-dom$)/],
     }),
     commonjs(),
   ],
