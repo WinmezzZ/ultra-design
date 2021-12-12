@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash-es';
 import { createContext, FC } from 'react';
 import { defaultTheme, Theme } from './theme';
 

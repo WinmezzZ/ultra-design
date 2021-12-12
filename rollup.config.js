@@ -3,11 +3,12 @@ import fs from 'fs';
 import babel from '@rollup/plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import pkg from './package.json';
 
 const external = ['react', 'react-dom'];
 
 // https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
-const esExtelrnals = [...external, /@emotion\/react/, /@babel\/runtime/];
+const esExtelrnals = [...external, /@emotion\/react/, /@babel\/runtime/, ...Object.keys(pkg.dependencies)];
 
 const globals = {
   react: 'React',
