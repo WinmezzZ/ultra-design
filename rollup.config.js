@@ -6,10 +6,8 @@ import commonjs from '@rollup/plugin-commonjs';
 
 const external = ['react', 'react-dom'];
 
-// IMPORTANT DO THIS!!!
-// see https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
-external.push(/@babel\/runtime/);
-external.push(/@emotion\/react/);
+// https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
+const esExtelrnals = [...external, /@emotion\/react/, /@babel\/runtime/];
 
 const globals = {
   react: 'React',
@@ -18,6 +16,7 @@ const globals = {
 
 fs.rmSync('./lib', { recursive: true, force: true });
 fs.rmSync('./es', { recursive: true, force: true });
+fs.rmSync('./dist', { recursive: true, force: true });
 
 const componentsPath = path.join(__dirname, 'components');
 
@@ -42,47 +41,65 @@ const componentEnties = files
   })
   .filter(c => c);
 
-componentEnties.push(path.resolve('components/index.ts'));
+const entryInput = path.resolve('components/index.ts');
 
-/** @type{import('rollup').RollupOptions*/
-const config = {
-  external: external,
-  input: componentEnties,
-  output: [
-    {
-      format: 'cjs',
-      preserveModules: true,
-      dir: 'lib',
-      exports: 'named',
-      globals,
-    },
-    {
-      format: 'es',
-      preserveModules: true,
-      dir: 'es',
-      globals,
-    },
-  ],
-  plugins: [
-    babel({
-      exclude: 'node_modules/**',
-      extensions,
-      babelHelpers: 'runtime',
-      ignore: ['node_modules/**'],
-      presets: [
-        ['@babel/preset-env', { modules: false }],
-        ['@babel/preset-react', { runtime: 'automatic', importSource: '@emotion/react' }],
-        '@babel/preset-typescript',
-      ],
-      plugins: [['@babel/plugin-transform-runtime', { useEsModules: true }]],
-    }),
-    resolve({
-      browser: true,
-      extensions,
-      resolveOnly: [/^(?!react$)/, /^(?!react-dom$)/],
-    }),
-    commonjs(),
-  ],
-};
+componentEnties.push(entryInput);
 
-export default config;
+/** @type{import('rollup').OutputOptions[]}*/
+const output = [
+  {
+    format: 'cjs',
+    preserveModules: true,
+    dir: 'lib',
+    exports: 'named',
+    globals,
+  },
+  {
+    format: 'es',
+    preserveModules: true,
+    dir: 'es',
+    globals,
+  },
+  {
+    format: 'umd',
+    file: 'dist/index.js',
+    name: 'UltraDesign',
+    globals: {
+      ...globals,
+      '@emotion/react/jsx-runtime': 'jsxRuntime',
+      '@emotion/react': 'react$1',
+    },
+  },
+];
+
+const configs = output.map(item => {
+  /** @type{import('rollup').RollupOptions*/
+  const config = {
+    external: item.format === 'umd' ? external : esExtelrnals,
+    input: item.format === 'umd' ? entryInput : componentEnties,
+    output: item,
+    plugins: [
+      babel({
+        exclude: 'node_modules/**',
+        extensions,
+        babelHelpers: 'runtime',
+        ignore: ['node_modules/**'],
+        presets: [
+          ['@babel/preset-env', { modules: false }],
+          ['@babel/preset-react', { runtime: 'automatic', importSource: '@emotion/react' }],
+          '@babel/preset-typescript',
+        ],
+        plugins: [['@babel/plugin-transform-runtime', { useEsModules: item.format === 'es' }]],
+      }),
+      resolve({
+        browser: true,
+        extensions,
+      }),
+      commonjs(),
+    ],
+  };
+
+  return config;
+});
+
+export default configs;
