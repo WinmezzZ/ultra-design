@@ -35,7 +35,7 @@ export const defaultTheme: Theme = {
   dark: {
     textColor: '#FFFFFF',
     reverseTextColor: '#000000',
-    borderColor: '##434343',
+    borderColor: '#434343',
     backgroundColor: '#000000',
   },
 };

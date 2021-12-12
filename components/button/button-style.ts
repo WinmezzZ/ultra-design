@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
-import { Size } from '../config-provider';
+import { ComponentCommonProps, ConfigCommonOptions, Size } from '../config-provider';
 import React from 'react';
-import { ConfigContextOptions } from 'ultra-design';
 import { ButtonProps } from '.';
 
-export interface ButtonStyleProps extends ButtonProps, ConfigContextOptions {}
+export interface ButtonStyleProps
+  extends Omit<ButtonProps, keyof ComponentCommonProps>,
+    ComponentCommonProps,
+    ConfigCommonOptions {}
 
 const buttonSizeStyleMap: Record<Size, React.CSSProperties> = {
   mini: {
@@ -31,12 +33,12 @@ const buttonSizeStyleMap: Record<Size, React.CSSProperties> = {
 
 const buttonTypeStyleMap = (props: ButtonStyleProps) => {
   const { theme, type } = props;
-  const { mode } = props.theme!;
+  const { mode } = props.theme;
 
-  const { backgroundColor, textColor, borderColor, reverseTextColor } = theme![mode];
+  const { backgroundColor, textColor, borderColor } = theme[mode];
 
   const bgColor = type === 'primary' ? theme?.style.primaryColor : backgroundColor;
-  const txtColor = type === 'primary' ? reverseTextColor : textColor;
+  const txtColor = type === 'primary' ? '#fff' : textColor;
   const bdColor = ['text', 'primary'].includes(type as string) ? 'transparent' : borderColor;
   let baseStyle = `
     background-color: ${bgColor};
@@ -47,7 +49,7 @@ const buttonTypeStyleMap = (props: ButtonStyleProps) => {
   if (type === 'text') {
     baseStyle += `
       border: none;
-      color: ${theme!.style.primaryColor};
+      color: ${theme.style.primaryColor};
     `;
   } else if (type === 'dashed') {
     baseStyle += `border: 1px dashed #ccc;`;
@@ -60,14 +62,14 @@ const buttonTypeStyleMap = (props: ButtonStyleProps) => {
 
 export const buttonStyles = (props: ButtonStyleProps) => {
   // const { theme, type } = props;
-  // const { mode } = props.theme!;
+  // const { mode } = props.theme;
 
   return css`
-    height: ${buttonSizeStyleMap[props.size!].height}px;
-    padding: ${buttonSizeStyleMap[props.size!].padding};
+    height: ${buttonSizeStyleMap[props.size].height}px;
+    padding: ${buttonSizeStyleMap[props.size].padding};
     box-sizing: border-box;
     display: inline-block;
-    border-radius: ${props.theme!.style.radius}px;
+    border-radius: ${props.theme.style.radius}px;
     font-weight: 400;
     font-size: 14px;
     user-select: none;
