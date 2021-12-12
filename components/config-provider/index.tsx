@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { createContext, FC } from 'react';
 import { defaultTheme, Theme } from './theme';
 
@@ -9,7 +10,7 @@ export interface ComponentCommonProps {
    * @description.en-US size
    * @default 'middle'
    */
-  size?: Size;
+  size: Size;
 }
 
 export interface ConfigCommonOptions {
@@ -17,7 +18,7 @@ export interface ConfigCommonOptions {
    * @description.zh-CN 主题色
    * @description.en-US theme color
    */
-  theme?: Theme;
+  theme: Theme;
 }
 
 export const componentDefaultProps: ComponentCommonProps = {
@@ -40,9 +41,7 @@ export const ConfigContext = createContext<ConfigContextOptions>(configContextOp
 const ConfigProvider: FC<Partial<ConfigContextOptions>> = props => {
   const { children, ...rest } = props;
 
-  const config: ConfigContextOptions = { ...configContextOptions, ...rest };
-
-  console.log(config);
+  const config: ConfigContextOptions = _.merge(configContextOptions, rest);
 
   return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
 };
