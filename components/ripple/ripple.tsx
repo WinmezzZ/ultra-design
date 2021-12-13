@@ -1,36 +1,33 @@
 import { useCallbackState } from '../utils/useCallbackState';
 import { CSSProperties, useEffect, useRef } from 'react';
+import { css } from '@emotion/react';
 
-export interface RipplesProps {
+export interface RippleProps {
+  /**
+   * @description.zh-CN 效果持续时间
+   * @description.en-US effect duration
+   * @default true
+   */
   during?: number;
+  /**
+   * @description.zh-CN 涟漪的颜色
+   * @description.en-US ripple effect color
+   * @default true
+   */
   color?: string;
-  onMouseDown?: (ev: React.MouseEvent<HTMLDivElement>) => any;
+  /**
+   * className
+   */
   className?: string;
 }
 
-type State = Readonly<CSSProperties>;
-
-const boxStyle: CSSProperties = {
-  position: 'absolute',
-  width: '100%',
-  height: '100%',
-  overflow: 'hidden',
-  top: 0,
-  left: 0,
-};
-
-const Ripple: React.FC<RipplesProps> = props => {
-  const { children, during, color, onMouseDown: _onMouseDown, className } = props;
+const Ripple: React.FC<RippleProps> = props => {
+  const { during, color, className } = props;
 
   const timer = useRef({} as NodeJS.Timeout);
-  const [rippleStyle, setRippleStyle] = useCallbackState<State>({
-    position: 'absolute',
-    borderRadius: '50%',
+  const [rippleStyle, setRippleStyle] = useCallbackState<Readonly<CSSProperties>>({
     opacity: 0,
-    width: 35,
-    height: 35,
     transform: 'translate(-50%, -50%)',
-    pointerEvents: 'none',
   });
 
   useEffect(() => {
@@ -71,13 +68,10 @@ const Ripple: React.FC<RipplesProps> = props => {
         }, 50);
       },
     );
-
-    if (_onMouseDown) _onMouseDown(ev);
   };
 
   return (
-    <div {...props} className={`ultra-ripple ${className}`.trim()} style={boxStyle} onMouseDown={onMouseDown}>
-      {children}
+    <div {...props} className={`${className}`.trim()} css={styles} onMouseDown={onMouseDown}>
       <s style={rippleStyle} />
     </div>
   );
@@ -89,7 +83,20 @@ Ripple.defaultProps = {
   during: 600,
   color: 'rgba(0, 0, 0, .1)',
   className: '',
-  onMouseDown: () => {
-    //
-  },
 };
+
+const styles = css`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  s {
+    position: absolute;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    pointer-events: none;
+  }
+`;
