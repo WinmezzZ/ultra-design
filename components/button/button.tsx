@@ -2,6 +2,7 @@ import { ComponentCommonProps } from '../config-provider';
 import { useConfigContext } from '../config-provider/useConfigContext';
 import { buttonStyles } from './button-style';
 import React from 'react';
+import Ripple from '../ripple/ripple';
 
 export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger';
 
@@ -14,28 +15,36 @@ export interface BaseButtonProps {
    * @default 'default'
    */
   type?: ButtonType;
+
+  /**
+   * @description.zh-CN 开启涟漪效果
+   * @description.en-US enable ripple effect
+   * @default true
+   */
+  effect?: boolean;
 }
 
-export type NativeButtonProps = {
-  htmlType?: 'submit' | 'button' | 'reset';
-  onClick?: React.MouseEventHandler<HTMLElement>;
-} & BaseButtonProps &
-  Omit<React.AnchorHTMLAttributes<any>, 'type' | 'onClick'>;
-
-export interface ButtonProps extends Partial<ComponentCommonProps & NativeButtonProps> {}
+export interface ButtonProps extends Partial<ComponentCommonProps>, BaseButtonProps {}
 
 const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (props, ref) => {
-  const { children, size: _size, type: _type, ...rest } = props;
+  const { children, effect, type, ...rest } = props;
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
+
+  const rippleElement = effect && type !== 'text' ? <Ripple /> : null;
 
   return (
     <button ref={ref} css={buttonStyles(styleProps)} {...rest}>
       {children}
+      {rippleElement}
     </button>
   );
 };
 
 const Button = React.forwardRef(ButtonComponent);
+
+Button.defaultProps = {
+  effect: true,
+};
 
 export default Button;
