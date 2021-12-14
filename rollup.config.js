@@ -90,7 +90,13 @@ const configs = output.map(item => {
           ['@babel/preset-react', { runtime: 'automatic', importSource: '@emotion/react' }],
           '@babel/preset-typescript',
         ],
-        plugins: [['@babel/plugin-transform-runtime', { useEsModules: item.format === 'es' }]],
+        plugins: [
+          [
+            '@babel/plugin-transform-runtime',
+            // removed useEsModules option, see: https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
+            // { useEsModules: item.format === 'es' }
+          ],
+        ],
       }),
       resolve({
         browser: true,
