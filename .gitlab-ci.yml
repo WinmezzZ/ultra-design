@@ -27,6 +27,6 @@ build_and_deploy:
   script:
     - yarn build
     - echo "========== build success, start deploy ========="
-    - cp -r build/* /data/dynamic/blog/
+    - cp -r build/* /data/dynamic/ultra-design/
   tags:
     - deploy
