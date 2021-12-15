@@ -26,7 +26,7 @@ export interface BaseButtonProps {
 
 export interface ButtonProps extends Partial<ComponentCommonProps>, BaseButtonProps {}
 
-const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (props, ref) => {
+const ButtonComponent: React.ForwardRefRenderFunction<unknown, ButtonProps> = (props, ref) => {
   const { children, effect, type, ...rest } = props;
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
@@ -34,7 +34,7 @@ const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonP
   const rippleElement = effect && type !== 'text' ? <Ripple /> : null;
 
   return (
-    <button ref={ref} css={buttonStyles(styleProps)} {...rest}>
+    <button ref={ref as any} css={buttonStyles(styleProps)} {...rest}>
       {children}
       {rippleElement}
     </button>
