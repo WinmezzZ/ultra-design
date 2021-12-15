@@ -5,5 +5,5 @@ es
 lib
 dist-ssr
 *.local
-.umi
+.umi*
 docs-dist
