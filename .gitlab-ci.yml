@@ -1,0 +1,32 @@
+stages:
+  - install
+  - build
+
+cache:
+  key: ${CI_BUILD_REF_NAME}
+  paths:
+    - node_modules/
+
+install_packages:
+  stage: install
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      changes:
+        - 'package.json'
+      when: always
+    - when: never
+  script:
+    - yarn
+  tags:
+    - deploy
+
+build_and_deploy:
+  stage: build
+  only:
+    - master
+  script:
+    - yarn build
+    - echo "========== build success, start deploy ========="
+    - cp -r build/* /data/dynamic/blog/
+  tags:
+    - deploy
