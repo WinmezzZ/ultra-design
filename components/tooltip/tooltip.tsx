@@ -5,15 +5,16 @@ import { css } from '@emotion/react';
 
 import { useClickOutSide } from '../utils/useClickOutSide';
 export interface TooltipProps extends Partial<ComponentCommonProps> {
-  title?: string;
-  children: React.ReactElement;
+  title?: React.ReactNode;
   trigger?: 'hover' | 'click';
+  defaultVisible?: boolean;
+  visible?: boolean;
+  onVisibleChange?: (visible: boolean) => void;
 }
 
 const Tooltip: FC<TooltipProps> = props => {
-  const { children, trigger, title } = props;
-  const [visible, setVisible] = useState(false);
-
+  const { children, trigger, title, defaultVisible, visible: customVisible, onVisibleChange } = props;
+  const [visible, setVisible] = useState(defaultVisible);
   const [rect, setRect] = useState({} as DOMRect);
 
   // const childRef = useCallback((node: Element) => {
@@ -27,32 +28,35 @@ const Tooltip: FC<TooltipProps> = props => {
   const layerRef = useRef({} as HTMLDivElement);
 
   useEffect(() => {
-    console.log(childRef.current);
     if (!childRef.current) return;
     setRect(childRef.current.getBoundingClientRect());
   }, [childRef]);
 
-  useClickOutSide(layerRef, () => trigger === 'click' && setVisible(false), [childRef]);
+  const changeVisible = (visible: boolean) => {
+    setVisible(visible);
+    onVisibleChange?.(visible);
+  };
 
   useEffect(() => {
-    if (!childRef.current) return;
-    setRect(childRef.current.getBoundingClientRect());
-  }, [childRef]);
+    if (customVisible === undefined) return;
 
-  const child = React.cloneElement(children, {
+    changeVisible(customVisible);
+  }, [customVisible]);
+
+  const mouseEventHandler = (next: boolean) => trigger === 'hover' && changeVisible(next);
+  const clickEventHandler = () => trigger === 'click' && changeVisible(!visible);
+
+  useClickOutSide(layerRef, clickEventHandler, [childRef]);
+
+  if (!children) return null;
+
+  const resolvedChild = React.isValidElement(children) ? children : <span>{children}</span>;
+
+  const child = React.cloneElement(resolvedChild, {
     ref: childRef,
-    onMouseEnter: () => {
-      if (trigger !== 'hover') return;
-      setVisible(true);
-    },
-    onMouseLeave: () => {
-      if (trigger !== 'hover') return;
-      setVisible(false);
-    },
-    onClick: () => {
-      if (trigger !== 'click') return;
-      setVisible(!visible);
-    },
+    onMouseEnter: () => mouseEventHandler(true),
+    onMouseLeave: () => mouseEventHandler(false),
+    onClick: clickEventHandler,
   });
 
   return (
@@ -76,6 +80,7 @@ const Tooltip: FC<TooltipProps> = props => {
 
 Tooltip.defaultProps = {
   trigger: 'hover',
+  visible: false,
 };
 
 export default Tooltip;
