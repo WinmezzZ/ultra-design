@@ -10,12 +10,24 @@ export interface TooltipProps extends Partial<ComponentCommonProps> {
   defaultVisible?: boolean;
   visible?: boolean;
   onVisibleChange?: (visible: boolean) => void;
+  showDelay?: number;
+  hideDelay?: number;
 }
 
 const Tooltip: FC<TooltipProps> = props => {
-  const { children, trigger, title, defaultVisible, visible: customVisible, onVisibleChange } = props;
+  const {
+    children,
+    trigger,
+    title,
+    defaultVisible,
+    visible: customVisible,
+    onVisibleChange,
+    showDelay,
+    hideDelay,
+  } = props;
   const [visible, setVisible] = useState(defaultVisible);
   const [rect, setRect] = useState({} as DOMRect);
+  const timer = useRef<number>();
 
   // const childRef = useCallback((node: Element) => {
   //   if (node !== null) {
@@ -33,8 +45,26 @@ const Tooltip: FC<TooltipProps> = props => {
   }, [childRef]);
 
   const changeVisible = (visible: boolean) => {
-    setVisible(visible);
-    onVisibleChange?.(visible);
+    const clear = () => {
+      clearTimeout(timer.current);
+      timer.current = undefined;
+    };
+
+    const handler = (visible: boolean) => {
+      setVisible(visible);
+      onVisibleChange?.(visible);
+      clear();
+    };
+
+    clear();
+
+    if (visible) {
+      timer.current = window.setTimeout(() => handler(true), showDelay);
+
+      return;
+    }
+
+    timer.current = window.setTimeout(() => handler(false), hideDelay);
   };
 
   useEffect(() => {
@@ -81,6 +111,8 @@ const Tooltip: FC<TooltipProps> = props => {
 Tooltip.defaultProps = {
   trigger: 'hover',
   visible: false,
+  showDelay: 100,
+  hideDelay: 100,
 };
 
 export default Tooltip;
