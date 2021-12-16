@@ -22,19 +22,25 @@ export interface BaseButtonProps {
    * @default true
    */
   effect?: boolean;
+
+  /**
+   * @description.zh-CN 点击事件
+   * @description.click event
+   */
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export interface ButtonProps extends Partial<ComponentCommonProps>, React.PropsWithChildren<BaseButtonProps> {}
 
 const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (props, ref) => {
-  const { children, effect, type, ...rest } = props;
+  const { children, effect, type, onClick, ...rest } = props;
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
 
   const rippleElement = effect && type !== 'text' ? <Ripple /> : null;
 
   return (
-    <button ref={ref as any} css={buttonStyles(styleProps)} {...rest}>
+    <button ref={ref as any} css={buttonStyles(styleProps)} onClick={onClick} {...rest}>
       {children}
       {rippleElement}
     </button>
