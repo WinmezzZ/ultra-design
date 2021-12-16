@@ -1,6 +1,6 @@
 {
   "name": "ultra-design",
-  "version": "0.0.14-beta",
+  "version": "0.0.15-beta",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"

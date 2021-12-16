@@ -44,6 +44,50 @@ export default () => {
 
 ```
 
+**placement:**
+```tsx
+import React from 'react';
+import { Button, Tooltip } from 'ultra-design'
+
+export default () => {
+  return (
+    <div className="btn-margin-right-bottom" style={{ width: 400, height: 200 }}>
+      <div style={{ marginLeft: 70, whiteSpace: 'nowrap' }}>
+        <Tooltip placement="topLeft" title="哈哈">
+          <Button>TL</Button>
+        </Tooltip>
+        <Tooltip placement="top" title="哈哈">
+          <Button>Top</Button>
+        </Tooltip>
+        <Tooltip placement="topRight" title="哈哈">
+          <Button>TR</Button>
+        </Tooltip>
+      </div>
+
+      <div style={{ width: 70, float: 'right' }}>
+        <Tooltip placement="rightTop" title="哈哈">
+          <Button>RT</Button>
+        </Tooltip>
+        <Tooltip placement="right" title="哈哈">
+          <Button>Right</Button>
+        </Tooltip>
+        <Tooltip placement="rightBottom" title="哈哈">
+          <Button>RB</Button>
+        </Tooltip>
+      </div>
+      {
+      //   <div>
+      //   <Tooltip placement="bottom" title="哈哈">
+      //     <Button>Bottom</Button>
+      //   </Tooltip>
+      // </div>
+      }
+    </div>
+  )
+}
+
+```
+
 **default visible:**
 ```tsx
 import React from 'react';

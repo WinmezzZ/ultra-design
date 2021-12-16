@@ -13,7 +13,7 @@ export const four = 4;
 export const zeroDotThree = 0.2 + 0.1;
 export const fruitList = ['banana', 'oringe', 'apple'];
 
-export const callbackFn = cb => {
+export const callbackFn = (cb: any) => {
   setTimeout(() => {
     cb('data');
   }, 200);

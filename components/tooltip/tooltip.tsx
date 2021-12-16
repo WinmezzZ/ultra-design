@@ -4,9 +4,11 @@ import { createPortal } from 'react-dom';
 import { css } from '@emotion/react';
 
 import { useClickOutSide } from '../utils/useClickOutSide';
+import { getPosition, Placement } from './placement';
 export interface TooltipProps extends Partial<ComponentCommonProps> {
   title?: React.ReactNode;
   trigger?: 'hover' | 'click';
+  placement?: Placement;
   defaultVisible?: boolean;
   visible?: boolean;
   onVisibleChange?: (visible: boolean) => void;
@@ -19,6 +21,7 @@ const Tooltip: FC<TooltipProps> = props => {
     children,
     trigger,
     title,
+    placement,
     defaultVisible,
     visible: customVisible,
     onVisibleChange,
@@ -89,13 +92,25 @@ const Tooltip: FC<TooltipProps> = props => {
     onClick: clickEventHandler,
   });
 
+  // const updateRect = () => {
+  //   const position = getPosition(placement!, getRect(layerRef));
+
+  //   console.log(position);
+
+  //   setRect(position);
+  // };
+
+  // useEffect(() => {
+  //   updateRect();
+  // }, [visible]);
+
   return (
     <>
       {createPortal(
         <div css={styles}>
           {visible && (
             <div>
-              <div ref={layerRef} className="layer" style={{ top: rect.bottom, left: rect.left }}>
+              <div ref={layerRef} className="layer" style={getPosition(placement!, rect)}>
                 <div className="title">{title}</div>
               </div>
             </div>
@@ -111,6 +126,7 @@ const Tooltip: FC<TooltipProps> = props => {
 Tooltip.defaultProps = {
   trigger: 'hover',
   defaultVisible: false,
+  placement: 'bottom',
   showDelay: 100,
   hideDelay: 100,
 };
