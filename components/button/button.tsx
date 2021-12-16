@@ -24,9 +24,9 @@ export interface BaseButtonProps {
   effect?: boolean;
 }
 
-export interface ButtonProps extends Partial<ComponentCommonProps>, BaseButtonProps {}
+export interface ButtonProps extends Partial<ComponentCommonProps>, React.PropsWithChildren<BaseButtonProps> {}
 
-const ButtonComponent: React.ForwardRefRenderFunction<unknown, ButtonProps> = (props, ref) => {
+const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (props, ref) => {
   const { children, effect, type, ...rest } = props;
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
