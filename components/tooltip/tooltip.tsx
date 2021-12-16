@@ -110,7 +110,7 @@ const Tooltip: FC<TooltipProps> = props => {
 
 Tooltip.defaultProps = {
   trigger: 'hover',
-  visible: false,
+  defaultVisible: false,
   showDelay: 100,
   hideDelay: 100,
 };
@@ -132,6 +132,7 @@ const styles = css`
       word-wrap: break-word;
       padding: 4px 6px;
       min-width: 30px;
+      width: max-content;
       min-height: 20px;
     }
   }

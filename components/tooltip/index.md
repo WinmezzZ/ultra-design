@@ -8,22 +8,16 @@ group:
 
 ## Tooltip
 
-<!-- **basic usage:**
+**basic usage:**
 ```tsx
 import React from 'react';
 import { Button, Tooltip } from 'ultra-design'
 
 export default () => {
   return (
-    <div>
-      <Tooltip title="哈哈">
-        <Button>Hover Me</Button>
-      </Tooltip>
-
-      <Tooltip title="哈哈" trigger="click">
-        <Button>Click Me</Button>
-      </Tooltip>
-    </div>
+    <Tooltip title="哈哈">
+      <Button>Hover Me</Button>
+    </Tooltip>
   )
 }
 
@@ -59,13 +53,13 @@ export default () => {
   return (
     <div>
       <Tooltip defaultVisible title="哈哈" trigger="click">
-        Click Me
+        <Button>Click Me</Button>
       </Tooltip>
     </div>
   )
 }
 
-``` -->
+```
 
 **custon visible behavior:**
 ```tsx
@@ -76,13 +70,13 @@ export default () => {
   const [visible, setVisible] = React.useState(false)
   return (
     <div>
-      <Tooltip visible={visible} title={
-        <div style={{ width: 200}}>
-          <h2>23333</h2>
-          <Button onClick={() => setVisible(false)}>Close</Button>
+      <Tooltip visible={visible} onVisibleChange={v => setVisible(v)} title={
+        <div>
+          <h4>This is a title</h4>
+          <Button size="mini" onClick={() => setVisible(false)}>Close</Button>
         </div>
       } trigger="click">
-        <Button onClick={() => setVisible(!visible)}>Click Me</Button>
+        <Button>Click Me</Button>
       </Tooltip>
     </div>
   )
