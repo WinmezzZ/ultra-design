@@ -9,24 +9,25 @@ group:
 ## Tooltip
 
 **basic usage:**
+
 ```tsx
 import React from 'react';
-import { Button, Tooltip } from 'ultra-design'
+import { Button, Tooltip } from 'ultra-design';
 
 export default () => {
   return (
     <Tooltip title="哈哈">
       <Button>Hover Me</Button>
     </Tooltip>
-  )
-}
-
+  );
+};
 ```
 
 **trigger:**
+
 ```tsx
 import React from 'react';
-import { Button, Tooltip } from 'ultra-design'
+import { Button, Tooltip } from 'ultra-design';
 
 export default () => {
   return (
@@ -39,15 +40,15 @@ export default () => {
         <Button>Click Me</Button>
       </Tooltip>
     </div>
-  )
-}
-
+  );
+};
 ```
 
 **placement:**
+
 ```tsx
 import React from 'react';
-import { Button, Tooltip } from 'ultra-design'
+import { Button, Tooltip } from 'ultra-design';
 
 export default () => {
   return (
@@ -63,8 +64,18 @@ export default () => {
           <Button>TR</Button>
         </Tooltip>
       </div>
-
-      <div style={{ width: 70, float: 'right' }}>
+      <div style={{ width: 70, float: 'left' }}>
+        <Tooltip placement="leftTop" title="哈哈">
+          <Button>LT</Button>
+        </Tooltip>
+        <Tooltip placement="left" title="哈哈">
+          <Button>Left</Button>
+        </Tooltip>
+        <Tooltip placement="leftBottom" title="哈哈">
+          <Button>LB</Button>
+        </Tooltip>
+      </div>
+      <div style={{ width: 70, marginLeft: 304 }}>
         <Tooltip placement="rightTop" title="哈哈">
           <Button>RT</Button>
         </Tooltip>
@@ -75,23 +86,27 @@ export default () => {
           <Button>RB</Button>
         </Tooltip>
       </div>
-      {
-      //   <div>
-      //   <Tooltip placement="bottom" title="哈哈">
-      //     <Button>Bottom</Button>
-      //   </Tooltip>
-      // </div>
-      }
+      <div style={{ marginLeft: 70, clear: 'both', whiteSpace: 'nowrap' }}>
+        <Tooltip placement="bottomLeft" title="哈哈">
+          <Button>BL</Button>
+        </Tooltip>
+        <Tooltip placement="bottom" title="哈哈">
+          <Button>Bottom</Button>
+        </Tooltip>
+        <Tooltip placement="bottomRight" title="哈哈">
+          <Button>BR</Button>
+        </Tooltip>
+      </div>
     </div>
-  )
-}
-
+  );
+};
 ```
 
 **default visible:**
+
 ```tsx
 import React from 'react';
-import { Button, Tooltip } from 'ultra-design'
+import { Button, Tooltip } from 'ultra-design';
 
 export default () => {
   return (
@@ -100,33 +115,38 @@ export default () => {
         <Button>Click Me</Button>
       </Tooltip>
     </div>
-  )
-}
-
+  );
+};
 ```
 
 **custon visible behavior:**
+
 ```tsx
 import React from 'react';
-import { Button, Tooltip } from 'ultra-design'
+import { Button, Tooltip } from 'ultra-design';
 
 export default () => {
-  const [visible, setVisible] = React.useState(false)
+  const [visible, setVisible] = React.useState(false);
   return (
     <div>
-      <Tooltip visible={visible} onVisibleChange={v => setVisible(v)} title={
-        <div>
-          <h4>This is a title</h4>
-          <Button size="mini" onClick={() => setVisible(false)}>Close</Button>
-        </div>
-      } trigger="click">
+      <Tooltip
+        visible={visible}
+        onVisibleChange={v => setVisible(v)}
+        title={
+          <div>
+            <h4>This is a title</h4>
+            <Button size="mini" onClick={() => setVisible(false)}>
+              Close
+            </Button>
+          </div>
+        }
+        trigger="click"
+      >
         <Button>Click Me</Button>
       </Tooltip>
     </div>
-  )
-}
-
+  );
+};
 ```
 
 <API src="index.ts" />
-

@@ -19,9 +19,13 @@
     "emitDeclarationOnly": true,
     "baseUrl": ".",
     "paths": {
-      "ultra-design": ["./components/index.ts"]
+      "*": ["*"],
+      "ultra-design": ["components/index.ts"]
     }
   },
-  "include": ["./components", "env.d.ts"],
-  "exclude": ["**/__tests__/**", "node_modules", "**/*.md", ".umi"]
+  "include": [
+    "components",
+    "env.d.ts"
+  ],
+  "exclude": ["node_modules", "**/*.md", ".umi"]
 }

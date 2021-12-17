@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import { createRef, useState } from 'react';
 import { mount } from 'enzyme';
 import Button from '..';
 

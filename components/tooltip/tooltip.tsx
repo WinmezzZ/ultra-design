@@ -147,9 +147,9 @@ const styles = css`
       white-space: nowrap;
       word-wrap: break-word;
       padding: 4px 6px;
-      min-width: 30px;
       width: max-content;
-      min-height: 20px;
+      /* min-width: 30px;
+      min-height: 20px; */
     }
   }
 `;
