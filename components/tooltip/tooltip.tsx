@@ -1,10 +1,11 @@
-import { ComponentCommonProps } from '../config-provider';
+import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { css } from '@emotion/react';
 
 import { useClickOutSide } from '../utils/useClickOutSide';
 import { getPosition, getIconPosition, Placement } from './placement';
+import { useConfigContext } from '../config-provider/useConfigContext';
 export interface TooltipProps extends Partial<ComponentCommonProps> {
   title?: React.ReactNode;
   trigger?: 'hover' | 'click';
@@ -32,6 +33,8 @@ const Tooltip: FC<TooltipProps> = props => {
     showArrow,
     offset,
   } = props;
+  const configContext = useConfigContext();
+  const styleProps = { ...configContext, ...props };
   const [visible, setVisible] = useState(defaultVisible);
   const [rect, setRect] = useState({} as DOMRect);
   const timer = useRef<number>();
@@ -113,7 +116,7 @@ const Tooltip: FC<TooltipProps> = props => {
   return (
     <>
       {createPortal(
-        <div css={styles}>
+        <div css={styles(styleProps)}>
           {visible && (
             <div>
               <div ref={layerRef} className="layer" style={getPosition(placement!, rect, layerOffset)}>
@@ -142,30 +145,42 @@ Tooltip.defaultProps = {
 
 export default Tooltip;
 
-const styles = css`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  .layer {
+interface TooltipStyleProps
+  extends Omit<TooltipProps, keyof ComponentCommonProps>,
+    ComponentCommonProps,
+    ConfigCommonOptions {}
+
+const styles = (props: TooltipStyleProps) => {
+  const { mode } = props.theme;
+  const { secondReverseBgColor, reverseTextColor } = props.theme[mode];
+
+  return css`
     position: absolute;
-    background-color: #ccc;
-    border-radius: 4px;
-    .title {
-      white-space: nowrap;
-      word-wrap: break-word;
-      padding: 4px 6px;
-      width: max-content;
-      /* min-width: 30px;
-      min-height: 20px; */
-    }
-    .arrow {
+    top: 0;
+    left: 0;
+    width: 100%;
+    .layer {
       position: absolute;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 6px 7px 6px 0;
-      border-color: transparent ${'#ccc'} transparent transparent;
+      background-color: ${secondReverseBgColor};
+      color: ${reverseTextColor};
+      border-radius: 4px;
+      .title {
+        white-space: nowrap;
+        word-wrap: break-word;
+        padding: 4px 6px;
+        width: max-content;
+        font-size: 14px;
+        min-width: 30px;
+        min-height: 16px;
+      }
+      .arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 6px 7px 6px 0;
+        border-color: transparent ${secondReverseBgColor} transparent transparent;
+      }
     }
-  }
-`;
+  `;
+};
