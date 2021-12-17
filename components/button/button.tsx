@@ -53,4 +53,6 @@ Button.defaultProps = {
   effect: true,
 };
 
+Button.displayName = 'UltraButton';
+
 export default Button;

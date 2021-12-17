@@ -1,9 +1,19 @@
 node_modules
 .DS_Store
+
 dist
 es
 lib
-dist-ssr
-*.local
+
+# dumi
 .umi*
+dist-ssr
 docs-dist
+
+# testing
+coverage
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
