@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { css } from '@emotion/react';
 
 import { useClickOutSide } from '../utils/useClickOutSide';
-import { getPosition, Placement } from './placement';
+import { getPosition, getIconPosition, Placement } from './placement';
 export interface TooltipProps extends Partial<ComponentCommonProps> {
   title?: React.ReactNode;
   trigger?: 'hover' | 'click';
@@ -14,6 +14,8 @@ export interface TooltipProps extends Partial<ComponentCommonProps> {
   onVisibleChange?: (visible: boolean) => void;
   showDelay?: number;
   hideDelay?: number;
+  showArrow?: boolean;
+  offset?: number;
 }
 
 const Tooltip: FC<TooltipProps> = props => {
@@ -27,6 +29,8 @@ const Tooltip: FC<TooltipProps> = props => {
     onVisibleChange,
     showDelay,
     hideDelay,
+    showArrow,
+    offset,
   } = props;
   const [visible, setVisible] = useState(defaultVisible);
   const [rect, setRect] = useState({} as DOMRect);
@@ -38,6 +42,8 @@ const Tooltip: FC<TooltipProps> = props => {
   //     setRect(node.getBoundingClientRect());
   //   }
   // }, []);
+
+  const layerOffset = showArrow ? offset! : offset! - 6;
 
   const childRef = useRef<HTMLElement>();
   const layerRef = useRef({} as HTMLDivElement);
@@ -110,8 +116,9 @@ const Tooltip: FC<TooltipProps> = props => {
         <div css={styles}>
           {visible && (
             <div>
-              <div ref={layerRef} className="layer" style={getPosition(placement!, rect)}>
+              <div ref={layerRef} className="layer" style={getPosition(placement!, rect, layerOffset)}>
                 <div className="title">{title}</div>
+                {showArrow && <div className="arrow" style={getIconPosition(placement!)}></div>}
               </div>
             </div>
           )}
@@ -129,6 +136,8 @@ Tooltip.defaultProps = {
   placement: 'bottom',
   showDelay: 100,
   hideDelay: 100,
+  offset: 12,
+  showArrow: true,
 };
 
 export default Tooltip;
@@ -142,7 +151,6 @@ const styles = css`
     position: absolute;
     background-color: #ccc;
     border-radius: 4px;
-    box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
     .title {
       white-space: nowrap;
       word-wrap: break-word;
@@ -150,6 +158,14 @@ const styles = css`
       width: max-content;
       /* min-width: 30px;
       min-height: 20px; */
+    }
+    .arrow {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 6px 7px 6px 0;
+      border-color: transparent ${'#ccc'} transparent transparent;
     }
   }
 `;

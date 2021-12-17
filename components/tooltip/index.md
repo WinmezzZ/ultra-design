@@ -149,4 +149,34 @@ export default () => {
 };
 ```
 
-<API src="index.ts" />
+**hide arrow:**
+
+```tsx
+import React from 'react';
+import { Button, Tooltip } from 'ultra-design';
+
+export default () => {
+  return (
+    <Tooltip showArrow={false} title="哈哈">
+      <Button>Hover Me</Button>
+    </Tooltip>
+  );
+};
+```
+
+**layer offset:**
+
+```tsx
+import React from 'react';
+import { Button, Tooltip } from 'ultra-design';
+
+export default () => {
+  return (
+    <Tooltip offset={40} title="哈哈">
+      <Button>Hover Me</Button>
+    </Tooltip>
+  );
+};
+```
+
+<API src="index.ts" />;
