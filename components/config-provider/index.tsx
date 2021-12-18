@@ -36,9 +36,13 @@ const configContextOptions = {
   ...configCommonOptions,
 };
 
+type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>;
+};
+
 export const ConfigContext = createContext<ConfigContextOptions>(configContextOptions);
 
-const ConfigProvider: FC<Partial<ConfigContextOptions>> = props => {
+const ConfigProvider: FC<DeepPartial<ConfigContextOptions>> = props => {
   const { children, ...rest } = props;
 
   const config: ConfigContextOptions = _.merge(configContextOptions, rest);

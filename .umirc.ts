@@ -32,6 +32,7 @@ const config: IConfig = {
       }
 
       .tooltip-pisition button {
+        width: 70px;
         margin-left: 10px;
         margin-top: 10px;
       }
