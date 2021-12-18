@@ -1,4 +1,3 @@
-import { ComponentCommonProps } from '../config-provider';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useClickOutSide } from '../utils/useClickOutSide';
@@ -20,17 +19,69 @@ const defaultPositionRect: PositionRect = {
   y: -1000,
 };
 
-export interface TooltipProps extends Partial<ComponentCommonProps> {
+export interface TooltipProps {
+  /**
+   * @description.zh-CN 提示内容
+   * @description.en-US tooltip content
+   */
   title?: React.ReactNode;
+  /**
+   * @description.zh-CN 触发提示框的方式
+   * @description.en-US trigger mode
+   * @default 'hover'
+   */
   trigger?: 'hover' | 'click';
+  /**
+   * @description.zh-CN 提示框出现的方位
+   * @description.en-US tooltip position
+   * @default 'hover'
+   */
   placement?: Placement;
+  /**
+   * @description.zh-CN 是否默认显示
+   * @description.en-US position of the tooltip relative to the target
+   * @default true
+   */
   defaultVisible?: boolean;
+  /**
+   * @description.zh-CN 是否显示
+   * @description.en-US set visible as default
+   * @default false
+   */
   visible?: boolean;
+  /**
+   * @description.zh-CN 当提示框状态改变时触发
+   * @description.en-US call when visibility of the tooltip is changed
+   */
   onVisibleChange?: (visible: boolean) => void;
+  /**
+   * @description.zh-CN 在提示显示前的延迟
+   * @description.en-US delay before tooltip is shown
+   * @default 100
+   */
   showDelay?: number;
+  /**
+   * @description.zh-CN 关闭提示前的延迟
+   * @description.en-US delay before tooltip is hidden (only work in 'hover' mode)
+   * @default 100
+   */
   hideDelay?: number;
+  /**
+   * @description.zh-CN 是否显示箭头
+   * @description.en-US show arrow icon
+   * @default true
+   */
   showArrow?: boolean;
+  /**
+   * @description.zh-CN 提示框与目标之间的偏移
+   * @description.en-US distance between pop-up and target
+   * @default 'hover'
+   */
   offset?: number;
+  /**
+   * @description.zh-CN 弹出框的类名
+   * @description.en-US tclassName of layer box
+   */
   layerClassName?: string;
 }
 
