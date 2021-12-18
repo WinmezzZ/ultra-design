@@ -52,7 +52,7 @@ import { Button, Tooltip } from 'ultra-design';
 
 export default () => {
   return (
-    <div className="btn-margin-right-bottom" style={{ width: 400, height: 200 }}>
+    <div className="tooltip-pisition" style={{ width: 400, height: 200 }}>
       <div style={{ marginLeft: 70, whiteSpace: 'nowrap' }}>
         <Tooltip placement="topLeft" title="哈哈">
           <Button>TL</Button>

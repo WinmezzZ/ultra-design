@@ -6,6 +6,20 @@ import { css } from '@emotion/react';
 import { useClickOutSide } from '../utils/useClickOutSide';
 import { getPosition, getIconPosition, Placement } from './placement';
 import { useConfigContext } from '../config-provider/useConfigContext';
+
+export type PositionRect = Omit<DOMRect, 'toJSON'>;
+
+const defaultPositionRect: PositionRect = {
+  top: -1000,
+  left: -1000,
+  bottom: -1000,
+  right: -1000,
+  width: 0,
+  height: 0,
+  x: -1000,
+  y: -1000,
+};
+
 export interface TooltipProps extends Partial<ComponentCommonProps> {
   title?: React.ReactNode;
   trigger?: 'hover' | 'click';
@@ -36,7 +50,7 @@ const Tooltip: FC<TooltipProps> = props => {
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
   const [visible, setVisible] = useState(defaultVisible);
-  const [rect, setRect] = useState({} as DOMRect);
+  const [rect, setRect] = useState<PositionRect>(defaultPositionRect);
   const timer = useRef<number>();
 
   // const childRef = useCallback((node: Element) => {
@@ -53,7 +67,17 @@ const Tooltip: FC<TooltipProps> = props => {
 
   useEffect(() => {
     if (!childRef.current) return;
-    setRect(childRef.current.getBoundingClientRect());
+    const childRect = childRef.current.getBoundingClientRect();
+
+    setRect({
+      ...childRect,
+      width: childRect.width,
+      height: childRect.height,
+      top: childRect.top + document.documentElement.scrollTop,
+      bottom: childRect.bottom + document.documentElement.scrollTop,
+      left: childRect.left + document.documentElement.scrollLeft,
+      right: childRect.right + document.documentElement.scrollLeft,
+    });
   }, [childRef]);
 
   const changeVisible = (visible: boolean) => {
@@ -101,17 +125,8 @@ const Tooltip: FC<TooltipProps> = props => {
     onClick: clickEventHandler,
   });
 
-  // const updateRect = () => {
-  //   const position = getPosition(placement!, getRect(layerRef));
-
-  //   console.log(position);
-
-  //   setRect(position);
-  // };
-
-  // useEffect(() => {
-  //   updateRect();
-  // }, [visible]);
+  const layerStyle = getPosition(placement!, rect, layerOffset);
+  const ArrowStyle = getIconPosition(placement!);
 
   return (
     <>
@@ -119,9 +134,9 @@ const Tooltip: FC<TooltipProps> = props => {
         <div css={styles(styleProps)}>
           {visible && (
             <div>
-              <div ref={layerRef} className="layer" style={getPosition(placement!, rect, layerOffset)}>
+              <div ref={layerRef} className="layer" style={layerStyle}>
                 <div className="title">{title}</div>
-                {showArrow && <div className="arrow" style={getIconPosition(placement!)}></div>}
+                {showArrow && <div className="arrow" style={ArrowStyle}></div>}
               </div>
             </div>
           )}

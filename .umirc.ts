@@ -31,10 +31,9 @@ const config: IConfig = {
         margin-left: 10px;
       }
 
-      .btn-margin-right-bottom button {
+      .tooltip-pisition button {
         width: 70px;
-      }
-      .btn-margin-right-bottom button+button {
+        margin-left: 10px;
         margin-top: 10px;
       }
     `

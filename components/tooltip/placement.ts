@@ -1,5 +1,5 @@
-import { ReactiveDomReact } from '../utils/getRect';
 import React from 'react';
+import { PositionRect } from './tooltip';
 
 export type Placement =
   | 'topLeft'
@@ -27,7 +27,7 @@ export interface TooltipPosition {
   transform: string;
 }
 
-export const getPosition = (placement: Placement, rect: DOMRect, offset: number) => {
+export const getPosition = (placement: Placement, rect: PositionRect, offset: number) => {
   const placementPositions: Record<Placement, React.CSSProperties> = {
     topLeft: {
       top: `${rect.top - offset}px`,
