@@ -122,8 +122,6 @@ const Tooltip: FC<TooltipProps> = props => {
     if (!childRef.current) return;
     const childRect = childRef.current.getBoundingClientRect();
 
-    console.log(childRect);
-
     setRect({
       ...childRect,
       width: childRect.width,
