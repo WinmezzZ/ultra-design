@@ -1,11 +1,11 @@
-import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
+import { ComponentCommonProps } from '../config-provider';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { css } from '@emotion/react';
-
 import { useClickOutSide } from '../utils/useClickOutSide';
-import { getPosition, getIconPosition, Placement } from './placement';
+import { getPosition, Placement } from './placement';
 import { useConfigContext } from '../config-provider/useConfigContext';
+import clsx from 'clsx';
+import { toolTipStyles } from './tooltip-styles';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
 
@@ -31,6 +31,7 @@ export interface TooltipProps extends Partial<ComponentCommonProps> {
   hideDelay?: number;
   showArrow?: boolean;
   offset?: number;
+  layerClassName?: string;
 }
 
 const Tooltip: FC<TooltipProps> = props => {
@@ -46,6 +47,7 @@ const Tooltip: FC<TooltipProps> = props => {
     hideDelay,
     showArrow,
     offset,
+    layerClassName,
   } = props;
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
@@ -126,17 +128,16 @@ const Tooltip: FC<TooltipProps> = props => {
   });
 
   const layerStyle = getPosition(placement!, rect, layerOffset);
-  const ArrowStyle = getIconPosition(placement!);
 
   return (
     <>
       {createPortal(
-        <div css={styles(styleProps)}>
+        <div css={toolTipStyles(styleProps)}>
           {visible && (
             <div>
-              <div ref={layerRef} className="layer" style={layerStyle}>
+              <div ref={layerRef} className={clsx('layer', layerClassName)} style={layerStyle}>
                 <div className="title">{title}</div>
-                {showArrow && <div className="arrow" style={ArrowStyle}></div>}
+                {showArrow && <div className={clsx('arrow', `arrow-placement__${placement}`)}></div>}
               </div>
             </div>
           )}
@@ -159,43 +160,3 @@ Tooltip.defaultProps = {
 };
 
 export default Tooltip;
-
-interface TooltipStyleProps
-  extends Omit<TooltipProps, keyof ComponentCommonProps>,
-    ComponentCommonProps,
-    ConfigCommonOptions {}
-
-const styles = (props: TooltipStyleProps) => {
-  const { mode } = props.theme;
-  const { secondReverseBgColor, reverseTextColor } = props.theme[mode];
-
-  return css`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    .layer {
-      position: absolute;
-      background-color: ${secondReverseBgColor};
-      color: ${reverseTextColor};
-      border-radius: 4px;
-      .title {
-        white-space: nowrap;
-        word-wrap: break-word;
-        padding: 4px 6px;
-        width: max-content;
-        font-size: 14px;
-        min-width: 30px;
-        min-height: 16px;
-      }
-      .arrow {
-        position: absolute;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 6px 7px 6px 0;
-        border-color: transparent ${secondReverseBgColor} transparent transparent;
-      }
-    }
-  `;
-};
