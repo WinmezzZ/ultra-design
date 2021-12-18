@@ -5,6 +5,7 @@ import { getPosition, Placement } from './placement';
 import { useConfigContext } from '../config-provider/useConfigContext';
 import clsx from 'clsx';
 import { toolTipStyles } from './tooltip-styles';
+import { CSSTransition } from 'react-transition-group';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
 
@@ -196,14 +197,14 @@ const Tooltip: FC<TooltipProps> = props => {
     <>
       {createPortal(
         <div css={toolTipStyles(styleProps)}>
-          {visible && (
-            <div>
+          <div>
+            <CSSTransition in={visible} unmountOnExit timeout={300} classNames="tooltip-layer">
               <div ref={layerRef} className={clsx('layer', layerClassName)} style={layerStyle}>
                 <div className="title">{title}</div>
                 {showArrow && <div className={clsx('arrow', `arrow-placement__${placement}`)}></div>}
               </div>
-            </div>
-          )}
+            </CSSTransition>
+          </div>
         </div>,
         document.body,
       )}

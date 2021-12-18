@@ -100,5 +100,20 @@ export const toolTipStyles = (props: TooltipStyleProps) => {
         }
       }
     }
+
+    .tooltip-layer-enter {
+      opacity: 0;
+    }
+    .tooltip-layer-enter-active {
+      opacity: 1;
+      transition: opacity 300ms;
+    }
+    .tooltip-layer-exit {
+      opacity: 1;
+    }
+    .tooltip-layer-exit-active {
+      opacity: 0;
+      transition: opacity 300ms;
+    }
   `;
 };
