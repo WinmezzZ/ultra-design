@@ -118,9 +118,11 @@ const Tooltip: FC<TooltipProps> = props => {
   const childRef = useRef<HTMLElement>();
   const layerRef = useRef({} as HTMLDivElement);
 
-  useEffect(() => {
+  const updateRect = () => {
     if (!childRef.current) return;
     const childRect = childRef.current.getBoundingClientRect();
+
+    console.log(childRect);
 
     setRect({
       ...childRect,
@@ -131,7 +133,19 @@ const Tooltip: FC<TooltipProps> = props => {
       left: childRect.left + document.documentElement.scrollLeft,
       right: childRect.right + document.documentElement.scrollLeft,
     });
+  };
+
+  useEffect(() => {
+    updateRect();
   }, [childRef]);
+
+  useEffect(() => {
+    window.addEventListener('resize', updateRect);
+
+    return () => {
+      window.removeEventListener('resize', updateRect);
+    };
+  }, []);
 
   const changeVisible = (visible: boolean) => {
     const clear = () => {
