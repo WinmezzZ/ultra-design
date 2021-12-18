@@ -60,8 +60,23 @@ const buttonTypeStyleMap = (props: ButtonStyleProps) => {
   return baseStyle;
 };
 
+const loadingLayer = () => css`
+  &::before {
+    position: absolute;
+    inset: -1px;
+    z-index: 2;
+    display: block;
+    background: #fff;
+    border-radius: inherit;
+    opacity: 0.35;
+    transition: opacity 0.2s;
+    content: '';
+    pointer-events: none;
+  }
+`;
+
 export const buttonStyles = (props: ButtonStyleProps) => {
-  // const { theme, type } = props;
+  const { loading } = props;
   // const { mode } = props.theme;
 
   return css`
@@ -80,10 +95,10 @@ export const buttonStyles = (props: ButtonStyleProps) => {
     white-space: nowrap;
     transition: background-color 200ms ease 0ms, box-shadow 200ms ease 0ms, border 200ms ease 0ms, color 200ms ease 0ms;
     position: relative;
-    overflow: hidden;
     border: 1px solid transparent;
-    cursor: pointer;
+    cursor: ${loading ? 'default' : 'pointer'};
     box-shadow: 0 2px #00000004;
     ${buttonTypeStyleMap(props)}
+    ${loading && loadingLayer()}
   `;
 };

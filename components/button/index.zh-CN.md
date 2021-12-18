@@ -41,4 +41,19 @@ export default () => (
 );
 ```
 
+## 加载中
+
+```tsx
+import React from 'react';
+import { Button } from 'ultra-design';
+
+export default () => (
+  <div>
+    <Button type="primary" loading>
+      加载中...
+    </Button>
+  </div>
+);
+```
+
 <API src="./index.ts" />
