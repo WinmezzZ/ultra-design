@@ -1,20 +1,44 @@
 ---
 nav:
-  title: 组件
+  title: Components
   path: /components
 group:
   title: 基本组件
 ---
 
-## 按钮
+# Button 按钮
 
-Demo:
+## 按钮类型
 
 ```tsx
 import React from 'react';
 import { Button } from 'ultra-design';
 
-export default () => <Button>按钮</Button>;
+export default () => (
+  <div>
+    <Button type="primary">基本</Button>
+    <Button>默认</Button>
+    <Button type="dashed">虚线</Button>
+    <Button type="text">文本</Button>
+  </div>
+);
+```
+
+## 按钮尺寸
+
+```tsx
+import React from 'react';
+import { Button } from 'ultra-design';
+
+export default () => (
+  <div>
+    <Button size="mini">mini</Button>
+    <Button size="small">小</Button>
+    <Button size="middle">中等</Button>
+    <Button size="large">大</Button>
+    <Button size="larger">超大</Button>
+  </div>
+);
 ```
 
 <API src="./index.ts" />

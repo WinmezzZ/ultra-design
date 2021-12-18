@@ -6,12 +6,13 @@ group:
   title: Basic
 ---
 
-## Button
-**type:**
+# Button
+
+## button type
 
 ```tsx
 import React from 'react';
-import { Button } from 'ultra-design'
+import { Button } from 'ultra-design';
 
 export default () => (
   <div>
@@ -20,24 +21,24 @@ export default () => (
     <Button type="dashed">Dashed</Button>
     <Button type="text">Text</Button>
   </div>
-)
+);
 ```
 
-**size:**
+## button size
 
 ```tsx
 import React from 'react';
-import { Button } from 'ultra-design'
+import { Button } from 'ultra-design';
 
 export default () => (
-   <div>
+  <div>
     <Button size="mini">Mini</Button>
     <Button size="small">Small</Button>
     <Button size="middle">Middle</Button>
     <Button size="large">Lage</Button>
     <Button size="larger">Lager</Button>
   </div>
-)
+);
 ```
 
 <API src="./index.ts" />

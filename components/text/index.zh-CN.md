@@ -3,10 +3,10 @@ nav:
   title: Components
   path: /components
 group:
-  title: Basic
+  title: 基本组件
 ---
 
-## Text
+# Text 文本
 
 ```
 

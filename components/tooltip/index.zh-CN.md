@@ -3,12 +3,12 @@ nav:
   title: Components
   path: /components
 group:
-  title: Basic
+  title: 基本组件
 ---
 
-# Tooltip
+# Tooltip 文字提示
 
-## basic usage
+## 基本使用
 
 ```tsx
 import React from 'react';
@@ -17,13 +17,13 @@ import { Button, Tooltip } from 'ultra-design';
 export default () => {
   return (
     <Tooltip title="哈哈">
-      <Button>Hover Me</Button>
+      <Button>移入我</Button>
     </Tooltip>
   );
 };
 ```
 
-## trigger
+## 触发方式
 
 ```tsx
 import React from 'react';
@@ -33,18 +33,18 @@ export default () => {
   return (
     <div>
       <Tooltip title="哈哈">
-        <Button>Hover Me</Button>
+        <Button>移入我</Button>
       </Tooltip>
 
       <Tooltip title="哈哈" trigger="click">
-        <Button>Click Me</Button>
+        <Button>点击我</Button>
       </Tooltip>
     </div>
   );
 };
 ```
 
-## placement
+## 弹出层方位
 
 ```tsx
 import React from 'react';
@@ -102,7 +102,7 @@ export default () => {
 };
 ```
 
-## default visible
+## 默认显示
 
 ```tsx
 import React from 'react';
@@ -112,14 +112,14 @@ export default () => {
   return (
     <div>
       <Tooltip defaultVisible title="哈哈" trigger="click">
-        <Button>Click Me</Button>
+        <Button>点击我</Button>
       </Tooltip>
     </div>
   );
 };
 ```
 
-## custon visible behavior
+## 自定义显示行为
 
 ```tsx
 import React from 'react';
@@ -142,14 +142,14 @@ export default () => {
         }
         trigger="click"
       >
-        <Button>Click Me</Button>
+        <Button>点击我</Button>
       </Tooltip>
     </div>
   );
 };
 ```
 
-## hide arrow
+## 隐藏箭头
 
 ```tsx
 import React from 'react';
@@ -158,13 +158,13 @@ import { Button, Tooltip } from 'ultra-design';
 export default () => {
   return (
     <Tooltip showArrow={false} title="哈哈">
-      <Button>Hover Me</Button>
+      <Button>移入我</Button>
     </Tooltip>
   );
 };
 ```
 
-## layer offset
+## 弹出层位置偏移
 
 ```tsx
 import React from 'react';
@@ -173,7 +173,7 @@ import { Button, Tooltip } from 'ultra-design';
 export default () => {
   return (
     <Tooltip offset={40} title="哈哈">
-      <Button>Hover Me</Button>
+      <Button>移入我</Button>
     </Tooltip>
   );
 };
