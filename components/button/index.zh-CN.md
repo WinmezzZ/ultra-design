@@ -32,11 +32,26 @@ import { Button } from 'ultra-design';
 
 export default () => (
   <div>
-    <Button size="mini">mini</Button>
+    <Button size="mini">超小</Button>
     <Button size="small">小</Button>
     <Button size="middle">中等</Button>
     <Button size="large">大</Button>
     <Button size="larger">超大</Button>
+  </div>
+);
+```
+
+## 禁用
+
+```tsx
+import React from 'react';
+import { Button } from 'ultra-design';
+
+export default () => (
+  <div>
+    <Button type="primary" disabled>
+      不可用
+    </Button>
   </div>
 );
 ```

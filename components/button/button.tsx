@@ -25,6 +25,13 @@ export interface BaseButtonProps {
   loading?: boolean;
 
   /**
+   * @description.zh-CN 是否禁用按钮
+   * @description.en-US disabled state of button
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
    * @description.zh-CN 开启涟漪效果
    * @description.en-US enable ripple effect
    * @default true
@@ -41,12 +48,12 @@ export interface BaseButtonProps {
 export interface ButtonProps extends Partial<ComponentCommonProps>, React.PropsWithChildren<BaseButtonProps> {}
 
 const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (props, ref) => {
-  const { children, effect, type, onClick, loading, ...rest } = props;
+  const { children, effect, type, onClick, loading, disabled, ...rest } = props;
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
 
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (loading) {
+    if (loading || disabled) {
       e.preventDefault();
 
       return;
@@ -55,7 +62,7 @@ const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonP
     onClick?.(e);
   };
 
-  const rippleElement = effect && type !== 'text' && !loading ? <Ripple /> : null;
+  const rippleElement = effect && type !== 'text' && !loading && !disabled ? <Ripple /> : null;
 
   return (
     <button ref={ref as any} css={buttonStyles(styleProps)} onClick={clickHandler} {...rest}>

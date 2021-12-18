@@ -50,6 +50,7 @@ const buttonTypeStyleMap = (props: ButtonStyleProps) => {
     baseStyle += `
       border: none;
       color: ${theme.style.primaryColor};
+      background-color: unset;
     `;
   } else if (type === 'dashed') {
     baseStyle += `border: 1px dashed #ccc;`;
@@ -75,8 +76,19 @@ const loadingLayer = () => css`
   }
 `;
 
+const disabledStyle = (props: ButtonStyleProps) => {
+  const { theme, type } = props;
+  const { disabledBgColor, disabledTextColor, disabledBorderColor } = theme[theme.mode];
+
+  return css`
+    border-color: ${disabledBorderColor};
+    background-color: ${type !== 'text' && disabledBgColor};
+    color: ${disabledTextColor};
+  `;
+};
+
 export const buttonStyles = (props: ButtonStyleProps) => {
-  const { loading } = props;
+  const { loading, disabled } = props;
   // const { mode } = props.theme;
 
   return css`
@@ -96,9 +108,10 @@ export const buttonStyles = (props: ButtonStyleProps) => {
     transition: background-color 200ms ease 0ms, box-shadow 200ms ease 0ms, border 200ms ease 0ms, color 200ms ease 0ms;
     position: relative;
     border: 1px solid transparent;
-    cursor: ${loading ? 'default' : 'pointer'};
+    cursor: ${loading ? 'default' : disabled ? 'not-allowed' : 'pointer'};
     box-shadow: 0 2px #00000004;
     ${buttonTypeStyleMap(props)}
     ${loading && loadingLayer()}
+    ${disabled && disabledStyle(props)}
   `;
 };

@@ -41,6 +41,45 @@ export default () => (
 );
 ```
 
+## button size
+
+```tsx
+import React from 'react';
+import { Button } from 'ultra-design';
+
+export default () => (
+  <div>
+    <Button size="mini">Mini</Button>
+    <Button size="small">Small</Button>
+    <Button size="middle">Middle</Button>
+    <Button size="large">Lage</Button>
+    <Button size="larger">Lager</Button>
+  </div>
+);
+```
+
+## disabled
+
+```tsx
+import React from 'react';
+import { Button } from 'ultra-design';
+
+export default () => (
+  <div>
+    <Button type="primary" disabled>
+      Disabled
+    </Button>
+    <Button disabled>Disabled</Button>
+    <Button type="dashed" disabled>
+      Disabled
+    </Button>
+    <Button type="text" disabled>
+      Disabled
+    </Button>
+  </div>
+);
+```
+
 ## loading
 
 ```tsx
