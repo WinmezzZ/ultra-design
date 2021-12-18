@@ -179,4 +179,33 @@ export default () => {
 };
 ```
 
+## Set scroll container
+
+By default, the `Tooltip` popover position will only scroll with the `body`, but if the `Tooltip` trigger is inside the inner scroll element, the popover will not scroll with the inner scroll element. You can fix this by setting `getLayerContainer` to be the render parent of the popover
+
+```tsx
+import React from 'react';
+import { Button, Tooltip } from 'ultra-design';
+
+export default () => {
+  return (
+    <div style={{ height: 200, width: 200, overflow: 'auto', position: 'relative' }}>
+      <div style={{ height: 170 }}></div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', width: 240 }}>
+        <Tooltip
+          defaultVisible
+          trigger="click"
+          getLayerContainer={trigger => trigger.parentNode as HTMLElement}
+          title="哈哈"
+        >
+          <Button>Click Me</Button>
+        </Tooltip>
+        <div style={{ width: 40 }}></div>
+      </div>
+      <div style={{ height: 500 }}></div>
+    </div>
+  );
+};
+```
+
 <API src="index.ts" />

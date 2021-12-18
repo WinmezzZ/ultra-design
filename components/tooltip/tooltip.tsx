@@ -80,6 +80,12 @@ export interface TooltipProps {
    */
   offset?: number;
   /**
+   * @description.zh-CN 浮层渲染父节点，默认渲染到 body 上
+   * @description.en-US layer parent node, render in body element default
+   * @default () => document.body;
+   */
+  getLayerContainer?: (trigger: HTMLElement) => HTMLElement;
+  /**
    * @description.zh-CN 弹出框的类名
    * @description.en-US tclassName of layer box
    */
@@ -100,6 +106,7 @@ const Tooltip: FC<TooltipProps> = props => {
     showArrow,
     offset,
     layerClassName,
+    getLayerContainer,
   } = props;
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
@@ -119,19 +126,38 @@ const Tooltip: FC<TooltipProps> = props => {
   const childRef = useRef<HTMLElement>();
   const layerRef = useRef({} as HTMLDivElement);
 
+  const mountNode: HTMLElement =
+    childRef.current && getLayerContainer ? getLayerContainer(childRef.current) : document.body;
+
   const updateRect = () => {
     if (!childRef.current) return;
     const childRect = childRef.current.getBoundingClientRect();
 
-    setRect({
-      ...childRect,
-      width: childRect.width,
-      height: childRect.height,
-      top: childRect.top + document.documentElement.scrollTop,
-      bottom: childRect.bottom + document.documentElement.scrollTop,
-      left: childRect.left + document.documentElement.scrollLeft,
-      right: childRect.right + document.documentElement.scrollLeft,
-    });
+    if (!getLayerContainer) {
+      const { scrollTop, scrollLeft } = document.documentElement;
+
+      setRect({
+        ...childRect,
+        width: childRect.width || rect.right - rect.left,
+        height: childRect.height || rect.bottom - rect.top,
+        top: childRect.top + scrollTop,
+        bottom: childRect.bottom + scrollTop,
+        left: childRect.left + scrollLeft,
+        right: childRect.right + scrollLeft,
+      });
+    } else {
+      const { offsetHeight, offsetLeft, offsetTop, offsetWidth } = childRef.current;
+
+      setRect({
+        ...childRect,
+        width: offsetWidth,
+        height: offsetHeight,
+        top: offsetTop,
+        bottom: offsetTop + offsetHeight,
+        left: offsetLeft,
+        right: offsetLeft + offsetWidth,
+      });
+    }
   };
 
   useEffect(() => {
@@ -206,7 +232,7 @@ const Tooltip: FC<TooltipProps> = props => {
             </CSSTransition>
           </div>
         </div>,
-        document.body,
+        mountNode,
       )}
       {child}
     </>
