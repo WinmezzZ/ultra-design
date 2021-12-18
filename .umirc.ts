@@ -31,6 +31,10 @@ const config: IConfig = {
         margin-left: 10px;
       }
 
+      .__dumi-default-previewer button {
+        margin-bottom: 5px;
+      }
+
       .tooltip-pisition button {
         width: 70px;
         margin-left: 10px;

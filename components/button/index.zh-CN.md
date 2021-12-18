@@ -52,6 +52,13 @@ export default () => (
     <Button type="primary" disabled>
       不可用
     </Button>
+    <Button disabled>不可用</Button>
+    <Button type="dashed" disabled>
+      不可用
+    </Button>
+    <Button type="text" disabled>
+      不可用
+    </Button>
   </div>
 );
 ```
@@ -62,13 +69,33 @@ export default () => (
 import React from 'react';
 import { Button } from 'ultra-design';
 
-export default () => (
-  <div>
-    <Button type="primary" loading>
-      加载中...
-    </Button>
-  </div>
-);
+export default () => {
+  const [loading, setLoading] = React.useState(false);
+
+  const clickHandler = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  };
+  return (
+    <div>
+      <Button type="primary" loading>
+        加载中...
+      </Button>
+      <Button loading>加载中...</Button>
+      <Button type="dashed" loading>
+        加载中...
+      </Button>
+      <Button type="text" loading>
+        加载中...
+      </Button>
+      <Button type="primary" onClick={clickHandler} loading={loading}>
+        点击我
+      </Button>
+    </div>
+  );
+};
 ```
 
 <API src="./index.ts" />

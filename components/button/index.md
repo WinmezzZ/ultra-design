@@ -86,13 +86,33 @@ export default () => (
 import React from 'react';
 import { Button } from 'ultra-design';
 
-export default () => (
-  <div>
-    <Button type="primary" loading>
-      Loading...
-    </Button>
-  </div>
-);
+export default () => {
+  const [loading, setLoading] = React.useState(false);
+
+  const clickHandler = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  };
+  return (
+    <div>
+      <Button type="primary" loading>
+        Loading...
+      </Button>
+      <Button loading>Loading...</Button>
+      <Button type="dashed" loading>
+        Loading...
+      </Button>
+      <Button type="text" loading>
+        Loading...
+      </Button>
+      <Button type="primary" onClick={clickHandler} loading={loading}>
+        Click Me
+      </Button>
+    </div>
+  );
+};
 ```
 
 <API src="./index.ts" />
