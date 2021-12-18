@@ -105,7 +105,7 @@ export const buttonStyles = (props: ButtonStyleProps) => {
     justify-content: center;
     text-align: center;
     white-space: nowrap;
-    transition: background-color 200ms ease 0ms, box-shadow 200ms ease 0ms, border 200ms ease 0ms, color 200ms ease 0ms;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     position: relative;
     border: 1px solid transparent;
     cursor: ${loading ? 'default' : disabled ? 'not-allowed' : 'pointer'};
