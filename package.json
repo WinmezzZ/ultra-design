@@ -1,6 +1,13 @@
 {
   "name": "ultra-design",
   "version": "0.0.15-beta",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-lib",
+    "react-component-lib",
+    "ultra-deisign"
+  ],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -10,6 +17,12 @@
     "lib",
     "es"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:WinmezzZ/ultra-design.git",
+    "branch": "master",
+    "platform": "github"
+  },
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
