@@ -136,7 +136,7 @@ const Tooltip: FC<TooltipProps> = props => {
 
   useEffect(() => {
     updateRect();
-  }, [childRef]);
+  }, [childRef, visible]);
 
   useEffect(() => {
     window.addEventListener('resize', updateRect);
