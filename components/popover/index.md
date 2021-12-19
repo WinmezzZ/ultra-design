@@ -3,7 +3,8 @@ nav:
   title: Components
   path: /components
 group:
-  title: Basic
+  title: Feedback
+  order: 1
 ---
 
 # Popover

@@ -4,6 +4,7 @@ nav:
   path: /components
 group:
   title: 基本组件
+  order: 0
 ---
 
 # Button 按钮

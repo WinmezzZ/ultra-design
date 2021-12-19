@@ -3,7 +3,8 @@ nav:
   title: Components
   path: /components
 group:
-  title: 基本组件
+  title: 反馈
+  order: 1
 ---
 
 # Tooltip 文字提示

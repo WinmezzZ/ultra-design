@@ -4,6 +4,7 @@ nav:
   path: /components
 group:
   title: Basic
+  order: 0
 ---
 
 # Button
