@@ -34,9 +34,9 @@ const Modal: FC<ModalProps> = props => {
     <>
       {createPortal(
         <div>
-          <Overlay visible={visible} timeout={1000} />
-          <CSSTransition in={visible} unmountOnExit timeout={1000} classNames="ultra-modal-wrapper">
-            <div css={modalWrapperStyle} onClick={closeHandler}>
+          <Overlay visible={visible} timeout={300} />
+          <CSSTransition in={visible} unmountOnExit timeout={300} classNames="ultra-modal-wrapper">
+            <div onClick={closeHandler} css={modalWrapperStyle} className="ultra-modal-wrapper">
               <div className="ultra-modal">{children}</div>
             </div>
           </CSSTransition>

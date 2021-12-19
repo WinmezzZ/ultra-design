@@ -12,9 +12,9 @@ const Overlay: FC<OverlayProps> = props => {
   const { visible, timeout } = props;
 
   return (
-    <React.Fragment css={overlayStyle(props)}>
+    <>
       <CSSTransition in={visible} unmountOnExit timeout={timeout!} classNames="ultra-overlay">
-        <div className="ultra-overlay">
+        <div css={overlayStyle(props)} className="ultra-overlay">
           {visible && (
             <Global
               styles={css`
@@ -28,7 +28,7 @@ const Overlay: FC<OverlayProps> = props => {
           )}
         </div>
       </CSSTransition>
-    </React.Fragment>
+    </>
   );
 };
 
