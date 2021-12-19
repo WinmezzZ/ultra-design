@@ -2,12 +2,12 @@ import { css } from '@emotion/react';
 import { TooltipProps } from '.';
 import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
 
-interface TooltipStyleProps
+export interface TooltipCSSProps
   extends Omit<TooltipProps, keyof ComponentCommonProps>,
     ComponentCommonProps,
     ConfigCommonOptions {}
 
-export const toolTipStyles = (props: TooltipStyleProps) => {
+export const toolTipCSS = (props: TooltipCSSProps) => {
   const { mode } = props.theme;
   const { secondReverseBgColor, reverseTextColor } = props.theme[mode];
 

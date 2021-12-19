@@ -4,8 +4,9 @@ import { useClickOutSide } from '../utils/useClickOutSide';
 import { getPosition, Placement } from './placement';
 import { useConfigContext } from '../config-provider/useConfigContext';
 import clsx from 'clsx';
-import { toolTipStyles } from './tooltip-styles';
+import { toolTipCSS, TooltipCSSProps } from './tooltip-styles';
 import { CSSTransition } from 'react-transition-group';
+import { SerializedStyles } from '@emotion/react';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
 
@@ -90,6 +91,8 @@ export interface TooltipProps {
    * @description.en-US tclassName of layer box
    */
   layerClassName?: string;
+
+  cssProps?: (props: TooltipCSSProps) => SerializedStyles;
 }
 
 const Tooltip: FC<TooltipProps> = props => {
@@ -107,6 +110,7 @@ const Tooltip: FC<TooltipProps> = props => {
     offset,
     layerClassName,
     getLayerContainer,
+    cssProps,
   } = props;
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
@@ -222,7 +226,7 @@ const Tooltip: FC<TooltipProps> = props => {
   return (
     <>
       {createPortal(
-        <div css={toolTipStyles(styleProps)}>
+        <div css={[toolTipCSS(styleProps), cssProps?.(styleProps)]}>
           <div>
             <CSSTransition in={visible} unmountOnExit timeout={300} classNames="tooltip-layer">
               <div ref={layerRef} className={clsx('layer', layerClassName)} style={layerStyle}>
