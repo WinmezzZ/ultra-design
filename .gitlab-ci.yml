@@ -27,6 +27,6 @@ build_and_deploy:
   script:
     - yarn build:doc
     - echo "========== build success, start deploy ========="
-    - cp -r docs-dist/* /data/dynamic/ultra-design/
+    - cp -r docs-dist/* /var/www/ultra-design.hyyar.com/
   tags:
     - deploy
