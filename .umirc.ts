@@ -7,6 +7,9 @@ const config: IConfig = {
   logo: 'https://cdn.hyyar.com/logo.jpg',
   outputPath: 'docs-dist',
   mode: 'site',
+  theme: {
+    '@c-primary': '#13c2c2'
+  },
   resolve: {
     includes: ['docs', 'components'],
   },
