@@ -12,15 +12,13 @@ group:
 
 ```tsx
 import React from 'react';
-import { Button, Popover, ConfigProvider } from 'ultra-design';
+import { Button, Popover } from 'ultra-design';
 
 export default () => {
   return (
-    <ConfigProvider theme={{ mode: 'dark' }}>
-      <Popover content="哈哈">
-        <Button>Click Me</Button>
-      </Popover>
-    </ConfigProvider>
+    <Popover content="哈哈">
+      <Button>Click Me</Button>
+    </Popover>
   );
 };
 ```
