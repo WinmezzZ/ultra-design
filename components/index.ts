@@ -13,5 +13,11 @@ export { default as Tooltip } from './tooltip';
 export type { PopoverProps } from './popover';
 export { default as Popover } from './popover';
 
+export type { OverlayProps } from './overlay';
+export { default as Overlay } from './overlay';
+
+export type { ModalProps } from './modal';
+export { default as Modal } from './modal';
+
 export type { ConfigContextOptions } from './config-provider';
 export { default as ConfigProvider } from './config-provider';
