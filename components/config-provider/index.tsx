@@ -45,7 +45,7 @@ export const ConfigContext = createContext<ConfigContextOptions>(configContextOp
 const ConfigProvider: FC<DeepPartial<ConfigContextOptions>> = props => {
   const { children, ...rest } = props;
 
-  const config: ConfigContextOptions = _.merge(configContextOptions, rest);
+  const config: ConfigContextOptions = _.merge({}, configContextOptions, rest);
 
   return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
 };
