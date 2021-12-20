@@ -37,7 +37,7 @@ export const defaultTheme: Theme = {
   mode: 'light',
   style: {
     primaryColor: '#13c2c2',
-    radius: 4,
+    radius: 6,
   },
   light: {
     textColor: '#000000',
