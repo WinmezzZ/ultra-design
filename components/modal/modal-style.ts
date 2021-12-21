@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import _ from 'lodash-es';
 import { ConfigCommonOptions } from '../config-provider';
 import { ModalProps } from './modal';
 
@@ -37,7 +38,7 @@ export const modalWrapperStyle = (props: ModalCSSProps) => {
       overflow: auto;
       ${center
         ? css`
-            ${top &&
+            ${!_.isNil(top) &&
             css`
               top: ${top};
             `}
@@ -46,7 +47,7 @@ export const modalWrapperStyle = (props: ModalCSSProps) => {
             text-align: left;
           `
         : css`
-            top: ${top || '10vh'};
+            top: ${top ?? '10vh'};
           `}
       font-size: 14px;
       .ultra-modal-header {

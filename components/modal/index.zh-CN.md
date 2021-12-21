@@ -3,13 +3,13 @@ nav:
   title: Components
   path: /components
 group:
-  title: Feedback
+  title: 反馈
   order: 1
 ---
 
-# Modal
+# Modal 对话框
 
-## Basic Usage
+## 基本使用
 
 ```tsx
 import React from 'react';
@@ -32,7 +32,7 @@ export default () => {
 };
 ```
 
-## Modal Position
+## 弹框位置
 
 ```tsx
 import React from 'react';
@@ -43,8 +43,8 @@ export default () => {
   const [visible2, setVisible2] = React.useState(false);
   return (
     <div>
-      <Button onClick={() => setVisible1(true)}>Top 0</Button>
-      <Button onClick={() => setVisible2(true)}>Centered</Button>
+      <Button onClick={() => setVisible1(true)}>贴紧顶部</Button>
+      <Button onClick={() => setVisible2(true)}>垂直居中</Button>
       <Modal top={0} visible={visible1} title="标题" onClose={() => setVisible1(false)}>
         <ul>
           <li>this is a text</li>
@@ -64,7 +64,7 @@ export default () => {
 };
 ```
 
-## Hide Some Parts
+## 隐藏部分内容
 
 ```tsx
 import React from 'react';
@@ -77,10 +77,10 @@ export default () => {
   const [visible4, setVisible4] = React.useState(false);
   return (
     <div>
-      <Button onClick={() => setVisible1(true)}>Hide Close Icon</Button>
-      <Button onClick={() => setVisible2(true)}>Hide Cancel Button</Button>
-      <Button onClick={() => setVisible3(true)}>Hide Footer</Button>
-      <Button onClick={() => setVisible4(true)}>Body Only</Button>
+      <Button onClick={() => setVisible1(true)}>隐藏关闭图标</Button>
+      <Button onClick={() => setVisible2(true)}>隐藏取消按钮</Button>
+      <Button onClick={() => setVisible3(true)}>隐藏尾部</Button>
+      <Button onClick={() => setVisible4(true)}>只显示 body</Button>
       <Modal hideClose visible={visible1} title="标题" onClose={() => setVisible1(false)}>
         <ul>
           <li>this is a text</li>
@@ -122,12 +122,8 @@ export default () => {
 
 <API src="index.ts" />
 
-## Attention
+## 注意事项
 
-1. When `confirmButton` and `cancelButton` are both set to `undefined`, the entire bottom component will be hidden
+1. 当 `confirmButton` 和 `cancelButton` 同时设为 `null` 时，整个底部组件将会被隐藏
 
-2. The `top` attribute defaults to 10vh, but if you set the center attribute, the default value of top will be cancelled, but you can still set the value of the `top` attribute manually
-
-3. 当 `confirmButton` 和 `cancelButton` 同时设为 `null` 时，整个底部组件将会被隐藏
-
-4. top 属性默认为 10vh，但如果设置了 center 属性后，top 的默认值将取消，但是你依然可以手动再设置 top 的值
+2. top 属性默认为 10vh，但如果设置了 center 属性后，top 的默认值将取消，但是你依然可以手动再设置 top 的值

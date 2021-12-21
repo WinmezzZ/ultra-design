@@ -41,7 +41,7 @@ export interface ModalProps {
    * @description.en-US the top attribute of the modal relative to the browser window
    * @default '10vh'
    */
-  top?: string;
+  top?: string | number;
   /**
    * @description.zh-CN 对话框的宽度，除了百分比，也可以设置为固定的 px
    * @description.en-US The width of the modal, in addition to the percentage, can also be set to a fixed px
@@ -67,25 +67,25 @@ export interface ModalProps {
    */
   hideClose?: boolean;
   /**
-   * @description.zh-CN 确定按钮的属性，支持 'disabled', 'loading', 'type', 'children'，设置为 `undefined` 将隐藏确认按钮
-   * @description.en-US conform button props, support 'disabled', 'loading', 'type', 'children', set to `undefined` will hide confirm button
+   * @description.zh-CN 确定按钮的属性，支持 'disabled', 'loading', 'type', 'children'，设置为 `null` 将隐藏确认按钮
+   * @description.en-US confirm button props, support 'disabled', 'loading', 'type', 'children', set to `null` will hide confirm button
    * @default { children: 'Ok', type: 'primary' }
    */
-  conformButton?: ModalButtonProps;
+  confirmButton?: ModalButtonProps | null;
   /**
-   * @description.zh-CN 取消按钮的属性，支持 'disabled', 'loading', 'type', 'children'，设置为 `undefined` 将隐藏取消按钮
-   * @description.en-US cancel button props, support 'disabled', 'loading', 'type', 'children', set to `undefined` will hide cancel button
+   * @description.zh-CN 取消按钮的属性，支持 'disabled', 'loading', 'type', 'children'，设置为 `null` 将隐藏取消按钮
+   * @description.en-US cancel button props, support 'disabled', 'loading', 'type', 'children', set to `null` will hide cancel button
    * @default { children: 'Cancel' }
    */
-  cancelButton?: ModalButtonProps;
+  cancelButton?: ModalButtonProps | null;
 }
 
 const Modal: FC<ModalProps> = props => {
-  const { title, visible, onClose, onOk, conformButton, cancelButton, keyboard, beforeClose, hideClose, children } =
+  const { title, visible, onClose, onOk, confirmButton, cancelButton, keyboard, beforeClose, hideClose, children } =
     props;
   const configContext = useConfigContext();
   const cssProps = { ...configContext, ...props };
-  const conformButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: '确定' }, conformButton);
+  const confirmButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: '确定' }, confirmButton);
   const cancelBtnProps: ModalButtonProps = Object.assign({}, { children: '取消' }, cancelButton);
 
   const closeHandler = async () => {
@@ -123,13 +123,13 @@ const Modal: FC<ModalProps> = props => {
               <div className="ultra-modal">
                 <div className="ultra-modal-header">
                   {!hideClose && <Close className="ultra-modal-header__close" onClick={closeHandler} />}
-                  <h4 className="ultra-modal-header__title">{title}</h4>
+                  {title && <h4 className="ultra-modal-header__title">{title}</h4>}
                 </div>
                 <div className="ultra-modal-body">{children}</div>
-                {!(!conformButton && !cancelButton) && (
+                {!(confirmButton === null && cancelButton === null) && (
                   <div className="ultra-modal-footer">
-                    <Button {...conformButtonProps} onClick={onOk} />
-                    <Button {...cancelBtnProps} onClick={closeHandler} />
+                    {confirmButton !== null && <Button {...confirmButtonProps} onClick={onOk} />}
+                    {cancelButton !== null && <Button {...cancelBtnProps} onClick={closeHandler} />}
                   </div>
                 )}
               </div>

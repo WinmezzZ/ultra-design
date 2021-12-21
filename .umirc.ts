@@ -43,6 +43,18 @@ const config: IConfig = {
         margin-left: 10px;
         margin-top: 10px;
       }
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      
+      li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
     `
   ]
   // more config: https://d.umijs.org/config
