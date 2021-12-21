@@ -124,10 +124,7 @@ export default () => {
 
 ## Attention
 
-1. When `confirmButton` and `cancelButton` are both set to `undefined`, the entire bottom component will be hidden
+- When `confirmButton` and `cancelButton` are both set to `undefined`, the entire bottom component will be hidden
 
-2. The `top` attribute defaults to 10vh, but if you set the center attribute, the default value of top will be cancelled, but you can still set the value of the `top` attribute manually
+- The `top` attribute defaults to 10vh, but if you set the center attribute, the default value of top will be cancelled, but you can still set the value of the `top` attribute manually
 
-3. 当 `confirmButton` 和 `cancelButton` 同时设为 `null` 时，整个底部组件将会被隐藏
-
-4. top 属性默认为 10vh，但如果设置了 center 属性后，top 的默认值将取消，但是你依然可以手动再设置 top 的值

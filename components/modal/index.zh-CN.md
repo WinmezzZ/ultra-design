@@ -124,6 +124,6 @@ export default () => {
 
 ## 注意事项
 
-1. 当 `confirmButton` 和 `cancelButton` 同时设为 `null` 时，整个底部组件将会被隐藏
+- 当 `confirmButton` 和 `cancelButton` 同时设为 `null` 时，整个底部组件将会被隐藏
 
-2. top 属性默认为 10vh，但如果设置了 center 属性后，top 的默认值将取消，但是你依然可以手动再设置 top 的值
+- top 属性默认为 10vh，但如果设置了 center 属性后，top 的默认值将取消，但是你依然可以手动再设置 top 的值
