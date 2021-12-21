@@ -6,6 +6,7 @@ es
 lib
 
 # dumi
+.umi*
 dist-ssr
 docs-dist
 

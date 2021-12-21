@@ -2176,10 +2176,10 @@
     react-refresh "^0.11.0"
     resolve "^1.20.0"
 
-"@winme/eslint-config-react-base@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@winme/eslint-config-react-base/-/eslint-config-react-base-0.0.3.tgz#4cde29a70c32f5288e40169034d8c926873df0d3"
-  integrity sha512-PQY+Q77Fft040nCmcXuX+ZAaExKmmcZgEj6mtiv70XAyRuQX/vjybeW0RMf599+zB5WAaIu9vW8B/1sDH8F6mw==
+"@winme/eslint-config-react-base@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@winme/eslint-config-react-base/-/eslint-config-react-base-0.0.7.tgz#c6a7454a3a782fff4fe869bcafe22ec707c7734d"
+  integrity sha512-gG9Mb9adzY3dj2pbxpuKJOGwVudD3BThtJ6CXov3DuCVdKbwiwEQMiijYt7ZcOxCYc2j8CAvaWs0fALL0fUUEQ==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^5.6.0"
     "@typescript-eslint/parser" "^5.6.0"

@@ -1,0 +1,1 @@
+module.exports = require('@winme/eslint-config-react-base/.prettierrc.js');
