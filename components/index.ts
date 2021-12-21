@@ -19,5 +19,11 @@ export { default as Overlay } from './overlay';
 export type { ModalProps } from './modal';
 export { default as Modal } from './modal';
 
+export type { InputProps } from './input';
+export { default as Input } from './input';
+
+export type { SelectProps } from './select';
+export { default as Select } from './select';
+
 export type { ConfigContextOptions } from './config-provider';
 export { default as ConfigProvider } from './config-provider';
