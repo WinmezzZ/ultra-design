@@ -15,10 +15,10 @@ export const inputStyle = (props: InputCSSProps) => {
     margin: 0;
     list-style: none;
     position: relative;
-    display: inline-block;
+    display: inline-flex;
     width: 100%;
     min-width: 0;
-    padding: 4px 11px;
+    padding: 7px 11px;
     color: ${textColor};
     font-size: 14px;
     background-color: ${backgroundColor};
@@ -36,6 +36,7 @@ export const inputStyle = (props: InputCSSProps) => {
       color: ${disabledTextColor};
       box-shadow: none;
       input {
+        flex: 1;
         cursor: not-allowed;
         color: ${disabledTextColor};
       }
@@ -50,6 +51,21 @@ export const inputStyle = (props: InputCSSProps) => {
       outline: none;
       background-color: transparent;
       color: ${textColor};
+    }
+
+    .ultra-icon {
+      display: inline-flex;
+    }
+
+    .ultra-input__icon {
+      display: flex;
+      align-items: center;
+    }
+
+    .ultra-input__clear {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
     }
   `;
 };

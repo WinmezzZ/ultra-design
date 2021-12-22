@@ -1,25 +1,42 @@
-import React, { HTMLInputTypeAttribute, useRef, useState } from 'react';
+import React, { HTMLInputTypeAttribute, useMemo, useRef, useState } from 'react';
 import { inputStyle } from './input-style';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
 import { Close } from '@icon-park/react';
-import { isNil } from 'lodash-es';
 
 export interface InputProps {
   defaultValue?: string;
   value?: string;
-  type?: HTMLInputTypeAttribute;
+  inputMode?: 'search' | 'text' | 'none' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal';
+  placeholder?: string;
   icon?: React.ReactNode;
   clearable?: boolean;
   disabled?: boolean;
+  readOnly?: boolean;
+  autoFocus?: boolean;
   onInput?: React.FormEventHandler<HTMLInputElement>;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
 }
 
 const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (props, ref) => {
-  const { defaultValue, disabled, icon, onFocus, onBlur, onChange, onInput, value, type, clearable } = props;
+  const {
+    defaultValue,
+    disabled,
+    readOnly,
+    icon,
+    onFocus,
+    onBlur,
+    onChange,
+    onInput,
+    value,
+    inputMode,
+    placeholder,
+    autoFocus,
+    clearable,
+  } = props;
+  const [inputValue, setInputValue] = useState(defaultValue);
   const [focus, setFocus] = useState(false);
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
@@ -35,6 +52,7 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
     onBlur?.(e);
   };
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+    setInputValue(e.target.value);
     onChange?.(e);
   };
   const handleInput: React.FormEventHandler<HTMLInputElement> = e => {
@@ -42,6 +60,7 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
     onInput?.(e);
   };
   const handleClear = (e: React.MouseEvent<HTMLDivElement>) => {
+    setInputValue('');
     const el = inputRef.current;
 
     if (!el) return;
@@ -64,18 +83,21 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
       {icon && <span className="ultra-input__icon">{icon}</span>}
       <input
         ref={inputRef}
-        type={type}
-        value={isNil(value) ? '' : value}
-        {...(ref ? { defaultValue } : {})}
+        inputMode={inputMode}
+        value={value}
+        defaultValue={defaultValue}
         disabled={disabled}
+        readOnly={readOnly}
+        placeholder={placeholder}
+        autoFocus={autoFocus}
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onInput={handleInput}
       />
-      {value && clearable && (
+      {inputValue && clearable && (
         <span className="ultra-input__clear" onClick={handleClear}>
-          {<Close />}
+          {<Close className="ultra-icon" />}
         </span>
       )}
     </div>
@@ -83,9 +105,5 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
 };
 
 const Input = React.forwardRef(InputComponent);
-
-Input.defaultProps = {
-  type: 'text',
-};
 
 export default Input;
