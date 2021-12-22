@@ -9,15 +9,28 @@ group:
 # Input
 
 ## Basic Usage
+
 ```tsx
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Input } from 'ultra-design';
 
-export default () => (
-  <div>
-    <Input></Input>
-  </div>
-);
+export default () => {
+  const [value, setValue] = useState()
+
+  const handleChange = (e) => {
+    setValue(e.target.value)
+  }
+
+  useEffect(() => {
+    console.log(value)
+  }, [value])
+
+  return (
+          <div>
+            <Input value={value} onChange={handleChange} defaultValue="3"></Input>
+          </div>
+  );
+}
 ```
 
 ## Clearable
@@ -28,6 +41,18 @@ import { Input } from 'ultra-design';
 export default () => (
   <div>
     <Input clearable />
+  </div>
+);
+```
+
+## Disabled
+```tsx
+import React from 'react';
+import { Input } from 'ultra-design';
+
+export default () => (
+  <div>
+    <Input disabled />
   </div>
 );
 ```

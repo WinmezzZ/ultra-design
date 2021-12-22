@@ -8,7 +8,7 @@ export interface InputCSSProps extends InputProps, ComponentCommonProps, ConfigC
 export const inputStyle = (props: InputCSSProps) => {
   const { theme } = props;
   const { primaryColor, radius } = theme.style;
-  const { borderColor, backgroundColor, textColor } = theme[theme.mode];
+  const { borderColor, backgroundColor, textColor, disabledBgColor, disabledTextColor } = theme[theme.mode];
 
   return css`
     box-sizing: border-box;
@@ -26,9 +26,22 @@ export const inputStyle = (props: InputCSSProps) => {
     border: 1px solid ${borderColor};
     border-radius: ${radius}px;
     transition: all 0.3s;
-    &.ultra-input-focused {
+    &.ultra-input--focused {
       border-color: ${primaryColor};
       box-shadow: 0 0 0 2px ${fade(primaryColor, 0.2)};
+    }
+    &.ultra-input--disabled {
+      cursor: not-allowed;
+      background-color: ${disabledBgColor};
+      color: ${disabledTextColor};
+      box-shadow: none;
+      input {
+        cursor: not-allowed;
+        color: ${disabledTextColor};
+      }
+    }
+    &:not(&.ultra-input--disabled) &:hover {
+      border-color: ${primaryColor};
     }
     input {
       width: 100%;
