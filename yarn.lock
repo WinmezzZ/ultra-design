@@ -2052,10 +2052,10 @@
     regenerator-runtime "0.13.5"
     schema-utils "^3.0.0"
 
-"@umijs/preset-dumi@1.1.35":
-  version "1.1.35"
-  resolved "https://registry.yarnpkg.com/@umijs/preset-dumi/-/preset-dumi-1.1.35.tgz#694f0cc70f5d4ccc34879ff456804b2a8e681abc"
-  integrity sha512-3hIKGAS/jSPXWLfpWCM3734TevLw3LqX/X7LdxM6YtGXxcuLYb6kTepLxRnRDk23sLwAH+g4tzHrndPhJyiNZA==
+"@umijs/preset-dumi@1.1.37":
+  version "1.1.37"
+  resolved "https://registry.yarnpkg.com/@umijs/preset-dumi/-/preset-dumi-1.1.37.tgz#195f7ab812c493d479c606329bf43827ebc33218"
+  integrity sha512-DiRSZ0rtYY1JA4RHD7tfRN5sgvbt71nTMIYASwGFFqOWAUz1TP9LMUXMh0QTcmCjYpYt98lQsVX1S+BOkRifVA==
   dependencies:
     "@babel/core" "^7.7.2"
     "@babel/generator" "^7.7.2"
@@ -2071,7 +2071,7 @@
     copy-text-to-clipboard "^2.2.0"
     deepmerge "^4.2.2"
     dumi-assets-types "1.0.0"
-    dumi-theme-default "1.1.18"
+    dumi-theme-default "1.1.20"
     enhanced-resolve "^4.1.1"
     github-slugger "^1.3.0"
     hast-util-has-property "^1.0.4"
@@ -3350,23 +3350,24 @@ dumi-assets-types@1.0.0:
   resolved "https://registry.yarnpkg.com/dumi-assets-types/-/dumi-assets-types-1.0.0.tgz#d5368cb11045b203bf1ef1080e553b2287a2ec81"
   integrity sha512-7nhSeWM15vybbUAMPLZsdls2jKoHB2UU4P1RM6kLPucuS8eC/HSmufquFqTTYtX4oIDLHGtil/dVtMreNGwhdA==
 
-dumi-theme-default@1.1.18:
-  version "1.1.18"
-  resolved "https://registry.yarnpkg.com/dumi-theme-default/-/dumi-theme-default-1.1.18.tgz#5994a2539c802511d7ef721b9ac38e81910b9bdd"
-  integrity sha512-btiLNmJkXxp3lB2T7FcWlSZioMBsghaqnmJcoVSSW+r0OOhDS65e1Z747B0VxHLEJqSwLQtqcEebUD9QGy8Vvg==
+dumi-theme-default@1.1.20:
+  version "1.1.20"
+  resolved "https://registry.yarnpkg.com/dumi-theme-default/-/dumi-theme-default-1.1.20.tgz#53bb44fa8b14d97a840ef9f9833f960e54c8ddaf"
+  integrity sha512-p6XuHQXpRmofD/TC59VvIMeC+6FMvdl9xb6X1cWtoLta1oH7lvSt1/4WPS8yRcsKMcWXM2Z1BSVMrztjCiTyvw==
   dependencies:
+    lodash.throttle "^4.1.1"
     prism-react-renderer "^1.1.1"
     prismjs "^1.21.0"
     rc-motion "^2.4.1"
     rc-tabs "^11.7.1"
     rc-tree "^5.2.0"
 
-dumi@^1.1.35:
-  version "1.1.35"
-  resolved "https://registry.yarnpkg.com/dumi/-/dumi-1.1.35.tgz#390007d779febbdf7afe6b88c20c25b02e7159bb"
-  integrity sha512-I1e2rC+OcHM4T05P6GzYUf1JOP1pWDbYOvYbHAUjC0GUktpQmTLsUSl9bPR46dmiIZ9JNSV5EuDq4ZGkRm+YHw==
+dumi@^1.1.37:
+  version "1.1.37"
+  resolved "https://registry.yarnpkg.com/dumi/-/dumi-1.1.37.tgz#3435e0b1742c4ff3c2453b1ccb41f97ad12f63cc"
+  integrity sha512-ph34F/PVKxd5KQsEvx5jLa6PmX+7wIRO60WkSi5LS030ZoAlapUyggP4YsWEHlhaBi1SZk7lD3dZvwJpv0DAKg==
   dependencies:
-    "@umijs/preset-dumi" "1.1.35"
+    "@umijs/preset-dumi" "1.1.37"
     umi "^3.0.0"
 
 electron-to-chromium@^1.3.896:
