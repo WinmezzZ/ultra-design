@@ -1,4 +1,4 @@
-import React, { HTMLInputTypeAttribute, useMemo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { inputStyle } from './input-style';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
@@ -18,6 +18,7 @@ export interface InputProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  onClear?: () => void;
 }
 
 const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (props, ref) => {
@@ -35,6 +36,7 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
     placeholder,
     autoFocus,
     clearable,
+    onClear,
   } = props;
   const [inputValue, setInputValue] = useState(defaultValue);
   const [focus, setFocus] = useState(false);
@@ -73,6 +75,7 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
     };
 
     onChange?.(fakeEvent);
+    onClear?.();
   };
 
   return (

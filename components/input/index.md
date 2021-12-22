@@ -28,11 +28,13 @@ export default () => {
 import React from 'react';
 import { Input } from 'ultra-design';
 
-export default () => (
-  <div>
-    <Input clearable />
-  </div>
-);
+export default () => {
+  return (
+    <div>
+      <Input clearable />
+    </div>
+  )
+};
 ```
 
 ## Disabled
