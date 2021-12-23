@@ -25,6 +25,9 @@ export const selectStyle = (props: SelectCSSProps) => {
     border-radius: ${radius}px;
     transition: all 0.3s;
     cursor: pointer;
+    :focus {
+      outline: 0;
+    }
     &.ultra-select--focused {
       border-color: ${primaryColor};
       box-shadow: 0 0 0 2px ${fade(primaryColor, 0.2)};

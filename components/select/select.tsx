@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { selectStyle } from './select-style';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
 import Input from '../input';
 import Dropdown from '../dropdown';
 import Option, { OptionProps } from './option';
-import { Up, Down } from '@icon-park/react';
+import { Down, Up } from '@icon-park/react';
+import { isNil } from 'lodash-es';
 
 export interface SelectProps {
   value?: string;
@@ -20,7 +21,7 @@ export interface SelectProps {
   style?: React.CSSProperties;
 }
 
-const Select: React.FC<SelectProps> = props => {
+const SelectComponent: React.ForwardRefRenderFunction<unknown, SelectProps> = (props, ref) => {
   const {
     disabled,
     onChange,
@@ -34,10 +35,12 @@ const Select: React.FC<SelectProps> = props => {
     className,
     style,
   } = props;
+  const selfRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState('');
   const [selectionLabel, setSelectionLabel] = useState<any>(defaultValue);
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [selectValue, setSelectValue] = useState();
+  const [selectValue, setSelectValue] = useState<string | number | boolean | undefined>(value || defaultValue);
+  const [hoverIndex, setHoverIndex] = useState(-1);
   const [dropdownVisivle, setDropdownVisivle] = useState(false);
   const [focus, setFocus] = useState(false);
   const configContext = useConfigContext();
@@ -51,8 +54,24 @@ const Select: React.FC<SelectProps> = props => {
       );
 
       setSelectedIndex(defaultOptionIndex);
+
+      return;
+    }
+    if (!isNil(value) && optionsData) {
+      const defaultOptionIndex = optionsData.findIndex(opt => opt.value === value);
+
+      setSelectionLabel(optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label);
+      setSelectedIndex(defaultOptionIndex);
+
+      return;
     }
   }, []);
+
+  useImperativeHandle(ref, () => {
+    return {
+      value: selectValue,
+    };
+  });
 
   const handleChange = (data: React.PropsWithChildren<OptionProps>, i: number) => {
     const { children, label, value: optionValue } = data;
@@ -60,21 +79,72 @@ const Select: React.FC<SelectProps> = props => {
     setSelectedIndex(i);
     setSelectionLabel(children || label);
 
-    if (filterable && optionsData?.length) {
-      const v = optionsData.find(o => o.value === optionValue);
+    setSelectValue(optionValue);
 
-      if (v) {
-        setInputValue(v.value);
-        onChange?.(value);
-      }
+    if (!optionsData?.length) return;
+    const v = optionsData.find(o => o.value === optionValue);
+
+    if (v) {
+      onChange?.(optionValue);
     }
 
     setFocus(true);
+    setDropdownVisivle(false);
   };
 
-  useEffect(() => {
-    setDropdownVisivle(false);
-  }, [focus]);
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (disabled) return;
+    if (!optionsData?.length) return;
+    if (optionsData.every(o => o.disabled)) return;
+    if (e.code === 'ArrowDown') {
+      setHoverIndex(i => {
+        let step = 1;
+
+        for (let j = 0; j < optionsData.length - 1; j++) {
+          const next = i + j + 1;
+
+          if (optionsData[next >= optionsData.length ? 0 : next].disabled) {
+            step += 1;
+          } else {
+            break;
+          }
+        }
+
+        return i >= optionsData.length - 1 ? step - 1 : i + step;
+      });
+    } else if (e.code === 'ArrowUp') {
+      setHoverIndex(i => {
+        let step = 1;
+
+        for (let j = 0; j < optionsData.length - 1; j++) {
+          const next = i - j - 1;
+
+          if (optionsData[next <= -1 ? optionsData.length - 1 : next].disabled) {
+            step += 1;
+          } else {
+            break;
+          }
+        }
+
+        return i <= -1 ? optionsData.length - step : i - step;
+      });
+    }
+
+    if (e.code === 'Enter') {
+      const noHover = hoverIndex <= -1;
+
+      if (noHover) {
+        setDropdownVisivle(!dropdownVisivle);
+      } else {
+        handleChange(optionsData[hoverIndex], hoverIndex);
+      }
+    }
+
+    // TODO: for fix ref always null
+    if (selfRef.current) {
+      selfRef.current.focus();
+    }
+  };
 
   const handleClear = () => {
     setInputValue('');
@@ -83,25 +153,28 @@ const Select: React.FC<SelectProps> = props => {
     onChange?.(selectValue);
   };
 
+  const renderOptionItem = (option: any, props: OptionProps, index: number) => {
+    return React.cloneElement(option, {
+      ...props,
+      className: clsx(
+        selectedIndex === index && 'ultra-select-option--active',
+        hoverIndex === index && 'ultra-select-option--hover',
+      ),
+      onClick: () => !props.disabled && handleChange(props, index),
+      onMouseEnter: () => {
+        setHoverIndex(index);
+      },
+    });
+  };
+
   return (
     <Dropdown
       visible={dropdownVisivle}
       onVisibleChange={v => setDropdownVisivle(v)}
       content={
         children
-          ? React.Children.toArray(children).map((child: any, i) =>
-              React.cloneElement(child, {
-                className: clsx(selectedIndex === i && 'ultra-select-option--active'),
-                onClick: () => !child.props.disabled && handleChange(child.props, i),
-              }),
-            )
-          : options?.map((option, i) => (
-              <Option
-                {...option}
-                className={clsx(selectedIndex === i && 'ultra-select-option--active')}
-                onClick={() => handleChange(option, i)}
-              />
-            ))
+          ? React.Children.toArray(children).map((child: any, i) => renderOptionItem(child, child.props, i))
+          : options?.map((option, i) => renderOptionItem(Option, option, i))
       }
       getLayerContainer={node => node.parentNode as HTMLElement}
     >
@@ -117,6 +190,8 @@ const Select: React.FC<SelectProps> = props => {
         css={selectStyle(styleProps)}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
+        onKeyDown={handleKeyDown}
+        ref={selfRef}
       >
         {filterable ? (
           <Input
@@ -139,6 +214,8 @@ const Select: React.FC<SelectProps> = props => {
     </Dropdown>
   );
 };
+
+const Select = React.forwardRef(SelectComponent);
 
 Select.displayName = 'UltraSelect';
 
