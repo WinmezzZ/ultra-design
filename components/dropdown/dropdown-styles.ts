@@ -3,7 +3,7 @@ import { DropdownProps } from './dropdown';
 
 export const dropdownStyles: DropdownProps['cssProps'] = props => {
   const { mode } = props.theme;
-  const { boxShadow } = props.theme.style;
+  const { boxShadow, radius } = props.theme.style;
   const { thirdBackgroundColor, textColor } = props.theme[mode];
 
   return css`
@@ -12,9 +12,9 @@ export const dropdownStyles: DropdownProps['cssProps'] = props => {
       background-color: ${thirdBackgroundColor};
       color: ${textColor};
       box-shadow: ${boxShadow};
-      border-radius: 2px;
+      border-radius: ${radius};
       &__title {
-        padding: 12px 16px;
+        padding: 8px 0;
       }
       &__arrow {
         border-color: transparent ${thirdBackgroundColor} transparent transparent;
