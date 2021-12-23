@@ -16,7 +16,7 @@ export const toolTipCSS = (props: TooltipCSSProps) => {
     top: 0;
     left: 0;
     width: 100%;
-    .layer {
+    .ultra-tooltip {
       position: absolute;
       background-color: ${secondReverseBgColor};
       color: ${reverseTextColor};
@@ -31,69 +31,69 @@ export const toolTipCSS = (props: TooltipCSSProps) => {
         min-width: 30px;
         min-height: 16px;
       }
-      .arrow {
+      &__arrow {
         position: absolute;
         width: 0;
         height: 0;
         border-style: solid;
         border-width: 6px 7px 6px 0;
         border-color: transparent ${secondReverseBgColor} transparent transparent;
-        &.arrow-placement__topLeft {
+        &--placement__topLeft {
           bottom: -8px;
           left: 9px;
           transform: translate(0, 0) rotate(-90deg);
         }
-        &.arrow-placement__top {
+        &--placement__top {
           bottom: -8px;
           left: 50%;
           transform: translate(-50%, 0) rotate(-90deg);
         }
-        &.arrow-placement__topRight {
+        &--placement__topRight {
           bottom: -8px;
           right: 9px;
           transform: translate(0, 0) rotate(-90deg);
         }
-        &.arrow-placement__rightTop {
+        &--placement__rightTop {
           top: 9px;
           left: -6px;
           transform: translate(0, 0) rotate(0deg);
         }
-        &.arrow-placement__right {
+        &--placement__right {
           top: 50%;
           left: -6px;
           transform: translate(0, -50%) rotate(0deg);
         }
-        &.arrow-placement__rightBottom {
+        &--placement__rightBottom {
           bottom: 9px;
           left: -6px;
           transform: translate(0, 0) rotate(0deg);
         }
-        &.arrow-placement__bottomRight {
+        &--placement__bottomRight {
           top: -8px;
           right: 9px;
           transform: translate(0, 0) rotate(90deg);
         }
-        &.arrow-placement__bottom {
+        &--placement__bottom {
           top: -8px;
           left: 50%;
           transform: translate(-50%, 0) rotate(90deg);
         }
-        &.arrow-placement__bottomLeft {
+        &--placement__bottomLeft {
           top: -8px;
           left: 9px;
           transform: translate(0, 0) rotate(90deg);
         }
-        &.arrow-placement__leftBottom {
+        &--placement__leftBottom {
           bottom: 9px;
           right: -6px;
           transform: translate(0, 0) rotate(180deg);
         }
-        &.arrow-placement__left {
+        &--placement__left {
           top: 50%;
           right: -6px;
           transform: translate(0, -50%) rotate(180deg);
         }
-        &.arrow-placement__leftTop {
+        &--placement__leftTop {
           top: 9px;
           right: -6px;
           transform: translate(0, 0) rotate(180deg);
@@ -101,17 +101,17 @@ export const toolTipCSS = (props: TooltipCSSProps) => {
       }
     }
 
-    .tooltip-layer-enter {
+    .ultra-tooltip-layer-fade-enter {
       opacity: 0;
     }
-    .tooltip-layer-enter-active {
+    .ultra-tooltip-layer-fade-enter-active {
       opacity: 1;
       transition: opacity 300ms;
     }
-    .tooltip-layer-exit {
+    .ultra-tooltip-layer-fade-exit {
       opacity: 1;
     }
-    .tooltip-layer-exit-active {
+    .ultra-tooltip-layer-fade-exit-active {
       opacity: 0;
       transition: opacity 300ms;
     }

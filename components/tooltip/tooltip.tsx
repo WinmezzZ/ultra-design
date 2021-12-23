@@ -91,6 +91,18 @@ export interface TooltipProps {
    * @description.en-US tclassName of layer box
    */
   layerClassName?: string;
+  /**
+   * @description.zh-CN 渐变的类名，提供后可以自定义渐变效果
+   * @description.en-US className of `CSSTransition`, for custom transition
+   * @default 'ultra-tooltip-layer-fade'
+   */
+  transitionClassName?: string;
+  /**
+   * @description.zh-CN 渐变的持续的时间，尽量和 css 中的保持一致，此值将提供给 `CSSTransition`
+   * @description.en-US timeout of `CSSTransition`, be best set to same as transition duration in css
+   * @default 300
+   */
+  transitionTimeout?: number;
 
   cssProps?: (props: TooltipCSSProps) => SerializedStyles;
 }
@@ -111,6 +123,8 @@ const Tooltip: FC<TooltipProps> = props => {
     layerClassName,
     getLayerContainer,
     cssProps,
+    transitionClassName,
+    transitionTimeout,
   } = props;
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
@@ -228,10 +242,12 @@ const Tooltip: FC<TooltipProps> = props => {
       {createPortal(
         <div css={[toolTipCSS(styleProps), cssProps?.(styleProps)]}>
           <div>
-            <CSSTransition in={visible} unmountOnExit timeout={300} classNames="tooltip-layer">
-              <div ref={layerRef} className={clsx('layer', layerClassName)} style={layerStyle}>
+            <CSSTransition in={visible} unmountOnExit timeout={transitionTimeout!} classNames={transitionClassName}>
+              <div ref={layerRef} className={clsx('ultra-tooltip', layerClassName)} style={layerStyle}>
                 <div className="title">{title}</div>
-                {showArrow && <div className={clsx('arrow', `arrow-placement__${placement}`)}></div>}
+                {showArrow && (
+                  <div className={clsx('ultra-tooltip__arrow', `ultra-tooltip__arrow--placement__${placement}`)} />
+                )}
               </div>
             </CSSTransition>
           </div>
@@ -251,6 +267,8 @@ Tooltip.defaultProps = {
   hideDelay: 100,
   offset: 12,
   showArrow: true,
+  transitionClassName: 'ultra-tooltip-layer-fade',
+  transitionTimeout: 300,
 };
 
 export default Tooltip;
