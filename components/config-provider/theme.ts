@@ -20,6 +20,7 @@ export interface Theme {
   style: {
     primaryColor: string;
     radius: number;
+    boxShadow: string;
   };
   light: ThemeModeStyle;
   dark: ThemeModeStyle;
@@ -38,6 +39,7 @@ export const defaultTheme: Theme = {
   style: {
     primaryColor: '#13c2c2',
     radius: 6,
+    boxShadow: '0 1px 10px 0 rgb(0 0 0 / 25%)',
   },
   light: {
     textColor: '#000000',
