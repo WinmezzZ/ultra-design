@@ -25,5 +25,8 @@ export { default as Input } from './input';
 export type { SelectProps } from './select';
 export { default as Select } from './select';
 
+export type { DropdownProps } from './dropdown';
+export { default as Dropdown } from './dropdown';
+
 export type { ConfigContextOptions } from './config-provider';
 export { default as ConfigProvider } from './config-provider';
