@@ -244,7 +244,7 @@ const Tooltip: FC<TooltipProps> = props => {
           <div>
             <CSSTransition in={visible} unmountOnExit timeout={transitionTimeout!} classNames={transitionClassName}>
               <div ref={layerRef} className={clsx('ultra-tooltip', layerClassName)} style={layerStyle}>
-                <div className="title">{title}</div>
+                <div className="ultra-tooltip__title">{title}</div>
                 {showArrow && (
                   <div className={clsx('ultra-tooltip__arrow', `ultra-tooltip__arrow--placement__${placement}`)} />
                 )}
