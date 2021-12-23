@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
 import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
+import { fade } from '../utils/fade';
 
 export interface OptionProps {
   label?: React.ReactNode;
@@ -42,7 +43,6 @@ export interface OptionCSSProps extends OptionProps, ComponentCommonProps, Confi
 const optionStyle = (props: OptionCSSProps) => {
   const { theme } = props;
   const { primaryColor } = theme.style;
-  const { textColor } = theme[theme.mode];
 
   return css`
     display: flex;
@@ -51,8 +51,8 @@ const optionStyle = (props: OptionCSSProps) => {
     min-height: 32px;
     cursor: pointer;
     &.ultra-select-option--active {
-      background-color: ${primaryColor};
-      color: ${textColor};
+      background-color: ${fade(primaryColor, 0.1)};
+      color: ${primaryColor};
     }
     &:not(.ultra-select-option--disabled, .ultra-select-option--active):hover {
       background-color: #f0f1f3;
