@@ -61,9 +61,9 @@ export default () => {
   const [value, setValue] = React.useState('')
   const inputRef = React.useRef<HTMLInputElement>('')
 
-  const handleChange = (e) => {
-    setValue(e.target.value)
-    console.log(e.target.value)
+  const handleChange = (value) => {
+    setValue(value)
+    console.log(value)
   }
   
   const handleBlur = () => {

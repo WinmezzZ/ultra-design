@@ -14,11 +14,11 @@ export interface InputProps {
   disabled?: boolean;
   readOnly?: boolean;
   autoFocus?: boolean;
-  onInput?: React.FormEventHandler<HTMLInputElement>;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  onFocus?: React.FocusEventHandler<HTMLInputElement>;
-  onBlur?: React.FocusEventHandler<HTMLInputElement>;
-  onClear?: () => void;
+  onInput?: (value: string, e: React.FormEvent<HTMLInputElement>) => void;
+  onChange?: (value: string, e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (value: string, e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (value: string, e: React.FocusEvent<HTMLInputElement>) => void;
+  onClear?: (value: string, e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (props, ref) => {
@@ -47,19 +47,19 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
 
   const handleFocus: React.FocusEventHandler<HTMLInputElement> = e => {
     setFocus(true);
-    onFocus?.(e);
+    onFocus?.(e.target.value, e);
   };
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = e => {
     setFocus(false);
-    onBlur?.(e);
+    onBlur?.(e.target.value, e);
   };
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     setInputValue(e.target.value);
-    onChange?.(e);
+    onChange?.(e.target.value, e);
   };
   const handleInput: React.FormEventHandler<HTMLInputElement> = e => {
     setFocus(true);
-    onInput?.(e);
+    onInput?.(e.currentTarget.value, e);
   };
   const handleClear = (e: React.MouseEvent<HTMLDivElement>) => {
     setInputValue('');
@@ -74,8 +74,8 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
       currentTarget: el,
     };
 
-    onChange?.(fakeEvent);
-    onClear?.();
+    onChange?.('', fakeEvent);
+    onClear?.('', fakeEvent as any as React.MouseEvent<HTMLDivElement>);
   };
 
   return (
