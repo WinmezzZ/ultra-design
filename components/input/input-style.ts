@@ -41,7 +41,7 @@ export const inputStyle = (props: InputCSSProps) => {
         color: ${disabledTextColor};
       }
     }
-    &:not(&.ultra-input--disabled) &:hover {
+    &:not(&.ultra-input--disabled):hover {
       border-color: ${primaryColor};
     }
     input {

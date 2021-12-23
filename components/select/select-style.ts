@@ -50,7 +50,7 @@ export const selectStyle = (props: SelectCSSProps) => {
       align-items: center;
     }
 
-    &:not(&.ultra-input--disabled) &:hover {
+    &:not(&.ultra-input--disabled):hover {
       border-color: ${primaryColor};
     }
 
