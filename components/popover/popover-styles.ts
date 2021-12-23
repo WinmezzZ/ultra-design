@@ -6,15 +6,15 @@ export const popoverStyles: PopoverProps['cssProps'] = props => {
   const { thirdBackgroundColor, textColor } = props.theme[mode];
 
   return css`
-    .layer {
+    .ultra-tooltip {
       background-color: ${thirdBackgroundColor};
       color: ${textColor};
       box-shadow: rgb(0 0 0 / 15%) 0px 8px 30px;
       border-radius: 2px;
-      .title {
+      &__title {
         padding: 12px 16px;
       }
-      .arrow {
+      &__arrow {
         border-color: transparent ${thirdBackgroundColor} transparent transparent;
       }
     }

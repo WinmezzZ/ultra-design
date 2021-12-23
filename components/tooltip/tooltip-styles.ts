@@ -22,7 +22,7 @@ export const toolTipCSS = (props: TooltipCSSProps) => {
       color: ${reverseTextColor};
       border-radius: 4px;
       z-index: 999;
-      .title {
+      &__title {
         white-space: nowrap;
         word-wrap: break-word;
         padding: 4px 6px;
