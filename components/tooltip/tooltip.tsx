@@ -226,13 +226,19 @@ const Tooltip: FC<TooltipProps> = props => {
 
   if (!children) return null;
 
-  const resolvedChild = React.isValidElement(children) ? children : <span>{children}</span>;
+  const isElement = React.isValidElement(children);
+
+  const resolvedChild = isElement ? children : <span>{children}</span>;
 
   const child = React.cloneElement(resolvedChild, {
+    ...(React.isValidElement(children) ? props : {}),
     ref: childRef,
     onMouseEnter: () => mouseEventHandler(true),
     onMouseLeave: () => mouseEventHandler(false),
-    onClick: clickEventHandler,
+    onClick: (e: React.MouseEvent) => {
+      clickEventHandler();
+      isElement && children.props.onClick(e);
+    },
   });
 
   const layerStyle = getPosition(placement!, rect, layerOffset);
