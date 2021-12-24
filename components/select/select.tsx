@@ -45,7 +45,9 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, SelectProps> = (p
   const [focus, setFocus] = useState(false);
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
-  const optionsData = children ? React.Children.toArray(children).map((item: any) => item.props) : options;
+  const optionsData: React.PropsWithChildren<OptionProps>[] = children
+    ? React.Children.toArray(children).map((item: any) => item.props)
+    : options || [];
 
   useEffect(() => {
     if (defaultValue && !value && optionsData) {
@@ -81,7 +83,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, SelectProps> = (p
 
     setSelectValue(optionValue);
 
-    if (!optionsData?.length) return;
+    if (!optionsData.length) return;
     const v = optionsData.find(o => o.value === optionValue);
 
     if (v) {
@@ -92,42 +94,34 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, SelectProps> = (p
     setDropdownVisivle(false);
   };
 
+  const getNextIndex = (currentIndex: number, symbol: '+' | '-'): number => {
+    const total = optionsData.length;
+    const isDown = symbol === '+';
+    const isOverRange = isDown ? currentIndex >= total : currentIndex <= -1;
+    // eslint-disable-next-line
+    let nextIndex = isDown ? (isOverRange ? -1 : currentIndex) + 1 : (isOverRange ? total : currentIndex) - 1;
+
+    for (let j = 0; j < total; j++) {
+      if (optionsData[nextIndex].disabled) {
+        eval(`nextIndex = currentIndex ${symbol} j ${symbol} 1;`);
+      } else {
+        break;
+      }
+      if (isDown && nextIndex >= total) return getNextIndex(0, symbol);
+      if (!isDown && nextIndex <= -1) return getNextIndex(total - 1, symbol);
+    }
+
+    return nextIndex;
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (disabled) return;
-    if (!optionsData?.length) return;
+    if (!optionsData.length) return;
     if (optionsData.every(o => o.disabled)) return;
     if (e.code === 'ArrowDown') {
-      setHoverIndex(i => {
-        let step = 1;
-
-        for (let j = 0; j < optionsData.length - 1; j++) {
-          const next = i + j + 1;
-
-          if (optionsData[next >= optionsData.length ? 0 : next].disabled) {
-            step += 1;
-          } else {
-            break;
-          }
-        }
-
-        return i >= optionsData.length - 1 ? step - 1 : i + step;
-      });
+      setHoverIndex(i => getNextIndex(i, '+'));
     } else if (e.code === 'ArrowUp') {
-      setHoverIndex(i => {
-        let step = 1;
-
-        for (let j = 0; j < optionsData.length - 1; j++) {
-          const next = i - j - 1;
-
-          if (optionsData[next <= -1 ? optionsData.length - 1 : next].disabled) {
-            step += 1;
-          } else {
-            break;
-          }
-        }
-
-        return i <= -1 ? optionsData.length - step : i - step;
-      });
+      setHoverIndex(i => getNextIndex(i, '-'));
     }
 
     if (e.code === 'Enter') {

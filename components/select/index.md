@@ -15,11 +15,17 @@ import { Select } from 'ultra-design';
 export default () => {
   return (
     <div>
-      <Select defaultValue="三国演义" style={{ width: 200 }}>
-        <Select.Option>三国演义</Select.Option>
-        <Select.Option>西游记</Select.Option>
-        <Select.Option disabled>红楼梦</Select.Option>
-        <Select.Option>水浒传</Select.Option>
+      <Select style={{ width: 200 }}>
+        <Select.Option disabled>JavaScript</Select.Option>
+        <Select.Option>Java</Select.Option>
+        <Select.Option>PHP</Select.Option>
+        <Select.Option disabled>Python</Select.Option>
+        <Select.Option>Ruby</Select.Option>
+        <Select.Option disabled>Dart </Select.Option>
+        <Select.Option disabled>C#</Select.Option>
+        <Select.Option>C++</Select.Option>
+        <Select.Option>Go</Select.Option>
+        <Select.Option disabled>Rust</Select.Option>
       </Select>
     </div>
   );
