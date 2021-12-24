@@ -94,37 +94,27 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, SelectProps> = (p
     setDropdownVisivle(false);
   };
 
-  const getNextIndex = (currentIndex: number, symbol: '+' | '-'): number => {
-    const total = optionsData.length;
-    const isDown = symbol === '+';
-    const isOverRange = isDown ? currentIndex >= total : currentIndex <= -1;
-    // eslint-disable-next-line
-    let nextIndex = isDown ? (isOverRange ? -1 : currentIndex) + 1 : (isOverRange ? total : currentIndex) - 1;
-
-    for (let j = 0; j < total; j++) {
-      if (optionsData[nextIndex].disabled) {
-        eval(`nextIndex = currentIndex ${symbol} j ${symbol} 1;`);
-      } else {
-        break;
-      }
-      if (isDown && nextIndex >= total) return getNextIndex(0, symbol);
-      if (!isDown && nextIndex <= -1) return getNextIndex(total - 1, symbol);
-    }
-
-    return nextIndex;
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    e.preventDefault();
     if (disabled) return;
     if (!optionsData.length) return;
     if (optionsData.every(o => o.disabled)) return;
-    if (e.code === 'ArrowDown') {
-      setHoverIndex(i => getNextIndex(i, '+'));
-    } else if (e.code === 'ArrowUp') {
-      setHoverIndex(i => getNextIndex(i, '-'));
-    }
 
-    if (e.code === 'Enter') {
+    if (e.code === 'ArrowDown') {
+      setHoverIndex(currentIndex => {
+        const arrowDown = (index: number): number =>
+          optionsData[++index] ? (optionsData[index].disabled ? arrowDown(index) : index) : arrowDown(-1);
+
+        return arrowDown(currentIndex);
+      });
+    } else if (e.code === 'ArrowUp') {
+      setHoverIndex(currentIndex => {
+        const arrowUp = (index: number): number =>
+          optionsData[--index] ? (optionsData[index].disabled ? arrowUp(index) : index) : arrowUp(optionsData.length);
+
+        return arrowUp(currentIndex);
+      });
+    } else if (e.code === 'Enter') {
       const noHover = hoverIndex <= -1;
 
       if (noHover) {
