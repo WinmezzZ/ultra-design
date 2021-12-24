@@ -96,23 +96,26 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, SelectProps> = (p
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     e.preventDefault();
-    if (disabled) return;
-    if (!optionsData.length) return;
+    const optsLen = optionsData.length;
+
+    if (disabled || !optsLen) return;
     if (optionsData.every(o => o.disabled)) return;
 
     if (e.code === 'ArrowDown') {
-      setHoverIndex(currentIndex => {
-        const arrowDown = (index: number): number =>
-          optionsData[++index] ? (optionsData[index].disabled ? arrowDown(index) : index) : arrowDown(-1);
+      setHoverIndex(i => {
+        while (optionsData[(i + 1) % optsLen].disabled) {
+          i += 1;
+        }
 
-        return arrowDown(currentIndex);
+        return (i + 1) % optsLen;
       });
     } else if (e.code === 'ArrowUp') {
-      setHoverIndex(currentIndex => {
-        const arrowUp = (index: number): number =>
-          optionsData[--index] ? (optionsData[index].disabled ? arrowUp(index) : index) : arrowUp(optionsData.length);
+      setHoverIndex(i => {
+        while (optionsData[(i - 1 + optsLen) % optsLen].disabled) {
+          i -= 1;
+        }
 
-        return arrowUp(currentIndex);
+        return (i - 1 + optsLen) % optsLen;
       });
     } else if (e.code === 'Enter') {
       const noHover = hoverIndex <= -1;
