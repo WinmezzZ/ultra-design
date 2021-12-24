@@ -21,7 +21,7 @@ export interface SelectProps {
   style?: React.CSSProperties;
 }
 
-const SelectComponent: React.ForwardRefRenderFunction<unknown, SelectProps> = (props, ref) => {
+const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithChildren<SelectProps>> = (props, ref) => {
   const {
     disabled,
     onChange,

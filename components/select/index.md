@@ -33,25 +33,26 @@ export default () => {
 ```
 
 ## Controlled & Uncontrolled
+
 1. For **Controlled component**, you should provide `value` and `onChange` both into input props.
 2. For **Uncontrolled component**, you can get input value by `ref` props.
 
-```tsx
+```jsx
 import React from 'react';
 import { Select } from 'ultra-design';
 
 export default () => {
-  const [value, setValue] = React.useState('2')
-  const selectRef = React.useRef(null)
+  const [value, setValue] = React.useState('2');
+  const selectRef = React.useRef(null);
 
-  const handleControlledChange = (value) => {
-    setValue(value)
-    console.log(value)
-  }
-  
+  const handleControlledChange = value => {
+    setValue(value);
+    console.log(value);
+  };
+
   const handleUnControlledChange = () => {
-    console.log(selectRef.current.value)
-  }
+    console.log(selectRef.current.value);
+  };
 
   return (
     <div>
@@ -69,7 +70,7 @@ export default () => {
         <Select.Option value="4" label="水浒传" />
       </Select>
     </div>
-  )
+  );
 };
 ```
 
