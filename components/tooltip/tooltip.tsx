@@ -231,13 +231,13 @@ const Tooltip: FC<TooltipProps> = props => {
   const resolvedChild = isElement ? children : <span>{children}</span>;
 
   const child = React.cloneElement(resolvedChild, {
-    ...(React.isValidElement(children) ? props : {}),
+    ...(React.isValidElement(children) ? children.props : {}),
     ref: childRef,
     onMouseEnter: () => mouseEventHandler(true),
     onMouseLeave: () => mouseEventHandler(false),
     onClick: (e: React.MouseEvent) => {
       clickEventHandler();
-      isElement && children.props.onClick(e);
+      isElement && children.props.onClick?.(e);
     },
   });
 
