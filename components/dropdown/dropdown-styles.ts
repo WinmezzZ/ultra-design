@@ -26,7 +26,7 @@ export const dropdownStyles: DropdownProps['cssProps'] = props => {
       overflow: hidden;
     }
     .ultra-dropdown-layer-slide-enter-active {
-      max-height: 200px;
+      max-height: 300px;
       transition: max-height 300ms ease;
     }
     .ultra-dropdown-layer-slide-exit {

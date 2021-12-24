@@ -25,6 +25,7 @@ export const selectStyle = (props: SelectCSSProps) => {
     border-radius: ${radius}px;
     transition: all 0.3s;
     cursor: pointer;
+    user-select: none;
     :focus {
       outline: 0;
     }

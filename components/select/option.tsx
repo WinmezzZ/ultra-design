@@ -53,6 +53,7 @@ const optionStyle = (props: OptionCSSProps) => {
     padding: 0 12px;
     min-height: 32px;
     cursor: pointer;
+    user-select: none;
 
     &.ultra-select-option--disabled {
       background-color: ${disabledBgColor};
