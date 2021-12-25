@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { selectStyle } from './select-style';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
@@ -37,7 +37,6 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   } = props;
   const selfRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState('');
-  const [selectionLabel, setSelectionLabel] = useState<any>(defaultValue);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [selectValue, setSelectValue] = useState<string | number | boolean | undefined>(value || defaultValue);
   const [hoverIndex, setHoverIndex] = useState(-1);
@@ -48,6 +47,16 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   const optionsData: React.PropsWithChildren<OptionProps>[] = children
     ? React.Children.toArray(children).map((item: any) => item.props)
     : options || [];
+
+  const selectionLabel = useMemo(() => {
+    if ('value' in props) {
+      const defaultOptionIndex = optionsData.findIndex(opt => opt.value === value);
+
+      return optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label;
+    } else {
+      return defaultValue;
+    }
+  }, [value, defaultValue]);
 
   useEffect(() => {
     if (defaultValue && !value && optionsData) {
@@ -62,7 +71,6 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     if (!isNil(value) && optionsData) {
       const defaultOptionIndex = optionsData.findIndex(opt => opt.value === value);
 
-      setSelectionLabel(optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label);
       setSelectedIndex(defaultOptionIndex);
 
       return;
@@ -75,11 +83,15 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     };
   });
 
+  useEffect(() => {
+    if (value === undefined) return;
+    setSelectValue(value);
+  }, [value]);
+
   const handleChange = (data: React.PropsWithChildren<OptionProps>, i: number) => {
-    const { children, label, value: optionValue } = data;
+    const { value: optionValue } = data;
 
     setSelectedIndex(i);
-    setSelectionLabel(children || label);
 
     setSelectValue(optionValue);
 
@@ -91,6 +103,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     }
 
     setFocus(true);
+    setHoverIndex(-1);
     setDropdownVisivle(false);
   };
 
@@ -128,9 +141,9 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     }
 
     // TODO: for fix ref always null
-    if (selfRef.current) {
-      selfRef.current.focus();
-    }
+    // if (selfRef.current) {
+    //   selfRef.current.focus();
+    // }
   };
 
   const handleClear = () => {
