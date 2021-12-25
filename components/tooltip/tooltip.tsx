@@ -210,7 +210,9 @@ const Tooltip: FC<TooltipProps> = props => {
       return;
     }
 
-    timer.current = window.setTimeout(() => handler(false), hideDelay);
+    timer.current = window.setTimeout(() => {
+      handler(false);
+    }, hideDelay);
   };
 
   useEffect(() => {
@@ -249,7 +251,13 @@ const Tooltip: FC<TooltipProps> = props => {
         <div css={[toolTipCSS(styleProps), cssProps?.(styleProps)]}>
           <div>
             <CSSTransition in={visible} unmountOnExit timeout={transitionTimeout!} classNames={transitionClassName}>
-              <div ref={layerRef} className={clsx('ultra-tooltip', layerClassName)} style={layerStyle}>
+              <div
+                ref={layerRef}
+                className={clsx('ultra-tooltip', layerClassName)}
+                style={layerStyle}
+                onMouseEnter={() => mouseEventHandler(true)}
+                onMouseLeave={() => mouseEventHandler(false)}
+              >
                 <div className="ultra-tooltip__title">{title}</div>
                 {showArrow && (
                   <div className={clsx('ultra-tooltip__arrow', `ultra-tooltip__arrow--placement__${placement}`)} />
@@ -269,8 +277,8 @@ Tooltip.defaultProps = {
   trigger: 'hover',
   defaultVisible: false,
   placement: 'bottom',
-  showDelay: 100,
-  hideDelay: 100,
+  showDelay: 150,
+  hideDelay: 150,
   offset: 12,
   showArrow: true,
   transitionClassName: 'ultra-tooltip-layer-fade',
