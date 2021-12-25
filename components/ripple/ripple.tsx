@@ -37,6 +37,7 @@ const Ripple: React.FC<RippleProps> = props => {
   }, []);
 
   const onMouseDown = (ev: React.MouseEvent<HTMLDivElement>) => {
+    ev.preventDefault();
     ev.stopPropagation();
 
     const { pageX, pageY, currentTarget } = ev;
