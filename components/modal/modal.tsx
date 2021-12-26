@@ -25,12 +25,12 @@ export interface ModalProps {
    * @description.zh-CN 对话框关闭时会触发此方法，比如点击取消按钮、点击关闭图标、按下 esc 键的时候
    * @description.en-US trigger when modal closed, like clicked cancel button, close icon and pressed escape key
    */
-  onClose?: () => void;
+  onClose?: (e: React.MouseEvent | KeyboardEvent) => void;
   /**
    * @description.zh-CN 点击确定按钮时会触发此方法
    * @description.en-US trigger when clicked confirm button
    */
-  onOk?: () => void;
+  onOk?: (e: React.MouseEvent) => void;
   /**
    * @description.zh-CN 关闭前执行的方法，如果此方法返回 false，那么将会阻止对话框关闭，支持异步。用途：比如关闭前确认
    * @description.en-US do something before modal close, return `false` will stop close modal, support sync function
@@ -88,21 +88,21 @@ const Modal: FC<ModalProps> = props => {
   const confirmButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: '确定' }, confirmButton);
   const cancelBtnProps: ModalButtonProps = Object.assign({}, { children: '取消' }, cancelButton);
 
-  const closeHandler = async () => {
+  const closeHandler = async (e: KeyboardEvent | React.MouseEvent) => {
     if (beforeClose) {
       const cancelClose = (await beforeClose()) === false;
       // quite close when beforeClose return false
 
       if (cancelClose) return;
     }
-    onClose?.();
+    onClose?.(e);
   };
 
   useEffect(() => {
     if (!keyboard) return;
     const listenEscKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Escape') {
-        closeHandler();
+        closeHandler(e);
       }
     };
 
