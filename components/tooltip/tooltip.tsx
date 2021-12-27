@@ -3,7 +3,8 @@ import { useClickOutSide } from '../utils/useClickOutSide';
 import { getPosition, Placement } from './placement';
 import Layer from './layer';
 import { TooltipCSSProps } from './tooltip-styles';
-import { SerializedStyles } from '@emotion/react';
+import { css, SerializedStyles } from '@emotion/react';
+import clsx from 'clsx';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
 
@@ -232,7 +233,13 @@ const Tooltip: FC<TooltipProps> = props => {
   };
 
   return (
-    <span className={`${props.id}-trigger`} {...childProps} style={{ display: 'inline-block' }}>
+    <span
+      css={css`
+        display: inline-block;
+      `}
+      className={clsx(`ultra-${props.id}__trigger`, 'ultra-layer__trigger')}
+      {...childProps}
+    >
       {children}
       <Layer
         {...props}
