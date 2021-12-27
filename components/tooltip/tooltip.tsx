@@ -195,9 +195,11 @@ const Tooltip: FC<TooltipProps> = props => {
       return;
     }
 
+    const hideDelayWithoutClick = trigger === 'click' ? 0 : hideDelay;
+
     timer.current = window.setTimeout(() => {
       handler(false);
-    }, hideDelay);
+    }, hideDelayWithoutClick);
   };
 
   useEffect(() => {
@@ -207,9 +209,13 @@ const Tooltip: FC<TooltipProps> = props => {
   }, [customVisible]);
 
   const mouseEventHandler = (next: boolean) => trigger === 'hover' && changeVisible(next);
-  const clickEventHandler = () => trigger === 'click' && changeVisible(!visible);
+  const clickEventHandler = () => {
+    trigger === 'click' && changeVisible(!visible);
+  };
 
-  useClickOutSide(childRef, clickEventHandler);
+  useClickOutSide(childRef, () => {
+    trigger === 'click' && changeVisible(false);
+  });
 
   const isElement = React.isValidElement(children);
 
