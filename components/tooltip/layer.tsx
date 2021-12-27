@@ -8,7 +8,6 @@ import { useConfigContext } from '../config-provider/useConfigContext';
 import usePortal from '../utils/usePortal';
 
 interface LayerProps extends TooltipProps {
-  layerRef: MutableRefObject<HTMLDivElement | null> | undefined;
   childRef: MutableRefObject<HTMLSpanElement | null> | undefined;
   style: React.CSSProperties;
   onMouseEnter: React.MouseEventHandler;
@@ -26,7 +25,6 @@ const Layer: FC<LayerProps> = props => {
     cssProps,
     transitionClassName,
     transitionTimeout,
-    layerRef,
     childRef,
     style,
     onMouseEnter,
@@ -37,6 +35,8 @@ const Layer: FC<LayerProps> = props => {
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
 
+  if (!childRef) return null;
+
   const mountNode: HTMLElement =
     childRef && childRef.current && getLayerContainer ? getLayerContainer(childRef.current) : document.body;
 
@@ -44,12 +44,13 @@ const Layer: FC<LayerProps> = props => {
 
   if (!portal) return null;
 
+  if (!visible) return null;
+
   return createPortal(
     <div css={[toolTipCSS(styleProps), cssProps?.(styleProps)]}>
       <div>
         <CSSTransition in={visible} unmountOnExit timeout={transitionTimeout!} classNames={transitionClassName}>
           <div
-            ref={layerRef}
             className={clsx('ultra-tooltip', layerClassName)}
             style={style}
             onMouseEnter={onMouseEnter}

@@ -6,11 +6,7 @@ interface Callback {
   (event: Event): void;
 }
 
-export function useClickOutSide<T extends HTMLElement | undefined>(
-  ref: Ref<T>,
-  callback: Callback,
-  excludes: Ref<any>[] = [],
-) {
+export function useClickOutSide<T extends HTMLElement | undefined>(ref: Ref<T>, callback: Callback) {
   useEffect(() => {
     const clickEvent = (e: MouseEvent) => {
       const el = ref.current;
@@ -20,14 +16,6 @@ export function useClickOutSide<T extends HTMLElement | undefined>(
       }
       if (el.contains(e.target as Node)) {
         return;
-      }
-
-      if (excludes.length) {
-        const exclude = excludes.some(ex => {
-          return ex.current.contains?.(e.target as Node);
-        });
-
-        if (exclude) return;
       }
 
       callback(e);

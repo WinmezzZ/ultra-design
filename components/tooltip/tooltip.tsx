@@ -138,7 +138,6 @@ const Tooltip: FC<TooltipProps> = props => {
   const layerOffset = showArrow ? offset! : offset! - 6;
 
   const childRef = useRef<HTMLSpanElement>(null);
-  const layerRef = useRef<HTMLDivElement>(null);
 
   const updateRect = () => {
     if (!childRef.current) return;
@@ -217,7 +216,7 @@ const Tooltip: FC<TooltipProps> = props => {
   const mouseEventHandler = (next: boolean) => trigger === 'hover' && changeVisible(next);
   const clickEventHandler = () => trigger === 'click' && changeVisible(!visible);
 
-  useClickOutSide(layerRef, clickEventHandler, [childRef]);
+  useClickOutSide(childRef, clickEventHandler);
 
   const isElement = React.isValidElement(children);
 
@@ -240,7 +239,6 @@ const Tooltip: FC<TooltipProps> = props => {
         id="tooltip"
         {...props}
         visible={visible}
-        layerRef={layerRef}
         childRef={childRef}
         style={layerStyle}
         onMouseEnter={() => mouseEventHandler(true)}
