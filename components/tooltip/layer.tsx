@@ -37,11 +37,11 @@ const Layer: FC<LayerProps> = props => {
 
   if (!childRef) return null;
 
-  const portal = usePortal(id!, () => (getLayerContainer ? getLayerContainer(childRef.current!) : null));
+  const portal = usePortal(id!);
+  const mountNode: HTMLElement =
+    childRef.current && getLayerContainer ? getLayerContainer(childRef.current) : portal || document.body;
 
   if (!portal) return null;
-
-  if (!visible) return null;
 
   return createPortal(
     <div css={[toolTipCSS(styleProps), cssProps?.(styleProps)]}>
@@ -61,7 +61,7 @@ const Layer: FC<LayerProps> = props => {
         </CSSTransition>
       </div>
     </div>,
-    portal,
+    mountNode,
   );
 };
 
