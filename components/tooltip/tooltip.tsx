@@ -1,11 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useClickOutSide } from '../utils/useClickOutSide';
 import { getPosition, Placement } from './placement';
-import { useConfigContext } from '../config-provider/useConfigContext';
-import clsx from 'clsx';
-import { toolTipCSS, TooltipCSSProps } from './tooltip-styles';
-import { CSSTransition } from 'react-transition-group';
+import Layer from './layer';
+import { TooltipCSSProps } from './tooltip-styles';
 import { SerializedStyles } from '@emotion/react';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
@@ -111,7 +108,6 @@ const Tooltip: FC<TooltipProps> = props => {
   const {
     children,
     trigger,
-    title,
     placement,
     defaultVisible,
     visible: customVisible,
@@ -120,14 +116,8 @@ const Tooltip: FC<TooltipProps> = props => {
     hideDelay,
     showArrow,
     offset,
-    layerClassName,
     getLayerContainer,
-    cssProps,
-    transitionClassName,
-    transitionTimeout,
   } = props;
-  const configContext = useConfigContext();
-  const styleProps = { ...configContext, ...props };
   const [visible, setVisible] = useState(defaultVisible);
   const [rect, setRect] = useState<PositionRect>(defaultPositionRect);
   const timer = useRef<number>();
@@ -141,11 +131,8 @@ const Tooltip: FC<TooltipProps> = props => {
 
   const layerOffset = showArrow ? offset! : offset! - 6;
 
-  const childRef = useRef<HTMLElement>();
-  const layerRef = useRef({} as HTMLDivElement);
-
-  const mountNode: HTMLElement =
-    childRef.current && getLayerContainer ? getLayerContainer(childRef.current) : document.body;
+  const childRef = useRef<HTMLSpanElement>(null);
+  const layerRef = useRef<HTMLDivElement>(null);
 
   const updateRect = () => {
     if (!childRef.current) return;
@@ -226,14 +213,11 @@ const Tooltip: FC<TooltipProps> = props => {
 
   useClickOutSide(layerRef, clickEventHandler, [childRef]);
 
-  if (!children) return null;
-
   const isElement = React.isValidElement(children);
 
-  const resolvedChild = isElement ? children : <span>{children}</span>;
+  const layerStyle = getPosition(placement!, rect, layerOffset);
 
-  const child = React.cloneElement(resolvedChild, {
-    ...(React.isValidElement(children) ? children.props : {}),
+  const childProps = {
     ref: childRef,
     onMouseEnter: () => mouseEventHandler(true),
     onMouseLeave: () => mouseEventHandler(false),
@@ -241,34 +225,20 @@ const Tooltip: FC<TooltipProps> = props => {
       clickEventHandler();
       isElement && children.props.onClick?.(e);
     },
-  });
-
-  const layerStyle = getPosition(placement!, rect, layerOffset);
+  };
 
   return (
     <>
-      {createPortal(
-        <div css={[toolTipCSS(styleProps), cssProps?.(styleProps)]}>
-          <div>
-            <CSSTransition in={visible} unmountOnExit timeout={transitionTimeout!} classNames={transitionClassName}>
-              <div
-                ref={layerRef}
-                className={clsx('ultra-tooltip', layerClassName)}
-                style={layerStyle}
-                onMouseEnter={() => mouseEventHandler(true)}
-                onMouseLeave={() => mouseEventHandler(false)}
-              >
-                <div className="ultra-tooltip__title">{title}</div>
-                {showArrow && (
-                  <div className={clsx('ultra-tooltip__arrow', `ultra-tooltip__arrow--placement__${placement}`)} />
-                )}
-              </div>
-            </CSSTransition>
-          </div>
-        </div>,
-        mountNode,
-      )}
-      {child}
+      {React.cloneElement(isElement ? children : <span>{children}</span>, childProps)}
+      <Layer
+        {...props}
+        visible={visible}
+        layerRef={layerRef}
+        childRef={childRef}
+        style={layerStyle}
+        onMouseEnter={() => mouseEventHandler(true)}
+        onMouseLeave={() => mouseEventHandler(false)}
+      />
     </>
   );
 };
