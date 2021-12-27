@@ -101,6 +101,12 @@ export interface TooltipProps {
    */
   transitionTimeout?: number;
 
+  /**
+   * @description.zh-CN wrapper container id
+   * @description.en-US 容器 id
+   */
+  id?: string;
+
   cssProps?: (props: TooltipCSSProps) => SerializedStyles;
 }
 
@@ -231,6 +237,7 @@ const Tooltip: FC<TooltipProps> = props => {
     <>
       {React.cloneElement(isElement ? children : <span>{children}</span>, childProps)}
       <Layer
+        id="tooltip"
         {...props}
         visible={visible}
         layerRef={layerRef}

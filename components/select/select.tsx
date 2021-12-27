@@ -169,6 +169,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
 
   return (
     <Dropdown
+      id="select"
       visible={dropdownVisivle}
       onVisibleChange={v => setDropdownVisivle(v)}
       content={

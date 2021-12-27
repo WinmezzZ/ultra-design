@@ -19,11 +19,13 @@ export interface PopoverProps extends Omit<TooltipProps, 'title'> {
 const Popover: FC<PopoverProps> = props => {
   const { content, ...rest } = props;
 
-  return <Tooltip cssProps={styleProps => popoverStyles!(styleProps)} {...rest} title={content} />;
+  return <Tooltip id="popover" cssProps={styleProps => popoverStyles!(styleProps)} {...rest} title={content} />;
 };
 
 Popover.defaultProps = {
   trigger: 'click',
 };
+
+Popover.displayName = 'UltraPopover';
 
 export default Popover;

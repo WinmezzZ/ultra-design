@@ -21,6 +21,7 @@ const Dropdown: FC<DropdownProps> = props => {
 
   return (
     <Tooltip
+      id="dropdown"
       cssProps={styleProps => dropdownStyles!(styleProps)}
       {...rest}
       title={content}
@@ -34,5 +35,7 @@ const Dropdown: FC<DropdownProps> = props => {
 Dropdown.defaultProps = {
   trigger: 'click',
 };
+
+Dropdown.displayName = 'UltraDropdown';
 
 export default Dropdown;

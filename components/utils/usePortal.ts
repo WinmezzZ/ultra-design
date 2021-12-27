@@ -11,7 +11,7 @@ const createElement = (id: string): HTMLElement => {
 const uuid = () => URL.createObjectURL(new Blob()).substr(-36);
 
 const usePortal = (selectId: string, getContainer?: () => HTMLElement | null): HTMLElement | null => {
-  const id = `ultra-design-${selectId || uuid()}`;
+  const id = `ultra-${selectId || uuid()}`;
   const [elSnapshot, setElSnapshot] = useState<HTMLElement | null>(createElement(id));
 
   useEffect(() => {

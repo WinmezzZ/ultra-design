@@ -5,6 +5,7 @@ import { toolTipCSS } from './tooltip-styles';
 import { CSSTransition } from 'react-transition-group';
 import { TooltipProps } from './tooltip';
 import { useConfigContext } from '../config-provider/useConfigContext';
+import usePortal from '../utils/usePortal';
 
 interface LayerProps extends TooltipProps {
   layerRef: MutableRefObject<HTMLDivElement | null> | undefined;
@@ -30,6 +31,7 @@ const Layer: FC<LayerProps> = props => {
     style,
     onMouseEnter,
     onMouseLeave,
+    id,
   } = props;
 
   const configContext = useConfigContext();
@@ -38,7 +40,9 @@ const Layer: FC<LayerProps> = props => {
   const mountNode: HTMLElement =
     childRef && childRef.current && getLayerContainer ? getLayerContainer(childRef.current) : document.body;
 
-  if (!visible) return null;
+  const portal = usePortal(id!, () => mountNode);
+
+  if (!portal) return null;
 
   return createPortal(
     <div css={[toolTipCSS(styleProps), cssProps?.(styleProps)]}>
@@ -59,7 +63,7 @@ const Layer: FC<LayerProps> = props => {
         </CSSTransition>
       </div>
     </div>,
-    mountNode,
+    portal,
   );
 };
 
