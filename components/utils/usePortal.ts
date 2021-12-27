@@ -16,6 +16,7 @@ const usePortal = (selectId: string, getContainer?: () => HTMLElement | null): H
 
   useEffect(() => {
     const customContainer = getContainer ? getContainer() : null;
+
     const parentElement = customContainer || document.body;
     const hasElement = parentElement.querySelector<HTMLElement>(`#${id}`);
     const el = hasElement || createElement(id);
@@ -24,7 +25,7 @@ const usePortal = (selectId: string, getContainer?: () => HTMLElement | null): H
       parentElement.appendChild(el);
     }
     setElSnapshot(el);
-  }, []);
+  }, [getContainer]);
 
   return elSnapshot;
 };

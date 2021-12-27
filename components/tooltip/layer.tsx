@@ -37,10 +37,7 @@ const Layer: FC<LayerProps> = props => {
 
   if (!childRef) return null;
 
-  const mountNode: HTMLElement =
-    childRef && childRef.current && getLayerContainer ? getLayerContainer(childRef.current) : document.body;
-
-  const portal = usePortal(id!, () => mountNode);
+  const portal = usePortal(id!, () => (getLayerContainer ? getLayerContainer(childRef.current!) : null));
 
   if (!portal) return null;
 
