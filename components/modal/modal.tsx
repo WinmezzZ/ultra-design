@@ -6,6 +6,7 @@ import { modalWrapperStyle } from './modal-style';
 import Button, { ButtonProps } from '../button';
 import { Close } from '@icon-park/react';
 import { useConfigContext } from '../config-provider/useConfigContext';
+import usePortal from '../utils/usePortal';
 
 type ModalButtonProps = Pick<ButtonProps, 'disabled' | 'loading' | 'type' | 'children'>;
 
@@ -85,6 +86,7 @@ const Modal: FC<ModalProps> = props => {
     props;
   const configContext = useConfigContext();
   const cssProps = { ...configContext, ...props };
+  const portal = usePortal('modal');
   const confirmButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: '确定' }, confirmButton);
   const cancelBtnProps: ModalButtonProps = Object.assign({}, { children: '取消' }, cancelButton);
 
@@ -113,6 +115,8 @@ const Modal: FC<ModalProps> = props => {
     };
   }, []);
 
+  if (!portal) return null;
+
   return (
     <>
       {createPortal(
@@ -136,7 +140,7 @@ const Modal: FC<ModalProps> = props => {
             </div>
           </CSSTransition>
         </div>,
-        document.body,
+        portal,
       )}
     </>
   );
