@@ -203,4 +203,31 @@ export default () => {
 };
 ```
 
+## 嵌套 Tooltip
+
+popover 组件可以和 tooltip 组件一起嵌套使用，当然，也可以嵌套它自己。
+
+```tsx
+import React from 'react';
+import { Button, Tooltip, Popover } from 'ultra-design';
+
+export default () => {
+  return (
+    <Popover
+      content={
+        <ul>
+          <li>正文1</li>
+          <li>正文2</li>
+        </ul>
+      }
+      placement="top"
+    >
+      <Tooltip title="哈哈">
+        <Button>Hover Me and Click Me</Button>
+      </Tooltip>
+    </Popover>
+  );
+};
+```
+
 <API src="index.ts" />
