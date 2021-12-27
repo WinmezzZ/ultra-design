@@ -175,21 +175,21 @@ const Tooltip: FC<TooltipProps> = props => {
     };
   }, []);
 
-  const changeVisible = (visible: boolean) => {
+  const changeVisible = (next: boolean) => {
     const clear = () => {
       clearTimeout(timer.current);
       timer.current = undefined;
     };
 
-    const handler = (visible: boolean) => {
-      setVisible(visible);
-      onVisibleChange?.(visible);
+    const handler = (next: boolean) => {
+      setVisible(next);
+      onVisibleChange?.(next);
       clear();
     };
 
     clear();
 
-    if (visible) {
+    if (next) {
       timer.current = window.setTimeout(() => handler(true), showDelay);
 
       return;
@@ -232,7 +232,7 @@ const Tooltip: FC<TooltipProps> = props => {
   };
 
   return (
-    <span className={`${props.id}-trigger`} {...childProps}>
+    <span className={`${props.id}-trigger`} {...childProps} style={{ display: 'inline-block' }}>
       {children}
       <Layer
         {...props}
