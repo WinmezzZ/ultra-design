@@ -232,10 +232,9 @@ const Tooltip: FC<TooltipProps> = props => {
   };
 
   return (
-    <>
-      {React.cloneElement(isElement ? children : <span>{children}</span>, childProps)}
+    <span className={`${props.id}-trigger`} {...childProps}>
+      {children}
       <Layer
-        id="tooltip"
         {...props}
         visible={visible}
         childRef={childRef}
@@ -243,11 +242,12 @@ const Tooltip: FC<TooltipProps> = props => {
         onMouseEnter={() => mouseEventHandler(true)}
         onMouseLeave={() => mouseEventHandler(false)}
       />
-    </>
+    </span>
   );
 };
 
 Tooltip.defaultProps = {
+  id: 'tooltip',
   trigger: 'hover',
   defaultVisible: false,
   placement: 'bottom',
