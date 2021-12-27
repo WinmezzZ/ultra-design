@@ -223,7 +223,6 @@ const Tooltip: FC<TooltipProps> = props => {
   const layerStyle = getPosition(placement!, rect, layerOffset);
 
   const childProps = {
-    ...(isElement ? children.props : {}),
     ref: childRef,
     onMouseEnter: () => mouseEventHandler(true),
     onMouseLeave: () => mouseEventHandler(false),
