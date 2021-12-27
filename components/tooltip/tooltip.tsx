@@ -128,13 +128,6 @@ const Tooltip: FC<TooltipProps> = props => {
   const [rect, setRect] = useState<PositionRect>(defaultPositionRect);
   const timer = useRef<number>();
 
-  // const childRef = useCallback((node: Element) => {
-  //   if (node !== null) {
-  //     console.log(node);
-  //     setRect(node.getBoundingClientRect());
-  //   }
-  // }, []);
-
   const layerOffset = showArrow ? offset! : offset! - 6;
 
   const childRef = useRef<HTMLSpanElement>(null);
