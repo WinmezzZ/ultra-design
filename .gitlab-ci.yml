@@ -9,6 +9,13 @@ cache:
 
 install_packages:
   stage: install
+  before_script:
+    - whoami
+    - pwd
+    - locate npm
+    - echo ${PATH}
+    - which npm
+    - ls -lh $(which npm)
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
       changes:
