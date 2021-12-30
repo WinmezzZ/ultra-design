@@ -15,7 +15,7 @@ import { Select } from 'ultra-design';
 export default () => {
   return (
     <div>
-      <Select style={{ width: 200 }}>
+      <Select style={{ width: 200 }} placeholder="Please Select...">
         <Select.Option disabled>JavaScript</Select.Option>
         <Select.Option>Java</Select.Option>
         <Select.Option>PHP</Select.Option>

@@ -54,9 +54,18 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
 
       return optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label;
     } else {
-      return defaultValue;
+      if (defaultValue) {
+        return defaultValue;
+      } else {
+        if (!selectValue) return undefined;
+        const defaultOptionIndex = optionsData.findIndex(opt => (opt.children || opt.label) === selectValue);
+
+        if (defaultOptionIndex >= 0) {
+          return optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label;
+        }
+      }
     }
-  }, [value, defaultValue]);
+  }, [value, defaultValue, selectValue]);
 
   useEffect(() => {
     if (defaultValue && !value && optionsData) {
@@ -92,8 +101,9 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     const { value: optionValue } = data;
 
     setSelectedIndex(i);
+    const finalValue = optionValue ?? (data.children || data.label);
 
-    setSelectValue(optionValue);
+    setSelectValue(finalValue as any);
 
     if (!optionsData.length) return;
     const v = optionsData.find(o => o.value === optionValue);
@@ -103,7 +113,6 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     }
 
     setFocus(true);
-    setHoverIndex(-1);
     setDropdownVisivle(false);
   };
 
@@ -114,7 +123,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     if (disabled || !optsLen) return;
     if (optionsData.every(o => o.disabled)) return;
 
-    if (e.code === 'ArrowDown') {
+    if (e.code === 'ArrowDown' && dropdownVisivle) {
       setHoverIndex(i => {
         while (optionsData[(i + 1) % optsLen].disabled) {
           i += 1;
@@ -122,7 +131,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
 
         return (i + 1) % optsLen;
       });
-    } else if (e.code === 'ArrowUp') {
+    } else if (e.code === 'ArrowUp' && dropdownVisivle) {
       setHoverIndex(i => {
         while (optionsData[(i - 1 + optsLen) % optsLen].disabled) {
           i -= 1;
@@ -131,11 +140,10 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
         return (i - 1 + optsLen) % optsLen;
       });
     } else if (e.code === 'Enter') {
+      setDropdownVisivle(!dropdownVisivle);
       const noHover = hoverIndex <= -1;
 
-      if (noHover) {
-        setDropdownVisivle(!dropdownVisivle);
-      } else {
+      if (dropdownVisivle && !noHover) {
         handleChange(optionsData[hoverIndex], hoverIndex);
       }
     }
@@ -206,7 +214,9 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
             onBlur={() => setFocus(false)}
           />
         ) : (
-          <div className="ultra-select__selection">{selectionLabel}</div>
+          <div className="ultra-select__selection">
+            {selectionLabel || <span className="ultra-select__placeholder">{placeholder}</span>}
+          </div>
         )}
         <div className="ultra-select__icon">
           {dropdownVisivle ? <Up className="ultra-icon" /> : <Down className="ultra-icon" />}

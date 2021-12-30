@@ -46,6 +46,10 @@ export const selectStyle = (props: SelectCSSProps) => {
       align-items: center;
     }
 
+    .ultra-select__placeholder {
+      color: ${fade(textColor, 0.3)};
+    }
+
     .ultra-select__icon {
       width: 32px;
       height: 100%;
