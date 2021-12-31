@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button should render empty correctly 1`] = `
+<UltraButton
+  effect={true}
+/>
+`;
+
+exports[`Button should render special styles 1`] = `ReactWrapper {}`;

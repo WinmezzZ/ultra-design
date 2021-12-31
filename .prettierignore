@@ -1,0 +1,20 @@
+node_modules
+.DS_Store
+
+dist
+es
+lib
+
+# dumi
+.umi*
+dist-ssr
+docs-dist
+
+# testing
+coverage
+
+*.svg
+*.ico
+.gitignore
+*.log
+*.lock
