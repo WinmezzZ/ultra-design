@@ -8,7 +8,7 @@ import { useConfigContext } from '../config-provider/useConfigContext';
 import usePortal from '../utils/usePortal';
 
 interface LayerProps extends TooltipProps {
-  childRef: MutableRefObject<HTMLSpanElement | null> | undefined;
+  childRef: MutableRefObject<HTMLElement | null> | undefined;
   style: React.CSSProperties;
   onMouseEnter: React.MouseEventHandler;
   onMouseLeave: React.MouseEventHandler;
@@ -42,10 +42,6 @@ const Layer: FC<LayerProps> = props => {
     childRef.current && getLayerContainer ? getLayerContainer(childRef.current) : portal || document.body;
 
   if (!portal) return null;
-
-  // if (!visible) return null;
-
-  console.log(transitionClassName);
 
   return createPortal(
     <div css={[toolTipCSS(styleProps), cssProps?.(styleProps)]}>
