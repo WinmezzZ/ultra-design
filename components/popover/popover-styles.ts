@@ -11,7 +11,6 @@ export const popoverStyles: PopoverProps['cssProps'] = props => {
       background-color: ${thirdBackgroundColor};
       color: ${textColor};
       box-shadow: ${boxShadow};
-      border-radius: 2px;
       &__title {
         padding: 12px 16px;
       }

@@ -43,22 +43,28 @@ const Layer: FC<LayerProps> = props => {
 
   if (!portal) return null;
 
+  // if (!visible) return null;
+
+  console.log(transitionClassName);
+
   return createPortal(
     <div css={[toolTipCSS(styleProps), cssProps?.(styleProps)]}>
       <div>
-        <CSSTransition in={visible} unmountOnExit timeout={transitionTimeout!} classNames={transitionClassName}>
-          <div
-            className={clsx('ultra-tooltip', layerClassName)}
-            style={style}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-          >
-            <div className="ultra-tooltip__title">{title}</div>
-            {showArrow && (
-              <div className={clsx('ultra-tooltip__arrow', `ultra-tooltip__arrow--placement__${placement}`)} />
-            )}
-          </div>
-        </CSSTransition>
+        <div
+          className={clsx('ultra-layer-wrapper', layerClassName)}
+          style={style}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
+          <CSSTransition in={visible} unmountOnExit timeout={transitionTimeout!} classNames={transitionClassName}>
+            <div className="ultra-tooltip">
+              <div className="ultra-tooltip__title">{title}</div>
+              {showArrow && (
+                <div className={clsx('ultra-tooltip__arrow', `ultra-tooltip__arrow--placement__${placement}`)} />
+              )}
+            </div>
+          </CSSTransition>
+        </div>
       </div>
     </div>,
     mountNode,
