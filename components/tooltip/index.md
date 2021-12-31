@@ -210,3 +210,18 @@ export default () => {
 ```
 
 <API src="index.ts" />
+
+```tsx
+import React from 'react';
+import { Button, Tooltip } from 'ultra-design';
+
+export default () => {
+  return (
+    <Tooltip title="呵呵" placement="top">
+      <Tooltip title="哈哈">
+        <Button>Hover Me and Click Me</Button>
+      </Tooltip>
+    </Tooltip>
+  );
+};
+```

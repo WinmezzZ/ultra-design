@@ -1,10 +1,10 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { useClickOutSide } from '../utils/useClickOutSide';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+// import { useClickOutSide } from '../utils/useClickOutSide';
 import { getPosition, Placement } from './placement';
 import Layer from './layer';
 import { TooltipCSSProps } from './tooltip-styles';
-import { css, SerializedStyles } from '@emotion/react';
-import clsx from 'clsx';
+import { SerializedStyles } from '@emotion/react';
+import { mergeRef } from '../utils/mergeRef';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
 
@@ -111,7 +111,10 @@ export interface TooltipProps {
   cssProps?: (props: TooltipCSSProps) => SerializedStyles;
 }
 
-const Tooltip: FC<TooltipProps> = props => {
+const TooltipComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithChildren<TooltipProps>> = (
+  props,
+  ref,
+) => {
   const {
     children,
     trigger,
@@ -131,11 +134,11 @@ const Tooltip: FC<TooltipProps> = props => {
 
   const layerOffset = showArrow ? offset! : offset! - 6;
 
-  const childRef = useRef<HTMLSpanElement>(null);
+  const triggerRef = useRef<HTMLElement>(null);
 
   const updateRect = () => {
-    if (!childRef.current) return;
-    const childRect = childRef.current.getBoundingClientRect();
+    if (!triggerRef.current) return;
+    const childRect = triggerRef.current.getBoundingClientRect();
 
     if (!getLayerContainer) {
       const { scrollTop, scrollLeft } = document.documentElement;
@@ -150,7 +153,7 @@ const Tooltip: FC<TooltipProps> = props => {
         right: childRect.right + scrollLeft,
       });
     } else {
-      const { offsetHeight, offsetLeft, offsetTop, offsetWidth } = childRef.current;
+      const { offsetHeight, offsetLeft, offsetTop, offsetWidth } = triggerRef.current;
 
       setRect({
         ...childRect,
@@ -166,7 +169,7 @@ const Tooltip: FC<TooltipProps> = props => {
 
   useEffect(() => {
     updateRect();
-  }, [childRef, visible]);
+  }, [triggerRef, visible]);
 
   useEffect(() => {
     window.addEventListener('resize', updateRect);
@@ -214,44 +217,58 @@ const Tooltip: FC<TooltipProps> = props => {
     trigger === 'click' && changeVisible(!visible);
   };
 
-  useClickOutSide(childRef, () => {
-    trigger === 'click' && changeVisible(false);
-  });
-
-  const isElement = React.isValidElement(children);
+  // useClickOutSide(triggerRef, () => {
+  //   trigger === 'click' && changeVisible(false);
+  // });
 
   const layerStyle = getPosition(placement!, rect, layerOffset);
 
+  const triggerNodeTemp = useMemo(() => {
+    const element = children as React.ReactElement;
+    const elementType = (element && typeof element !== 'string' && element.type) as any;
+    const [triggerChildNode] = React.Children.toArray(children);
+
+    if (React.Children.count(children) === 1 && React.isValidElement(triggerChildNode)) {
+      return triggerChildNode;
+    } else if (element && elementType.displayName === 'UltraTooltip') {
+      //  TODO，not render when nested tooltip
+      // console.log(elementType);
+      // return element.props.children;
+    }
+
+    return <span className={`layer-trigger`}>{children}</span>;
+  }, [children]);
+
   const childProps = {
-    ref: childRef,
+    ref: mergeRef(triggerRef, ref),
     onMouseEnter: () => mouseEventHandler(true),
     onMouseLeave: () => mouseEventHandler(false),
     onClick: (e: React.MouseEvent) => {
       clickEventHandler();
-      isElement && children.props.onClick?.(e);
+      React.isValidElement(children) && children.props.onClick?.(e);
     },
   };
 
+  const child = children && React.cloneElement(triggerNodeTemp, childProps);
+
   return (
-    <span
-      css={css`
-        display: inline-block;
-      `}
-      className={clsx(`ultra-${props.id}__trigger`, 'ultra-layer__trigger')}
-      {...childProps}
-    >
-      {children}
+    <>
+      {child}
       <Layer
         {...props}
         visible={visible}
-        childRef={childRef}
+        childRef={triggerRef}
         style={layerStyle}
         onMouseEnter={() => mouseEventHandler(true)}
         onMouseLeave={() => mouseEventHandler(false)}
       />
-    </span>
+    </>
   );
 };
+
+const Tooltip = React.forwardRef(TooltipComponent);
+
+Tooltip.displayName = 'UltraTooltip';
 
 Tooltip.defaultProps = {
   id: 'tooltip',

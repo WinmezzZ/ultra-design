@@ -1,12 +1,12 @@
 import React from 'react';
 
-export const mergeRef = <T>(refs: Array<React.MutableRefObject<T>>): React.RefCallback<T> => {
-  return value => {
+export const mergeRef = <T>(...refs: Array<React.Ref<T>>) => {
+  return (value: T) => {
     refs.forEach(ref => {
       if (typeof ref === 'function') {
-        (ref as any)(value);
+        ref(value);
       } else if (ref != null) {
-        (ref as React.MutableRefObject<T | null>).current = value;
+        (ref as any).current = value;
       }
     });
   };
