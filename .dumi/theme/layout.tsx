@@ -10,10 +10,13 @@ const themes: ThemeMode[] = ['dark', 'light'];
 const CustomLayout: FC<any> = ({ children, ...props }) => {
   const [color] = usePrefersColor();
 
-  // @ts-ignore
-  const themeMode: ThemeMode = themes.includes(color)
-    ? color
-    : (document.querySelector('html').getAttribute('data-prefers-color') as 'dark' | 'light');
+  const themeMode = useMemo(() => {
+    return themes.includes(color as ThemeMode)
+    ? color as ThemeMode
+    : (document.querySelector('html').getAttribute('data-prefers-color') as 'dark' | 'light')
+  }, [color])
+
+  if (!color) return null
 
   return (
     <ConfigProvider theme={{ mode: themeMode }}>
