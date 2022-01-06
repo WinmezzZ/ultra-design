@@ -27,7 +27,7 @@ const Dropdown: FC<DropdownProps> = props => {
       title={content}
       showArrow={false}
       placement="bottomLeft"
-      transitionClassName="ultra-dropdown-animate-slide"
+      transitionClassName="ultra-dropdown-animate"
     />
   );
 };

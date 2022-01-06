@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { slide } from '../styles/animation/slide';
 import { DropdownProps } from './dropdown';
 
 export const dropdownStyles: DropdownProps['cssProps'] = props => {
@@ -21,23 +22,6 @@ export const dropdownStyles: DropdownProps['cssProps'] = props => {
       }
     }
 
-    .ultra-dropdown-animate-slide-enter {
-      transform: scaleY(0.6);
-      opacity: 0;
-    }
-    .ultra-dropdown-animate-slide-enter-active {
-      transform: scaleY(1);
-      opacity: 1;
-      transition: all 300ms ease;
-    }
-    .ultra-dropdown-animate-slide-exit {
-      transform: scaleY(1);
-      opacity: 1;
-    }
-    .ultra-dropdown-animate-slide-exit-active {
-      transform: scaleY(0.6);
-      opacity: 0;
-      transition: all 300ms ease;
-    }
+    ${slide('ultra-dropdown-animate', props.transitionTimeout)}
   `;
 };
