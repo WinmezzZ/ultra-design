@@ -26,5 +26,5 @@ export function useClickOutSide<T extends HTMLElement | undefined>(ref: Ref<T>, 
     return () => {
       document.removeEventListener('click', clickEvent);
     };
-  }, [ref.current, callback]);
+  }, [ref, callback]);
 }
