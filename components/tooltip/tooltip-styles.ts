@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { TooltipProps } from '.';
 import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
+import { transitionFade } from '../styles/transition/fade';
 
 export interface TooltipCSSProps
   extends Omit<TooltipProps, keyof ComponentCommonProps>,
@@ -104,19 +105,6 @@ export const toolTipCSS = (props: TooltipCSSProps) => {
       }
     }
 
-    .ultra-tooltip__animate-fade-enter {
-      opacity: 0;
-    }
-    .ultra-tooltip__animate-fade-enter-active {
-      opacity: 1;
-      transition: opacity 300ms;
-    }
-    .ultra-tooltip__animate-fade-exit {
-      opacity: 1;
-    }
-    .ultra-tooltip__animate-fade-exit-active {
-      opacity: 0;
-      transition: opacity 300ms;
-    }
+    ${transitionFade(props.transitionClassName!, props.transitionTimeout)}
   `;
 };

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { slide } from '../styles/animation/slide';
+import { transitionSlide } from '../styles/transition/slide';
 import { DropdownProps } from './dropdown';
 
 export const dropdownStyles: DropdownProps['cssProps'] = props => {
@@ -22,6 +22,6 @@ export const dropdownStyles: DropdownProps['cssProps'] = props => {
       }
     }
 
-    ${slide('ultra-dropdown-animate', props.transitionTimeout)}
+    ${transitionSlide(props.transitionClassName!, props.transitionTimeout)}
   `;
 };

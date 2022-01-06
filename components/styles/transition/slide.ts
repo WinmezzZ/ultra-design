@@ -1,21 +1,21 @@
 import { css } from '@emotion/react';
 
-export const slide = (className: string, duration = 300) => {
+export const transitionSlide = (className: string, duration = 300) => {
   return css`
-    .${className}-slide-enter {
+    .${className}-enter {
       transform: scaleY(0.6);
       opacity: 0;
     }
-    .${className}-slide-enter-active {
+    .${className}-enter-active {
       transform: scaleY(1);
       opacity: 1;
       transition: all ${duration}ms ease;
     }
-    .${className}-slide-exit {
+    .${className}-exit {
       transform: scaleY(1);
       opacity: 1;
     }
-    .${className}-slide-exit-active {
+    .${className}-exit-active {
       transform: scaleY(0.6);
       opacity: 0;
       transition: all ${duration}ms ease;
