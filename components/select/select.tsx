@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { selectStyle } from './select-style';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
@@ -6,7 +6,6 @@ import Input from '../input';
 import Dropdown from '../dropdown';
 import Option, { OptionProps } from './option';
 import { Down, Up } from '@icon-park/react';
-import { isNil } from 'lodash-es';
 
 export interface SelectProps {
   value?: string;
@@ -38,7 +37,9 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   const selfRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [selectValue, setSelectValue] = useState<string | number | boolean | undefined>(value || defaultValue);
+  const [selectValue, setSelectValue] = useState<string | number | boolean | undefined>(
+    'value' in props ? value : defaultValue,
+  );
   const [hoverIndex, setHoverIndex] = useState(-1);
   const [dropdownVisivle, setDropdownVisivle] = useState(false);
   const [focus, setFocus] = useState(false);
@@ -49,67 +50,42 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     : options || [];
 
   const selectionLabel = useMemo(() => {
-    if ('value' in props) {
-      const defaultOptionIndex = optionsData.findIndex(opt => opt.value === value);
+    if (!selectValue) return undefined;
+
+    const defaultOptionIndex = optionsData.findIndex(opt => (opt.value ?? (opt.children || opt.label)) === selectValue);
+
+    if (defaultOptionIndex >= 0) {
+      setSelectedIndex(defaultOptionIndex);
 
       return optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label;
-    } else {
-      if (defaultValue) {
-        return defaultValue;
-      } else {
-        if (!selectValue) return undefined;
-        const defaultOptionIndex = optionsData.findIndex(opt => (opt.children || opt.label) === selectValue);
-
-        if (defaultOptionIndex >= 0) {
-          return optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label;
-        }
-      }
     }
-  }, [value, defaultValue, selectValue]);
+  }, [value, selectValue]);
 
-  useEffect(() => {
-    if (defaultValue && !value && optionsData) {
-      const defaultOptionIndex = optionsData.findIndex(opt =>
-        [opt.value, opt.children, opt.label].includes(defaultValue),
-      );
-
-      setSelectedIndex(defaultOptionIndex);
-
-      return;
-    }
-    if (!isNil(value) && optionsData) {
-      const defaultOptionIndex = optionsData.findIndex(opt => opt.value === value);
-
-      setSelectedIndex(defaultOptionIndex);
-
-      return;
-    }
-  }, []);
-
-  useImperativeHandle(ref, () => {
-    return {
-      value: selectValue,
-    };
-  });
-
-  useEffect(() => {
-    if (value === undefined) return;
-    setSelectValue(value);
-  }, [value]);
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        value: selectValue,
+      };
+    },
+    [selectValue],
+  );
 
   const handleChange = (data: React.PropsWithChildren<OptionProps>, i: number) => {
     const { value: optionValue } = data;
 
-    setSelectedIndex(i);
     const finalValue = optionValue ?? (data.children || data.label);
 
+    setSelectedIndex(i);
     setSelectValue(finalValue as any);
 
     if (!optionsData.length) return;
     const v = optionsData.find(o => o.value === optionValue);
 
     if (v) {
-      onChange?.(optionValue);
+      setTimeout(() => {
+        onChange?.(finalValue);
+      });
     }
 
     setFocus(true);
@@ -158,7 +134,9 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     setInputValue('');
     setSelectValue(undefined);
 
-    onChange?.(selectValue);
+    setTimeout(() => {
+      onChange?.(selectValue);
+    });
   };
 
   const renderOptionItem = (option: any, props: OptionProps, index: number) => {
