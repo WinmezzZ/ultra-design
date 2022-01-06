@@ -1,11 +1,11 @@
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { selectStyle } from './select-style';
+import { selectLayerStyles, selectStyle } from './select-style';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
 import Input from '../input';
-import Dropdown from '../dropdown';
 import Option, { OptionProps } from './option';
 import { Down, Up } from '@icon-park/react';
+import { Tooltip } from '..';
 
 export interface SelectProps {
   value?: string;
@@ -154,11 +154,16 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   };
 
   return (
-    <Dropdown
+    <Tooltip
       id="select"
       visible={dropdownVisivle}
       onVisibleChange={v => setDropdownVisivle(v)}
-      content={
+      showArrow={false}
+      placement="bottomLeft"
+      transitionClassName="ultra-select-animate-slide"
+      trigger="click"
+      cssProps={styleProps => selectLayerStyles!(styleProps)}
+      title={
         children
           ? React.Children.toArray(children).map((child: any, i) => renderOptionItem(child, child.props, i))
           : options?.map((option, i) => renderOptionItem(Option, option, i))
@@ -200,7 +205,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
           {dropdownVisivle ? <Up className="ultra-icon" /> : <Down className="ultra-icon" />}
         </div>
       </div>
-    </Dropdown>
+    </Tooltip>
   );
 };
 

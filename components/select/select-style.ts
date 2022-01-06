@@ -2,8 +2,33 @@ import { css } from '@emotion/react';
 import { SelectProps } from './select';
 import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
 import { fade } from '../utils/fade';
+import { transitionSlide } from '../styles/transition/slide';
 
 export interface SelectCSSProps extends SelectProps, ComponentCommonProps, ConfigCommonOptions {}
+
+export const selectLayerStyles = (props: SelectCSSProps) => {
+  const { theme } = props;
+  const { radius, boxShadow } = theme.style;
+  const { textColor, thirdBackgroundColor } = theme[theme.mode];
+
+  return css`
+    .ultra-tooltip {
+      transform-origin: top;
+      background-color: ${thirdBackgroundColor};
+      color: ${textColor};
+      box-shadow: ${boxShadow};
+      border-radius: ${radius}px;
+      &__title {
+        padding: 8px 0;
+      }
+      &__arrow {
+        border-color: transparent ${thirdBackgroundColor} transparent transparent;
+      }
+    }
+
+    ${transitionSlide('ultra-select-animate-slide')}
+  `;
+};
 
 export const selectStyle = (props: SelectCSSProps) => {
   const { theme } = props;
