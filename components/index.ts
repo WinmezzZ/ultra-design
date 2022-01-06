@@ -28,5 +28,8 @@ export { default as Select } from './select';
 export type { DropdownProps } from './dropdown';
 export { default as Dropdown } from './dropdown';
 
+export type { MenuProps } from './menu';
+export { default as Menu } from './menu';
+
 export type { ConfigContextOptions } from './config-provider';
 export { default as ConfigProvider } from './config-provider';
