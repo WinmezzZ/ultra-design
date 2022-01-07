@@ -1,6 +1,7 @@
 import SelectComponent from './select';
 import Option from './option';
 
+export { Option };
 export type { SelectProps } from './select';
 export type { OptionProps } from './option';
 
