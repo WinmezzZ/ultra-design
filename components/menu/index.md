@@ -32,4 +32,12 @@ export default () => {
 };
 ```
 
-<API src="./index.ts" />
+## API
+
+#### Menu
+
+<API hideTitle src="./menu.tsx" />
+
+#### Menu.SubMenu
+
+<API hideTitle src="./sub-menu.tsx" />
