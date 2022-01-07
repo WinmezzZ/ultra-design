@@ -5,12 +5,26 @@ import { useConfigContext } from '../config-provider/useConfigContext';
 import { SubMenuProps } from './sub-menu';
 
 export interface MenuProps {
+  /**
+   * @description.zh-CN 默认选中的子菜单项
+   * @description.en-US default selected menu item
+   */
+  defaultSelectedKey?: string;
+  /**
+   * @description.zh-CN 点击子菜单时触发的回调
+   * @description.en-US triggered when clicked a subMenu
+   */
   onClick?: (key: string) => void;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, MenuProps> = (props, ref) => {
-  const { children, onClick } = props;
-  const [activeSubMenu, setActiveSubMenu] = useState<string>();
+const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, React.PropsWithChildren<MenuProps>> = (
+  props,
+  ref,
+) => {
+  const { children, className, style, onClick, defaultSelectedKey } = props;
+  const [activeSubMenu, setActiveSubMenu] = useState(defaultSelectedKey);
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
 
@@ -35,7 +49,7 @@ const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, MenuProps>
   };
 
   return (
-    <ul ref={ref} className="ultra-menu" css={menuStyle(styleProps)}>
+    <ul ref={ref} style={style} className={clsx('ultra-menu', className)} css={menuStyle(styleProps)}>
       {children && React.Children.toArray(children).map((child: any) => renderItem(child, child.props))}
     </ul>
   );

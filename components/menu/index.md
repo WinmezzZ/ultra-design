@@ -10,24 +10,22 @@ group:
 
 ## Basic Usage
 
-```jsx
+```tsx
 import React, { useEffect, useRef, useState } from 'react';
 import { Menu } from 'ultra-design';
 
 export default () => {
-  const handleClick = key => {
+  const handleClick = (key: string) => {
     console.log(key);
   };
   return (
-    <div>
-      <Menu onClick={handleClick}>
-        <Menu.SubMenu key="123">123</Menu.SubMenu>
-        <Menu.SubMenu key="456">456</Menu.SubMenu>
-        <Menu.SubMenu disabled key="789">
-          789
-        </Menu.SubMenu>
-      </Menu>
-    </div>
+    <Menu style={{ width: 200, borderRight: '1px solid #ccc' }} defaultSelectedKey="123" onClick={handleClick}>
+      <Menu.SubMenu key="123">123</Menu.SubMenu>
+      <Menu.SubMenu key="456">456</Menu.SubMenu>
+      <Menu.SubMenu disabled key="789">
+        789
+      </Menu.SubMenu>
+    </Menu>
   );
 };
 ```

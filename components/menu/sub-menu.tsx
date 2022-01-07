@@ -4,8 +4,20 @@ import { useConfigContext } from '../config-provider/useConfigContext';
 import clsx from 'clsx';
 
 export interface SubMenuProps {
+  /**
+   * @description.zh-CN 子菜单唯一的 key 值
+   * @description.en-US Unique key value of submenu
+   */
   key?: string;
+  /**
+   * @description.zh-CN 左侧图标
+   * @description.en-US left icon
+   */
   icon?: React.ReactNode;
+  /**
+   * @description.zh-CN 禁用状态
+   * @description.en-US disabled status
+   */
   disabled?: boolean;
   className?: string;
 }
