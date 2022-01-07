@@ -8,13 +8,37 @@ import { Down, Up } from '@icon-park/react';
 import { Tooltip } from '..';
 
 export interface SelectProps {
+  /**
+   * @description.zh-CN 值
+   * @description.en-US value
+   */
   value?: string;
+  /**
+   * @description.zh-CN 默认值值
+   * @description.en-US default value
+   */
   defaultValue?: string;
+  /**
+   * @description.zh-CN 占位符
+   * @description.en-US placeholder
+   */
   placeholder?: string;
   clearable?: boolean;
   filterable?: boolean;
+  /**
+   * @description.zh-CN 是否禁用
+   * @description.en-US whether disable
+   */
   disabled?: boolean;
+  /**
+   * @description.zh-CN 选择时触发的回调
+   * @description.en-US triggered when selecting an option
+   */
   onChange?: (value: any) => void;
+  /**
+   * @description.zh-CN option
+   * @description.en-US list of configuration items for options
+   */
   options?: OptionProps[];
   className?: string;
   style?: React.CSSProperties;

@@ -74,4 +74,12 @@ export default () => {
 };
 ```
 
-<API src="./index.ts" />
+## API
+
+#### Select
+
+<API hideTitle src="./select.tsx" />
+
+#### Select.Option
+
+<API hideTitle src="./option.tsx" />

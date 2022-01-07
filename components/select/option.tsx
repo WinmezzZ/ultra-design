@@ -6,12 +6,25 @@ import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
 import { fade } from '../utils/fade';
 
 export interface OptionProps {
+  /**
+   * @description.zh-CN 选项的内容
+   * @description.en-US option's content
+   */
   label?: React.ReactNode;
-  value?: string | number | boolean;
+  /**
+   * @description.zh-CN 选项的值，必须是唯一的
+   * @description.en-US option's value, must be unique
+   */
+  value?: string | number;
+  /**
+   * @description.zh-CN 选项的禁用状态
+   * @description.en-US disabled status of option
+   */
   disabled?: boolean;
-  onClick?: (value?: string | number | boolean) => void;
+  onClick?: (value?: string | number) => void;
   onMouseEnter?: (e: React.MouseEvent) => void;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 const Option: FC<OptionProps> = props => {
