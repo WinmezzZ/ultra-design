@@ -16,7 +16,7 @@ export const menuStyle = (props: MenuCSSProps) => {
     list-style: none;
     position: relative;
     padding: 12px;
-    color: ${textColor};
+    color: ${fade(textColor, 0.8)};
     font-size: 14px;
     background-color: ${backgroundColor};
     background-image: none;
@@ -35,7 +35,7 @@ export interface SubMenuCSSProps extends SubMenuProps, ComponentCommonProps, Con
 export const subMenuStyle = (props: SubMenuCSSProps) => {
   const { theme } = props;
   const { primaryColor } = theme.style;
-  const { backgroundColor, textColor, disabledBgColor, disabledTextColor } = theme[theme.mode];
+  const { textColor, disabledBgColor, disabledTextColor } = theme[theme.mode];
 
   return css`
     display: flex;
@@ -44,19 +44,31 @@ export const subMenuStyle = (props: SubMenuCSSProps) => {
     min-height: 32px;
     cursor: pointer;
     user-select: none;
-    background-color: ${backgroundColor};
-    color: ${textColor};
     &.ultra-sub-menu--disabled {
       background-color: ${disabledBgColor};
       color: ${disabledTextColor};
       cursor: not-allowed;
     }
+
     &.ultra-sub-menu--active {
-      background-color: ${fade(primaryColor, 0.1)};
-      color: ${primaryColor};
+      ${theme.mode === 'dark'
+        ? css`
+            background-color: ${primaryColor};
+            color: ${textColor};
+          `
+        : css`
+            background-color: ${fade(primaryColor, 0.1)};
+            color: ${primaryColor};
+          `}
     }
     &:hover:not(.ultra-sub-menu--disabled, .ultra-sub-menu--active) {
-      background-color: #f0f1f3;
+      ${theme.mode === 'dark'
+        ? css`
+            color: ${fade(textColor, 1)};
+          `
+        : css`
+            background-color: #f0f1f3;
+          `}
     }
   `;
 };
