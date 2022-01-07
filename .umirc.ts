@@ -1,7 +1,7 @@
-import { defineConfig, IConfig } from 'dumi';
+import { defineConfig } from 'dumi';
 import path from 'path';
 
-const config: IConfig = {
+const config = {
   title: 'ultra-design',
   favicon: 'https://cdn.hyyar.com/favicon.ico',
   logo: 'https://cdn.hyyar.com/logo.jpg',
@@ -56,7 +56,15 @@ const config: IConfig = {
         list-style: none;
       }
     `
-  ]
+  ],
+  apiParser: {
+    propFilter: {
+      skipNodeModules: false,
+      // skipPropsWithName: ['title'],
+      skipPropsWithoutDoc: true,
+    },
+  }
+  
   // more config: https://d.umijs.org/config
 }
 
