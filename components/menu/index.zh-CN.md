@@ -3,12 +3,12 @@ nav:
   title: Components
   path: /components
 group:
-  title: Navigation
+  title: 导航
 ---
 
-# Menu
+# Menu 菜单
 
-## Basic Usage
+## 基本使用
 
 ```tsx
 import React from 'react';
