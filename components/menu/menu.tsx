@@ -1,40 +1,42 @@
-import React, { Children, useCallback, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { menuStyle } from './menu-style';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
-import { SubMenuProps } from '.';
-import SubMenu from './sub-menu';
+import { SubMenuProps } from './sub-menu';
 
-export interface MenuProps {}
+export interface MenuProps {
+  onClick?: (key: string) => void;
+}
 
-const MenuComponent: React.ForwardRefRenderFunction<HTMLMenuElement, MenuProps> = (props, ref) => {
-  const { children } = props;
+const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, MenuProps> = (props, ref) => {
+  const { children, onClick } = props;
+  const [activeSubMenu, setActiveSubMenu] = useState<string>();
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
-  const [activeSubMenu, setActiveSubMenu] = useState<string>();
 
   const handleClick = (item: SubMenuProps) => {
-    console.log(item);
     setActiveSubMenu(item.key);
-    // setMenuValue(e.target.value);
-    // onChange?.(e.target.value, e);
+    onClick?.(item.key!);
   };
 
-  const renderItem = (item: any, props: any) => {
-    console.log(props);
+  const renderItem = (item: any, props: SubMenuProps) => {
+    const key = item.key.replace(/^.\$/, '');
 
-    return item;
-  };
-
-  const renderContent = () => {
-    const menus = React.Children.toArray(children) as React.ReactElement[];
-
-    return menus.filter((item: any) => item.type !== 'string' && item.type.displayName === 'UltraSubMenu');
+    return React.cloneElement(item, {
+      ...props,
+      className: clsx(activeSubMenu === key && 'ultra-sub-menu--active'),
+      onClick: () =>
+        !props.disabled &&
+        handleClick({
+          ...props,
+          key,
+        }),
+    });
   };
 
   return (
-    <ul className="ultra-menu" css={menuStyle(styleProps)}>
-      {renderContent().map((child: any) => renderItem(child, child.props))}
+    <ul ref={ref} className="ultra-menu" css={menuStyle(styleProps)}>
+      {children && React.Children.toArray(children).map((child: any) => renderItem(child, child.props))}
     </ul>
   );
 };

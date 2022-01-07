@@ -14,9 +14,7 @@ const SubMenuComponent: React.ForwardRefRenderFunction<HTMLLIElement, React.Prop
   props,
   ref,
 ) => {
-  const { children, icon, className } = props;
-
-  console.log(props);
+  const { children, icon, disabled, className } = props;
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
 
@@ -24,9 +22,7 @@ const SubMenuComponent: React.ForwardRefRenderFunction<HTMLLIElement, React.Prop
     <li
       {...props}
       ref={ref}
-      id={props.key}
-      key={props.key}
-      className={clsx('ultra-sub-menu', className)}
+      className={clsx('ultra-sub-menu', disabled && 'ultra-sub-menu--disabled', className)}
       css={subMenuStyle(styleProps)}
     >
       {icon}
