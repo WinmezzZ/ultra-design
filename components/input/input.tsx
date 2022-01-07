@@ -1,23 +1,67 @@
-import React, { useRef, useState } from 'react';
+import React, { HTMLInputTypeAttribute, useRef, useState } from 'react';
 import { inputStyle } from './input-style';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
 import { Close } from '@icon-park/react';
 
 export interface InputProps {
+  /**
+   * @description.zh-CN 默认值
+   * @description.en-US default value
+   */
   defaultValue?: string;
+  /**
+   * @description.zh-CN 值
+   * @description.en-US value
+   */
   value?: string;
-  inputMode?: 'search' | 'text' | 'none' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal';
+  /**
+   * @description.zh-CN 原生 type 属性
+   * @description.en-US native type
+   */
+  type?: HTMLInputTypeAttribute;
+  /**
+   * @description.zh-CN 占位符
+   * @description.en-US placeholder
+   */
   placeholder?: string;
+  /**
+   * @description.zh-CN 左侧图标
+   * @description.en-US left icon
+   */
   icon?: React.ReactNode;
+  /**
+   * @description.zh-CN 值可以被清空
+   * @description.en-US value can be cleared
+   */
   clearable?: boolean;
+  /**
+   * @description.zh-CN 禁用状态
+   * @description.en-US disabled status
+   */
   disabled?: boolean;
+  /**
+   * @description.zh-CN 是否只读
+   * @description.en-US readolny
+   */
   readOnly?: boolean;
+  /**
+   * @description.zh-CN 出现时自动获得焦点
+   * @description.en-US auto focused when show
+   */
   autoFocus?: boolean;
   onInput?: (value: string, e: React.FormEvent<HTMLInputElement>) => void;
+  /**
+   * @description.zh-CN 输入或时的回调
+   * @description.en-US callback of input
+   */
   onChange?: (value: string, e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (value: string, e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (value: string, e: React.FocusEvent<HTMLInputElement>) => void;
+  /**
+   * @description.zh-CN 手动清空时的回调
+   * @description.en-US callback of clearable
+   */
   onClear?: (value: string, e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
@@ -32,7 +76,7 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
     onChange,
     onInput,
     value,
-    inputMode,
+    type,
     placeholder,
     autoFocus,
     clearable,
@@ -86,7 +130,7 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
       {icon && <span className="ultra-input__icon">{icon}</span>}
       <input
         ref={inputRef}
-        inputMode={inputMode}
+        type={type}
         value={value}
         defaultValue={defaultValue}
         disabled={disabled}

@@ -20,10 +20,11 @@ export default () => {
       <Input placeholder="Basic usage" />
     </div>
   );
-}
+};
 ```
 
 ## Clearable
+
 ```tsx
 import React from 'react';
 import { Input } from 'ultra-design';
@@ -33,11 +34,12 @@ export default () => {
     <div>
       <Input clearable />
     </div>
-  )
+  );
 };
 ```
 
 ## Disabled
+
 ```tsx
 import React from 'react';
 import { Input } from 'ultra-design';
@@ -50,6 +52,7 @@ export default () => (
 ```
 
 ## Controlled & Uncontrolled
+
 1. For **Controlled component**, you should provide `value` and `onChange` both into input props.
 2. For **Uncontrolled component**, you can get input value by `ref` props.
 
@@ -58,17 +61,19 @@ import React from 'react';
 import { Input } from 'ultra-design';
 
 export default () => {
-  const [value, setValue] = React.useState('')
-  const inputRef = React.useRef<HTMLInputElement>('')
+  const [value, setValue] = React.useState('');
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleChange = (value) => {
-    setValue(value)
-    console.log(value)
-  }
-  
+  const handleChange = (value: string) => {
+    setValue(value);
+    console.log(value);
+  };
+
   const handleBlur = () => {
-    console.log(inputRef.current.value)
-  }
+    if (inputRef.current) {
+      console.log(inputRef.current.value);
+    }
+  };
 
   return (
     <div>
@@ -76,7 +81,7 @@ export default () => {
       <hr />
       <Input ref={inputRef} onBlur={handleBlur} placeholder="Uncontrolled" />
     </div>
-  )
+  );
 };
 ```
 
@@ -86,10 +91,10 @@ export default () => {
 
 ### Why I get Warning: `A component is changing an uncontrolled input of type text to be controlled` when I using controlled component?
 
-  We didn't initialize val with a value, so val's initial value was undefined. This caused the first rendered input to look like this: `<input value=undefined/>`, so React decided it was an uncontrolled component.
-  
-  So we can do like this:
-  
-  ```js
-  const [val, setVal] = useState('');
+We didn't initialize val with a value, so val's initial value was undefined. This caused the first rendered input to look like this: `<input value=undefined/>`, so React decided it was an uncontrolled component.
+
+So we can do like this:
+
+```js
+const [val, setVal] = useState('');
 ```
