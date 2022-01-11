@@ -1,7 +1,7 @@
 ---
 hero:
   title: ultra-design
-  desc: An open source design system for building modern websites and applications.
+  desc: An open source React UI component library for building modern websites and applications.
   actions:
     - text: Github
       link: /https://github.com/WinmezzZ/ultra-design
