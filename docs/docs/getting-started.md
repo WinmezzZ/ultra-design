@@ -45,5 +45,18 @@ Ultra Design supports tree shaping based on ES modules by default. For the JS pa
 > It is not recommended to directly use the built file, which will fully introduce all components and cannot load on demand.
 
 ```html
-<script src="https://unpkg.com/browse/ultra-design@latest/dist/index.js"></script>
+<head>
+  <script src="https://unpkg.com/browse/ultra-design@latest/dist/index.js"></script>
+</head>
+<body>
+  <script type="text/babel">
+    const { Button } = UltraDesign;
+    ReactDOM.render(
+      <div>
+        <Button>Button</Button>
+      </div>,
+      document.getElementById('root'),
+    );
+  </script>
+</body>
 ```

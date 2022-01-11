@@ -5,7 +5,7 @@ order: 1
 
 # Getting Start 快速上手
 
-## 1、安装 Ultra Design
+## 1、安装
 
 ```bash
 # 使用 npm
@@ -17,7 +17,7 @@ npm i ultra-design --save
 yarn add ultra-design
 ```
 
-## 2、使用组件
+## 2、使用
 
 ```tsx | pure
 import ReactDOM from 'react-dom';
@@ -45,5 +45,18 @@ ultra-design 默认支持基于 ES modules 的 tree shaking，对于 js 部分�
 > 不推荐直接使用已构建文件，这样会全量引入所有组件，无法实现按需加载。
 
 ```html
-<script src="https://unpkg.com/browse/ultra-design@latest/dist/index.js"></script>
+<head>
+  <script src="https://unpkg.com/browse/ultra-design@latest/dist/index.js"></script>
+</head>
+<body>
+  <script type="text/babel">
+    const { Button } = UltraDesign;
+    ReactDOM.render(
+      <div>
+        <Button>Button</Button>
+      </div>,
+      document.getElementById('root'),
+    );
+  </script>
+</body>
 ```
