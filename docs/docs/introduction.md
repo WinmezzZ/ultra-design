@@ -3,7 +3,7 @@ title: Introduction
 order: 0
 ---
 
-# Introduction
+# Introduction 介绍
 
 Ultra design is a UI component library developed based on react. The original idea of creation is [ultra editor](https://github.com/WinmezzZ/ultra-editor)The editor derives a series of required conventional components for the purpose of simplifying the source code.
 
