@@ -3,6 +3,8 @@ title: Dynamic Theme
 order: 4
 ---
 
+# Dynamic Theme
+
 In addition to supporting customized themes, ultra design also supports the ability to dynamically switch themes, which is also configured through `ConfigProvider`.
 
 The core idea is also very simple. Save the theme configuration as the react state. If the state changes, the corresponding UI will also change.

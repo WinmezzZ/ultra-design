@@ -1,6 +1,6 @@
 ---
 hero:
-  title: ultra-design
+  title: Ultra Design
   desc: 用于构建现代网站和应用程序的开源 React UI 组件库。
   actions:
     - text: Github

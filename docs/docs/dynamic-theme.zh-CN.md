@@ -3,6 +3,8 @@ title: Dynamic Theme 动态主题
 order: 4
 ---
 
+# Dynamic Theme
+
 除了支持定制主题外，Ultra Design 同时支持动态切换主题能力，同样是通过 ConfigProvider 进行配置。
 
 核心理念也很简单，把 theme 配置作为 react 状态保存，state 变化，对应的 UI 也会发生变化。

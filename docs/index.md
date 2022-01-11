@@ -1,6 +1,6 @@
 ---
 hero:
-  title: ultra-design
+  title: Ultra Design
   desc: An open source React UI component library for building modern websites and applications.
   actions:
     - text: Github

@@ -5,6 +5,8 @@ order: 3
 
 # Customize Theme 定制样式
 
+默认主题配置
+
 ```js | pure
 const lightBg_1 = '#FFFFFF';
 const lightBg_2 = lightBg_1;
@@ -60,3 +62,14 @@ const theme = {
 - **mode**: 暗黑主题对应的专属样式
 
 你可以只修改部分属性或样式，最终所有的修改会被合并至 theme 中，将 theme 变量传入 `ConfigProvider` 中，即可实现定制化样式
+
+```jsx | pure
+const myTheme = {
+  light: {
+    textColor: '#333',
+  },
+};
+<ConfigProvider theme={myTheme}>
+  <App />
+</ConfigProvider>;
+```

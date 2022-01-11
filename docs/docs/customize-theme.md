@@ -5,6 +5,8 @@ order: 3
 
 # Customize Theme
 
+默认主题配置
+
 ```js | pure
 const lightBg_1 = '#FFFFFF';
 const lightBg_2 = lightBg_1;
@@ -60,3 +62,14 @@ attribute introduction
 - **mode**: sepcial style for dark
 
 You can modify only some attributes or styles. Finally, all modifications will be merged into theme. You can customize the style by passing the theme variable into `ConfigProvider`.
+
+```jsx | pure
+const myTheme = {
+  light: {
+    textColor: '#333',
+  },
+};
+<ConfigProvider theme={myTheme}>
+  <App />
+</ConfigProvider>;
+```
