@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import Trigger, { TriggerProps } from '../trigger';
 import { useMergeProps } from '../utils/mergeProps';
+import { tooltipStyles } from './tooltip-styles';
 
 export interface TooltipProps extends Omit<TriggerProps, 'content'> {
   /**
@@ -21,7 +22,7 @@ const defaultProps = {
 const Tooltip: FC<TooltipProps> = p => {
   const { title, ...props } = useMergeProps(defaultProps, p);
 
-  return <Trigger content={title} {...props} />;
+  return <Trigger content={title} {...props} css={tooltipStyles(props)} />;
 };
 
 Tooltip.displayName = 'UltraTooltip';
