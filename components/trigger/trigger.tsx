@@ -4,7 +4,6 @@ import { getPosition, Placement } from './placement';
 import Layer from './layer';
 import { css } from '@emotion/react';
 import clsx from 'clsx';
-import { transitionFade } from '../styles/transition/fade';
 import { useMergeProps } from '../utils/mergeProps';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
@@ -97,7 +96,7 @@ export interface TriggerProps {
    * @description.en-US layer parent node, render in body element default
    * @default () => document.body;
    */
-  getLayerContainer?: (trigger: HTMLElement) => HTMLElement;
+  getLayerContainer?: (trigger?: HTMLElement | null) => HTMLElement;
   /**
    * @description.zh-CN 弹出框的类名
    * @description.en-US tclassName of layer box
@@ -254,7 +253,6 @@ const Trigger: FC<TriggerProps> = p => {
     >
       {children}
       <Layer
-        css={transitionFade(props.transitionClassName, props.transitionTimeout)}
         {...props}
         visible={visible}
         childRef={childRef}
