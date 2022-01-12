@@ -15,11 +15,11 @@ Of course, if you like its UI style, you can also use it as your page level UI c
 - It fully supports the on-demand loading of tree shaking of ES module
 - There is no need to import CSS files separately. When importing components, style files will be introduced at the same time
 - Support dynamic color (light / dark), dynamic theme color
-- Supports custom global basic styles
+- Support custom global basic styles
+- Support International multilingual
 
 ## TODO
 
-- [ ] International multilingual support
 - [ ] Support server-side rendering SSR
 
 ## Contribute
