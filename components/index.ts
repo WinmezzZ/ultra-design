@@ -31,5 +31,8 @@ export { default as Dropdown } from './dropdown';
 export type { MenuProps } from './menu';
 export { default as Menu } from './menu';
 
+export type { KeyboardProps } from './keyboard';
+export { default as Keyboard } from './keyboard';
+
 export type { ConfigContextOptions } from './config-provider';
 export { default as ConfigProvider } from './config-provider';
