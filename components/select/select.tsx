@@ -1,11 +1,11 @@
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { selectLayerStyles, selectStyle } from './select-style';
+import { selectLayerStyles, selectStyles } from './select-style';
 import clsx from 'clsx';
-import { useConfigContext } from '../config-provider/useConfigContext';
 import Input from '../input';
 import Option, { OptionProps } from './option';
 import { Down, Up } from '@icon-park/react';
-import { Tooltip } from '..';
+import Trigger from '../trigger';
+import { useMergeProps } from '../utils/mergeProps';
 
 export interface SelectProps {
   /**
@@ -44,7 +44,14 @@ export interface SelectProps {
   style?: React.CSSProperties;
 }
 
-const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithChildren<SelectProps>> = (props, ref) => {
+const defaultProps = {
+  name: 'ultra-select',
+};
+
+export type MergedSelectProps = typeof defaultProps & SelectProps;
+
+const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithChildren<SelectProps>> = (p, ref) => {
+  const props = useMergeProps(defaultProps, p);
   const {
     disabled,
     onChange,
@@ -67,8 +74,6 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   const [hoverIndex, setHoverIndex] = useState(-1);
   const [dropdownVisivle, setDropdownVisivle] = useState(false);
   const [focus, setFocus] = useState(false);
-  const configContext = useConfigContext();
-  const styleProps = { ...configContext, ...props };
   const optionsData: React.PropsWithChildren<OptionProps>[] = children
     ? React.Children.toArray(children).map((item: any) => item.props)
     : options || [];
@@ -178,21 +183,22 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   };
 
   return (
-    <Tooltip
-      id="select"
+    <Trigger
       visible={dropdownVisivle}
       onVisibleChange={v => setDropdownVisivle(v)}
       showArrow={false}
       placement="bottomLeft"
-      transitionClassName="ultra-select-animate-slide"
       trigger="click"
-      cssProps={styleProps => selectLayerStyles!(styleProps)}
-      title={
+      content={
         children
           ? React.Children.toArray(children).map((child: any, i) => renderOptionItem(child, child.props, i))
           : options?.map((option, i) => renderOptionItem(Option, option, i))
       }
-      getLayerContainer={node => node.parentNode as HTMLElement}
+      {...props}
+      name="ultra-select"
+      transitionClassName="ultra-select-layer-slide"
+      getLayerContainer={node => node?.parentNode as HTMLElement}
+      css={selectLayerStyles(props)}
     >
       <div
         className={clsx([
@@ -203,7 +209,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
         ])}
         tabIndex={0}
         style={style}
-        css={selectStyle(styleProps)}
+        css={selectStyles(props)}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
         onKeyDown={handleKeyDown}
@@ -229,7 +235,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
           {dropdownVisivle ? <Up className="ultra-icon" /> : <Down className="ultra-icon" />}
         </div>
       </div>
-    </Tooltip>
+    </Trigger>
   );
 };
 

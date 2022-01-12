@@ -17,7 +17,7 @@ export const dropdownStyles = (props: DropdownStylesProps) => {
         color: ${textColor};
         box-shadow: ${boxShadow};
         border-radius: ${radius}px;
-        &__title {
+        &__content {
           padding: 8px 0;
         }
         &__arrow {

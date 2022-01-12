@@ -1,36 +1,34 @@
 import { css } from '@emotion/react';
-import { SelectProps } from './select';
-import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
+import { MergedSelectProps } from './select';
 import { fade } from '../utils/fade';
 import { transitionSlide } from '../styles/transition/slide';
+import { ConfigContextOptions } from '../config-provider';
 
-export interface SelectCSSProps extends SelectProps, ComponentCommonProps, ConfigCommonOptions {}
+export interface SelectStylesProps extends MergedSelectProps, ConfigContextOptions {}
 
-export const selectLayerStyles = (props: SelectCSSProps) => {
+export const selectLayerStyles = (props: SelectStylesProps) => {
   const { theme } = props;
   const { radius, boxShadow } = theme.style;
   const { textColor, thirdBackgroundColor } = theme[theme.mode];
 
   return css`
-    .ultra-tooltip {
-      transform-origin: top;
-      background-color: ${thirdBackgroundColor};
-      color: ${textColor};
-      box-shadow: ${boxShadow};
-      border-radius: ${radius}px;
-      &__title {
-        padding: 8px 0;
+    &.${props.name}-layer-wrapper {
+      .${props.name} {
+        transform-origin: top;
+        background-color: ${thirdBackgroundColor};
+        color: ${textColor};
+        box-shadow: ${boxShadow};
+        border-radius: ${radius}px;
+        &__content {
+          padding: 8px 0;
+        }
       }
-      &__arrow {
-        border-color: transparent ${thirdBackgroundColor} transparent transparent;
-      }
+      ${transitionSlide('ultra-select-layer-slide')}
     }
-
-    ${transitionSlide('ultra-select-animate-slide')}
   `;
 };
 
-export const selectStyle = (props: SelectCSSProps) => {
+export const selectStyles = (props: SelectStylesProps) => {
   const { theme } = props;
   const { primaryColor, radius } = theme.style;
   const { borderColor, backgroundColor, textColor, disabledBgColor, disabledTextColor } = theme[theme.mode];

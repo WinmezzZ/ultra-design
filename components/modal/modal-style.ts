@@ -54,7 +54,7 @@ export const modalWrapperStyle = (props: ModalCSSProps) => {
         display: flex;
         align-items: center;
         flex-direction: row-reverse;
-        &__title {
+        &__content {
           flex: 1;
           margin: 0;
           overflow: hidden;

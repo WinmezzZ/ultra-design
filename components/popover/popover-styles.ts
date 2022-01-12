@@ -16,7 +16,7 @@ export const popoverStyles = (props: TooltipStylesProps) => {
         background-color: ${thirdBackgroundColor};
         color: ${textColor};
         box-shadow: ${boxShadow};
-        &__title {
+        &__content {
           padding: 12px 16px;
         }
         &__arrow {
