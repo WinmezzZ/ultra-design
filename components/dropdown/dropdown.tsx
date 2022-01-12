@@ -1,39 +1,22 @@
-import React, { FC } from 'react';
-import Tooltip, { TooltipProps } from '../tooltip';
+import { FC } from 'react';
+import Trigger, { TriggerProps } from '../trigger';
+import { useMergeProps } from '../utils/mergeProps';
 import { dropdownStyles } from './dropdown-styles';
 
-export interface DropdownProps extends Omit<TooltipProps, 'title' | 'placement'> {
-  /**
-   * @description.zh-CN 气泡卡片内容
-   * @description.en-US dropdown content
-   */
-  content?: React.ReactNode;
-  /**
-   * @description.zh-CN 触发气泡卡片的方式
-   * @description.en-US dropdown trigger mode
-   * @default 'click'
-   */
-  trigger?: 'hover' | 'click';
-}
+export interface DropdownProps extends TriggerProps {}
 
-const Dropdown: FC<DropdownProps> = props => {
-  const { content, ...rest } = props;
+export type MergedDropdownProps = typeof defaultProps & DropdownProps;
 
-  return (
-    <Tooltip
-      id="dropdown"
-      cssProps={styleProps => dropdownStyles!(styleProps)}
-      {...rest}
-      title={content}
-      showArrow={false}
-      placement="bottomLeft"
-      transitionClassName="ultra-dropdown-animate-slide"
-    />
-  );
+const defaultProps = {
+  name: 'ultra-dropdown',
+  trigger: 'click',
+  transitionClassName: 'ultra-dropdown-layer-slide',
 };
 
-Dropdown.defaultProps = {
-  trigger: 'click',
+const Dropdown: FC<DropdownProps> = p => {
+  const props = useMergeProps(defaultProps, p);
+
+  return <Trigger {...props} css={dropdownStyles(props)} />;
 };
 
 Dropdown.displayName = 'UltraDropdown';
