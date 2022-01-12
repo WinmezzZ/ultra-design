@@ -28,7 +28,7 @@ export interface Theme {
 
 const lightBg_1 = '#FFFFFF';
 const lightBg_2 = lightBg_1;
-const lightBg_3 = lightBg_1;
+const lightBg_3 = '#FAFAFA';
 
 const darkBg_1 = '#000000';
 const darkBg_2 = '#141414';
