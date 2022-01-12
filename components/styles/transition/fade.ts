@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
 
-export const transitionFade = (className: string, duration = 300) => {
+export const transitionFade = (className?: string, duration = 300) => {
+  if (!className) return undefined;
+
   return css`
     .${className}-fade-enter {
       opacity: 0;
