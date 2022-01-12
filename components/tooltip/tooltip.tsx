@@ -27,4 +27,6 @@ const Tooltip: FC<TooltipProps> = p => {
   return <Trigger content={title} {...props} />;
 };
 
+Tooltip.displayName = 'UltraTooltip';
+
 export default Tooltip;

@@ -1,29 +1,23 @@
-import React, { FC } from 'react';
-import { Tooltip, TooltipProps } from '..';
+import { FC } from 'react';
+import Trigger, { TriggerProps } from '../trigger';
+import { useMergeProps } from '../utils/mergeProps';
 import { popoverStyles } from './popover-styles';
 
-export interface PopoverProps extends Omit<TooltipProps, 'title'> {
-  /**
-   * @description.zh-CN 气泡卡片内容
-   * @description.en-US popover content
-   */
-  content?: React.ReactNode;
-  /**
-   * @description.zh-CN 触发气泡卡片的方式
-   * @description.en-US popover trigger mode
-   * @default 'click'
-   */
-  trigger?: 'hover' | 'click';
-}
+export interface PopoverProps extends TriggerProps {}
 
-const Popover: FC<PopoverProps> = props => {
-  const { content, ...rest } = props;
+export type MergedPopoverProps = typeof defaultProps & PopoverProps;
 
-  return <Tooltip id="popover" cssProps={styleProps => popoverStyles!(styleProps)} {...rest} title={content} />;
+const defaultProps = {
+  name: 'ultra-popover',
+  trigger: 'click',
+  placement: 'bottom',
+  transitionClassName: 'ultra-popover-layer-fade',
 };
 
-Popover.defaultProps = {
-  trigger: 'click',
+const Popover: FC<PopoverProps> = p => {
+  const props = useMergeProps(defaultProps, p);
+
+  return <Trigger {...props} css={popoverStyles(props)} />;
 };
 
 Popover.displayName = 'UltraPopover';

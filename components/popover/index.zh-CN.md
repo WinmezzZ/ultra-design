@@ -192,7 +192,7 @@ export default () => {
     <div style={{ height: 200, width: 200, overflow: 'auto', position: 'relative' }}>
       <div style={{ height: 170 }}></div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', width: 240 }}>
-        <Popover defaultVisible getLayerContainer={trigger => trigger.parentNode as HTMLElement} content="哈哈">
+        <Popover defaultVisible getLayerContainer={trigger => trigger?.parentNode as HTMLElement} content="哈哈">
           <Button>Click Me</Button>
         </Popover>
         <div style={{ width: 40 }}></div>
