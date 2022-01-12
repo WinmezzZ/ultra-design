@@ -2,8 +2,6 @@ import React, { FC } from 'react';
 import Trigger, { TriggerProps } from '../trigger';
 import { useMergeProps } from '../utils/mergeProps';
 
-export type PositionRect = Omit<DOMRect, 'toJSON'>;
-
 export interface TooltipProps extends Omit<TriggerProps, 'content'> {
   /**
    * @description.zh-CN 提示内容
@@ -17,7 +15,6 @@ export type MergedTooltipProps = typeof defaultProps & TooltipProps;
 const defaultProps = {
   name: 'ultra-tooltip',
   trigger: 'hover',
-  placement: 'bottom',
   transitionClassName: 'ultra-tooltip-layer-fade',
 };
 
