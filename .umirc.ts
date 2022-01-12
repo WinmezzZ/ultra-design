@@ -59,7 +59,7 @@ const config = {
   ],
   apiParser: {
     propFilter: {
-      skipNodeModules: false,
+      skipNodeModules: true,
       // skipPropsWithName: ['title'],
       skipPropsWithoutDoc: true,
     },
