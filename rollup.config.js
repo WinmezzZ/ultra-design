@@ -5,17 +5,17 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import pkg from './package.json';
 
-const external = ['react', 'react-dom'];
+const globals = {
+  react: 'React',
+  'react-dom': 'ReactDOM',
+  'prop-types': 'PropTypes',
+};
+
+const external = Object.keys(globals);
 
 // https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
 const esExtelrnals = [...external, /@emotion\/react/, /@babel\/runtime/, ...Object.keys(pkg.dependencies)];
 
-const globals = {
-  react: 'React',
-  'react-dom': 'ReactDOM',
-};
-
-fs.rmSync('./lib', { recursive: true, force: true });
 fs.rmSync('./es', { recursive: true, force: true });
 fs.rmSync('./dist', { recursive: true, force: true });
 
@@ -48,13 +48,13 @@ componentEnties.push(entryInput);
 
 /** @type{import('rollup').OutputOptions[]}*/
 const output = [
-  {
-    format: 'cjs',
-    preserveModules: true,
-    dir: 'lib',
-    exports: 'named',
-    globals,
-  },
+  // {
+  //   format: 'cjs',
+  //   preserveModules: true,
+  //   dir: 'lib',
+  //   exports: 'named',
+  //   globals,
+  // },
   {
     format: 'es',
     preserveModules: true,
@@ -93,9 +93,11 @@ const configs = output.map(item => {
         plugins: [
           [
             '@babel/plugin-transform-runtime',
+
             // removed useEsModules option, see: https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
             // { useEsModules: item.format === 'es' }
           ],
+          'babel-plugin-typescript-to-proptypes',
         ],
       }),
       resolve({

@@ -23,7 +23,7 @@
     "branch": "master",
     "platform": "github"
   },
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
   "scripts": {
