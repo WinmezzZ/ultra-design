@@ -1,5 +1,7 @@
 import _ from 'lodash-es';
 import { createContext, FC } from 'react';
+import en_US from '../locale/en_US';
+import { Locale } from './locale';
 import { defaultTheme, Theme } from './theme';
 
 export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger';
@@ -19,6 +21,11 @@ export interface ConfigCommonOptions {
    * @description.en-US theme color
    */
   theme: Theme;
+  /**
+   * @description.zh-CN 地区
+   * @description.en-US region locale
+   */
+  locale: Locale;
 }
 
 export const componentDefaultProps: ComponentCommonProps = {
@@ -27,6 +34,7 @@ export const componentDefaultProps: ComponentCommonProps = {
 
 const configCommonOptions: ConfigCommonOptions = {
   theme: defaultTheme,
+  locale: en_US,
 };
 
 export interface ConfigContextOptions extends ComponentCommonProps, ConfigCommonOptions {}

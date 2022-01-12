@@ -5,8 +5,8 @@ import Overlay from '../overlay';
 import { modalWrapperStyle } from './modal-style';
 import Button, { ButtonProps } from '../button';
 import { Close } from '@icon-park/react';
-import { useConfigContext } from '../config-provider/useConfigContext';
 import usePortal from '../utils/usePortal';
+import { useMergeProps } from '../utils/mergeProps';
 
 type ModalButtonProps = Pick<ButtonProps, 'disabled' | 'loading' | 'type' | 'children'>;
 
@@ -81,14 +81,20 @@ export interface ModalProps {
   cancelButton?: ModalButtonProps | null;
 }
 
-const Modal: FC<ModalProps> = props => {
+const defaultProps = {
+  visible: false,
+  keyboard: true,
+  width: '50%',
+};
+
+const Modal: FC<ModalProps> = p => {
+  const props = useMergeProps(defaultProps, p);
   const { title, visible, onClose, onOk, confirmButton, cancelButton, keyboard, beforeClose, hideClose, children } =
     props;
-  const configContext = useConfigContext();
-  const cssProps = { ...configContext, ...props };
+  const { cancelText, okText } = props.locale.Modal;
   const portal = usePortal('modal');
-  const confirmButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: '确定' }, confirmButton);
-  const cancelBtnProps: ModalButtonProps = Object.assign({}, { children: '取消' }, cancelButton);
+  const confirmButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: okText }, confirmButton);
+  const cancelBtnProps: ModalButtonProps = Object.assign({}, { children: cancelText }, cancelButton);
 
   const closeHandler = async (e: KeyboardEvent | React.MouseEvent) => {
     if (beforeClose) {
@@ -123,7 +129,7 @@ const Modal: FC<ModalProps> = props => {
         <div>
           <Overlay visible={visible} timeout={300} />
           <CSSTransition in={visible} unmountOnExit timeout={300} classNames="ultra-modal-wrapper">
-            <div css={modalWrapperStyle(cssProps)} className="ultra-modal-wrapper">
+            <div css={modalWrapperStyle(props)} className="ultra-modal-wrapper">
               <div className="ultra-modal">
                 <div className="ultra-modal-header">
                   {!hideClose && <Close className="ultra-modal-header__close" onClick={closeHandler} />}
@@ -144,12 +150,6 @@ const Modal: FC<ModalProps> = props => {
       )}
     </>
   );
-};
-
-Modal.defaultProps = {
-  visible: false,
-  keyboard: true,
-  width: '50%',
 };
 
 export default Modal;
