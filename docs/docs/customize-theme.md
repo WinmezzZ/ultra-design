@@ -5,7 +5,7 @@ order: 3
 
 # Customize Theme
 
-默认主题配置
+default theme configuration
 
 ```js | pure
 const lightBg_1 = '#FFFFFF';
