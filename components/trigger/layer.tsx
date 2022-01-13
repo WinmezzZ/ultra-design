@@ -3,18 +3,20 @@ import clsx from 'clsx';
 import { layerStyles } from './trigger-styles';
 import { CSSTransition } from 'react-transition-group';
 import { MergedTriggerProps } from './trigger';
-import { useConfigContext } from '../config-provider/useConfigContext';
 import Portal from '../utils/Portal';
-import { mergeProps } from '../utils/mergeProps';
+import { useMergeProps } from '../utils/mergeProps';
 
 interface LayerProps extends MergedTriggerProps {
   childRef: MutableRefObject<HTMLElement | null> | undefined;
   style: React.CSSProperties;
   onMouseEnter: React.MouseEventHandler;
   onMouseLeave: React.MouseEventHandler;
+  className?: string;
 }
 
-const Layer: FC<LayerProps> = props => {
+const Layer: FC<LayerProps> = p => {
+  const props = useMergeProps({}, p);
+
   const {
     content,
     placement,
@@ -29,19 +31,17 @@ const Layer: FC<LayerProps> = props => {
     onMouseEnter,
     onMouseLeave,
     name,
+    className,
   } = props;
 
-  const configContext = useConfigContext();
-  const styleProps = mergeProps(configContext, props);
-
-  if (!childRef?.current) return null;
+  if (!childRef || !childRef.current) return null;
 
   return (
-    <Portal id={name} getContainer={() => getLayerContainer?.(childRef.current!)}>
-      <div css={[layerStyles(styleProps)]}>
+    <Portal id={name} getContainer={() => getLayerContainer?.(childRef.current)}>
+      <div css={layerStyles(props)}>
         <div>
           <div
-            className={clsx(`${name}-layer-wrapper`, layerClassName)}
+            className={clsx(`${name}-layer-wrapper`, layerClassName, className)}
             style={style}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}

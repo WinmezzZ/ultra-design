@@ -11,7 +11,7 @@ const createElement = (id: string): HTMLElement => {
 
 interface PortalProps {
   id: string;
-  getContainer?: () => HTMLElement | undefined | null;
+  getContainer?: () => HTMLElement | null | undefined;
 }
 
 const Portal: FC<PortalProps> = props => {
@@ -21,7 +21,7 @@ const Portal: FC<PortalProps> = props => {
   useEffect(() => {
     const customContainer = getContainer ? getContainer() : null;
     const parentElement = customContainer || document.body;
-    const hasElement = parentElement.querySelector<HTMLElement>(`#${id}`);
+    const hasElement = customContainer || parentElement.querySelector<HTMLElement>(`#${id}`);
     const el = hasElement || createElement(id);
 
     if (!hasElement) {

@@ -262,7 +262,7 @@ export default () => {
       <div style={{ display: 'flex', justifyContent: 'flex-end', width: 240 }}>
         <Popover
           defaultVisible
-          getLayerContainer={trigger => trigger.parentNode as HTMLElement}
+          getLayerContainer={trigger => trigger?.parentNode as HTMLElement}
           content={
             <ul>
               <li>正文1</li>

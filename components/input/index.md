@@ -11,7 +11,7 @@ group:
 ## Basic Usage
 
 ```tsx
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Input } from 'ultra-design';
 
 export default () => {
