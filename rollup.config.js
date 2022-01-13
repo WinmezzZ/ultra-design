@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import glob from 'glob';
 import babel from '@rollup/plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
@@ -10,38 +11,15 @@ const globals = {
   'react-dom': 'ReactDOM',
   'prop-types': 'PropTypes',
 };
-
 const external = Object.keys(globals);
-
 // https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
 const esExtelrnals = [...external, /@emotion\/react/, /@babel\/runtime/, ...Object.keys(pkg.dependencies)];
 
 fs.rmSync('./es', { recursive: true, force: true });
 fs.rmSync('./dist', { recursive: true, force: true });
 
-const componentsPath = path.join(__dirname, 'components');
-
-const files = fs.readdirSync(componentsPath);
-
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
-
-const componentEnties = files
-  .map(name => {
-    const comPath = path.join(componentsPath, name);
-    const entry = path.join(comPath, 'index.ts');
-
-    const stat = fs.statSync(comPath);
-
-    if (!stat.isDirectory()) return null;
-
-    const hasFile = fs.existsSync(entry);
-
-    if (!hasFile) return null;
-
-    return entry;
-  })
-  .filter(c => c);
-
+const componentEnties = glob.sync('components/*/index.ts');
 const entryInput = path.resolve('components/index.ts');
 
 componentEnties.push(entryInput);
