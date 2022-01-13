@@ -4,19 +4,19 @@ export const transitionFade = (className?: string, duration = 300) => {
   if (!className) return undefined;
 
   return css`
-    .${className}-fade-enter {
+    .${className}-enter {
       opacity: 0;
     }
-    .${className}-fade-enter-active {
+    .${className}-enter-active {
       opacity: 1;
-      transition: opacity ${duration}ms;
+      transition: all ${duration}ms;
     }
-    .${className}-fade-exit {
+    .${className}-exit {
       opacity: 1;
     }
-    .${className}-fade-exit-active {
+    .${className}-exit-active {
       opacity: 0;
-      transition: opacity ${duration}ms;
+      transition: all ${duration}ms;
     }
   `;
 };

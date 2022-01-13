@@ -23,8 +23,8 @@ export const popoverStyles = (props: TooltipStylesProps) => {
           border-color: transparent ${thirdBackgroundColor} transparent transparent;
         }
       }
-
-      ${transitionFade(props.transitionClassName, props.transitionTimeout)}
     }
+
+    ${transitionFade(props.transitionClassName, props.transitionTimeout)}
   `;
 };
