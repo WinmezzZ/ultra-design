@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
-import { ConfigContextOptions } from '../config-provider';
+import { ConfigProviderProps } from '../config-provider';
 import { transitionSlide } from '../styles/transition/slide';
 import { MergedDropdownProps } from './dropdown';
 
-export interface DropdownStylesProps extends MergedDropdownProps, ConfigContextOptions {}
+type DropdownStylesProps = MergedDropdownProps & ConfigProviderProps;
 
 export const dropdownStyles = (props: DropdownStylesProps) => {
   const { boxShadow, radius } = props.theme.style;

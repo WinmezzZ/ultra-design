@@ -1,5 +1,5 @@
 import React from 'react';
-import { useConfigContext } from '../config-provider/useConfigContext';
+import { useMergeProps } from '../utils/mergeProps';
 import { keyboardStyles } from './keyboard-styles';
 
 interface Props {
@@ -25,17 +25,20 @@ interface Props {
   ctrl?: boolean;
   className?: string;
 }
-
 type NativeAttrs = Omit<React.KeygenHTMLAttributes<any>, keyof Props>;
 
 export type KeyboardProps = Props & NativeAttrs;
 
-const Keyboard: React.FC<React.PropsWithChildren<KeyboardProps>> = props => {
-  const { command = false, shift = false, option = false, ctrl = false, children, className, ...rest } = props;
-  const configContext = useConfigContext();
+const defaultProps = {};
+
+export type MergedKeyboardProps = typeof defaultProps & Props;
+
+const Keyboard: React.FC<KeyboardProps> = p => {
+  const props = useMergeProps(defaultProps, p);
+  const { command, shift, option, ctrl, children, className, ...rest } = props;
 
   return (
-    <kbd className={className} {...rest} css={keyboardStyles(configContext)}>
+    <kbd className={className} {...rest} css={keyboardStyles(props)}>
       {command && <span>⌘</span>}
       {shift && <span>⇧</span>}
       {option && <span>⌥</span>}

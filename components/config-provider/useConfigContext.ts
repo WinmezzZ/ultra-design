@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import { ConfigContext, ConfigContextOptions } from '.';
+import { ConfigContext, ConfigProviderProps } from './config-provider';
 
 export function useConfigContext() {
-  const value = useContext<ConfigContextOptions>(ConfigContext);
+  const value = useContext<ConfigProviderProps>(ConfigContext);
 
   return value;
 }

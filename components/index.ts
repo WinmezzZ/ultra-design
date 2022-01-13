@@ -34,5 +34,5 @@ export { default as Menu } from './menu';
 export type { KeyboardProps } from './keyboard';
 export { default as Keyboard } from './keyboard';
 
-export type { ConfigContextOptions } from './config-provider';
+export type { ConfigProviderProps } from './config-provider';
 export { default as ConfigProvider } from './config-provider';

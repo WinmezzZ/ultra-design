@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import Overlay from '../overlay';
-import { modalWrapperStyle } from './modal-style';
+import { modalWrapperStyles } from './modal-style';
 import Button, { ButtonProps } from '../button';
 import { Close } from '@icon-park/react';
 import { useMergeProps } from '../utils/mergeProps';
@@ -86,6 +86,8 @@ const defaultProps = {
   width: '50%',
 };
 
+export type MergedModalrProps = typeof defaultProps & ModalProps;
+
 const Modal: FC<ModalProps> = p => {
   const props = useMergeProps(defaultProps, p);
   const { title, visible, onClose, onOk, confirmButton, cancelButton, keyboard, beforeClose, hideClose, children } =
@@ -123,7 +125,7 @@ const Modal: FC<ModalProps> = p => {
     <Portal id="ultra-modal">
       <Overlay visible={visible} timeout={300} />
       <CSSTransition in={visible} unmountOnExit timeout={300} classNames="ultra-modal-wrapper">
-        <div css={modalWrapperStyle(props)} className="ultra-modal-wrapper">
+        <div css={modalWrapperStyles(props)} className="ultra-modal-wrapper">
           <div className="ultra-modal">
             <div className="ultra-modal-header">
               {!hideClose && <Close className="ultra-modal-header__close" onClick={closeHandler} />}

@@ -1,6 +1,7 @@
 import { useCallbackState } from '../utils/useCallbackState';
 import { CSSProperties, useEffect, useRef } from 'react';
 import { css } from '@emotion/react';
+import { useMergeProps } from '../utils/mergeProps';
 
 export interface RippleProps {
   /**
@@ -15,14 +16,16 @@ export interface RippleProps {
    * @default true
    */
   color?: string;
-  /**
-   * className
-   */
-  className?: string;
 }
 
-const Ripple: React.FC<RippleProps> = props => {
-  const { during, color, className } = props;
+const defaultProps = {
+  during: 600,
+  color: 'rgba(0, 0, 0, .1)',
+};
+
+const Ripple: React.FC<RippleProps> = p => {
+  const props = useMergeProps(defaultProps, p);
+  const { during, color } = props;
 
   const timer = useRef({} as NodeJS.Timeout);
   const [rippleStyle, setRippleStyle] = useCallbackState<Readonly<CSSProperties>>({
@@ -72,19 +75,13 @@ const Ripple: React.FC<RippleProps> = props => {
   };
 
   return (
-    <div {...props} className={`${className}`.trim()} css={styles} onMouseDown={onMouseDown}>
+    <div css={styles} onMouseDown={onMouseDown} {...props}>
       <s style={rippleStyle} />
     </div>
   );
 };
 
 export default Ripple;
-
-Ripple.defaultProps = {
-  during: 600,
-  color: 'rgba(0, 0, 0, .1)',
-  className: '',
-};
 
 const styles = css`
   position: absolute;

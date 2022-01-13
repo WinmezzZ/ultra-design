@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
-import { ConfigCommonOptions } from '../config-provider';
+import { ConfigProviderProps } from '..';
+import { MergedKeyboardProps } from './keyboard';
 
-export interface KeyboardStyleProps extends ConfigCommonOptions {}
+type KeyboardStylesProps = MergedKeyboardProps & ConfigProviderProps;
 
-export const keyboardStyles = (props: KeyboardStyleProps) => {
+export const keyboardStyles = (props: KeyboardStylesProps) => {
   const { radius } = props.theme.style;
   const { thirdBackgroundColor, borderColor } = props.theme[props.theme.mode];
 

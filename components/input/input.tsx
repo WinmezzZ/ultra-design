@@ -1,10 +1,10 @@
 import React, { HTMLInputTypeAttribute, useRef, useState } from 'react';
-import { inputStyle } from './input-style';
+import { inputStyles } from './input-style';
 import clsx from 'clsx';
-import { useConfigContext } from '../config-provider/useConfigContext';
 import { Close } from '@icon-park/react';
+import { useMergeProps } from '../utils/mergeProps';
 
-export interface InputProps {
+export interface Props {
   /**
    * @description.zh-CN 默认值
    * @description.en-US default value
@@ -65,7 +65,16 @@ export interface InputProps {
   onClear?: (value: string, e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (props, ref) => {
+type NativeAttrs = Omit<React.InputHTMLAttributes<any>, keyof Props | 'size'>;
+
+export type InputProps = Props & NativeAttrs;
+
+const defaultProps = {};
+
+export type MergedInputProps = typeof defaultProps & Props;
+
+const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (p, ref) => {
+  const props = useMergeProps(defaultProps, p);
   const {
     defaultValue,
     disabled,
@@ -81,27 +90,29 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
     autoFocus,
     clearable,
     onClear,
+    className,
+    size: _size,
+    ...rest
   } = props;
+
   const [inputValue, setInputValue] = useState(defaultValue);
   const [focus, setFocus] = useState(false);
-  const configContext = useConfigContext();
-  const styleProps = { ...configContext, ...props };
 
   const inputRef = (ref as React.RefObject<HTMLInputElement>) || useRef<HTMLInputElement>(null);
 
-  const handleFocus: React.FocusEventHandler<HTMLInputElement> = e => {
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     setFocus(true);
     onFocus?.(e.target.value, e);
   };
-  const handleBlur: React.FocusEventHandler<HTMLInputElement> = e => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     setFocus(false);
     onBlur?.(e.target.value, e);
   };
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     onChange?.(e.target.value, e);
   };
-  const handleInput: React.FormEventHandler<HTMLInputElement> = e => {
+  const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
     setFocus(true);
     onInput?.(e.currentTarget.value, e);
   };
@@ -124,8 +135,8 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
 
   return (
     <div
-      className={clsx(['ultra-input', focus && 'ultra-input--focused', disabled && 'ultra-input--disabled'])}
-      css={inputStyle(styleProps)}
+      className={clsx(['ultra-input', focus && 'ultra-input--focused', disabled && 'ultra-input--disabled', className])}
+      css={inputStyles(props)}
     >
       {icon && <span className="ultra-input__icon">{icon}</span>}
       <input
@@ -141,6 +152,7 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
         onFocus={handleFocus}
         onBlur={handleBlur}
         onInput={handleInput}
+        {...rest}
       />
       {inputValue && clearable && (
         <span className="ultra-input__clear" onClick={handleClear}>

@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
-import { ConfigContextOptions } from '..';
+import { ConfigProviderProps } from '..';
 import { transitionFade } from '../styles/transition/fade';
 import { MergedPopoverProps } from './popover';
 
-export interface TooltipStylesProps extends MergedPopoverProps, ConfigContextOptions {}
+type TooltipStylesProps = MergedPopoverProps & ConfigProviderProps;
 
 export const popoverStyles = (props: TooltipStylesProps) => {
   const { mode } = props.theme;

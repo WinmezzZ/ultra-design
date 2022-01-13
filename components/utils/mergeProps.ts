@@ -1,5 +1,4 @@
 import { assign, assignWith, isUndefined } from 'lodash-es';
-import { ConfigContextOptions } from '../config-provider';
 import { useConfigContext } from '../config-provider/useConfigContext';
 
 export function mergeProps<A, B>(a: A, b: B): B & A;
@@ -18,7 +17,7 @@ export function mergeProps(...items: any[]) {
   return ret;
 }
 
-export function useMergeProps<A, B>(defaultProps: A, props: B): B & A & ConfigContextOptions {
+export function useMergeProps<A, B>(defaultProps: A, props: B) {
   const configContext = useConfigContext();
 
   return mergeProps(defaultProps, configContext, props);

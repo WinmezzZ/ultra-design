@@ -2,9 +2,9 @@ import { css } from '@emotion/react';
 import { MergedSelectProps } from './select';
 import { fade } from '../utils/fade';
 import { transitionSlide } from '../styles/transition/slide';
-import { ConfigContextOptions } from '../config-provider';
+import { ConfigProviderProps } from '../config-provider';
 
-export interface SelectStylesProps extends MergedSelectProps, ConfigContextOptions {}
+type SelectStylesProps = MergedSelectProps & ConfigProviderProps;
 
 export const selectLayerStyles = (props: SelectStylesProps) => {
   const { theme } = props;

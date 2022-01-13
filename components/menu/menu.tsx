@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { menuStyle } from './menu-style';
+import { menuStyles } from './menu-style';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
 import { SubMenuProps } from './sub-menu';
 
-export interface MenuProps {
+export interface Props {
   /**
    * @description.zh-CN 默认选中的子菜单项
    * @description.en-US default selected menu item
@@ -18,6 +18,14 @@ export interface MenuProps {
   className?: string;
   style?: React.CSSProperties;
 }
+
+type NativeAttrs = Omit<React.KeygenHTMLAttributes<any>, keyof Props>;
+
+export type MenuProps = Props & NativeAttrs;
+
+const defaultProps = {};
+
+export type MergedMenuProps = typeof defaultProps & MenuProps;
 
 const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, React.PropsWithChildren<MenuProps>> = (
   props,
@@ -49,7 +57,7 @@ const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, React.Prop
   };
 
   return (
-    <ul ref={ref} style={style} className={clsx('ultra-menu', className)} css={menuStyle(styleProps)}>
+    <ul ref={ref} style={style} className={clsx('ultra-menu', className)} css={menuStyles(styleProps)}>
       {children && React.Children.toArray(children).map((child: any) => renderItem(child, child.props))}
     </ul>
   );

@@ -1,12 +1,9 @@
 import { css } from '@emotion/react';
-import { ComponentCommonProps, ConfigCommonOptions, Size } from '../config-provider';
+import { ConfigProviderProps, Size } from '../config-provider/config-provider';
 import React from 'react';
-import { ButtonProps } from '.';
+import { MergedButtonProps } from './button';
 
-export interface ButtonStyleProps
-  extends Omit<ButtonProps, keyof ComponentCommonProps>,
-    ComponentCommonProps,
-    ConfigCommonOptions {}
+type ButtonStyleProps = MergedButtonProps & ConfigProviderProps;
 
 const buttonSizeStyleMap: Record<Size, React.CSSProperties> = {
   mini: {
@@ -76,7 +73,7 @@ const loadingLayer = () => css`
   }
 `;
 
-const disabledStyle = (props: ButtonStyleProps) => {
+const disabledStyles = (props: ButtonStyleProps) => {
   const { theme, type } = props;
   const { disabledBgColor, disabledTextColor, disabledBorderColor } = theme[theme.mode];
 
@@ -112,6 +109,6 @@ export const buttonStyles = (props: ButtonStyleProps) => {
     box-shadow: 0 2px #00000004;
     ${buttonTypeStyleMap(props)}
     ${loading && loadingLayer()}
-    ${disabled && disabledStyle(props)}
+    ${disabled && disabledStyles(props)}
   `;
 };

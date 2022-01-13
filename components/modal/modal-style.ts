@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import _ from 'lodash-es';
-import { ConfigCommonOptions } from '../config-provider';
-import { ModalProps } from './modal';
+import { ConfigProviderProps } from '../config-provider';
+import { MergedModalrProps } from './modal';
 
-export interface ModalCSSProps extends ModalProps, ConfigCommonOptions {}
+type ModalStylesProps = MergedModalrProps & ConfigProviderProps;
 
-export const modalWrapperStyle = (props: ModalCSSProps) => {
+export const modalWrapperStyles = (props: ModalStylesProps) => {
   const { center, top, width, theme } = props;
   const { radius } = theme.style;
   const { thirdBackgroundColor } = theme[theme.mode];

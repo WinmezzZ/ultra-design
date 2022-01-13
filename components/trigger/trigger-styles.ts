@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
-import { ConfigContextOptions } from '../config-provider';
+import { ConfigProviderProps } from '../config-provider';
 import { MergedTriggerProps } from './trigger';
 
-export interface TriggerCSSProps extends MergedTriggerProps, ConfigContextOptions {}
+type TriggerCSSProps = MergedTriggerProps & ConfigProviderProps;
 
 export const layerStyles = (props: TriggerCSSProps) => {
   const { mode } = props.theme;

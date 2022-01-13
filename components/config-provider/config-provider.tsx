@@ -37,7 +37,7 @@ const configCommonOptions: ConfigCommonOptions = {
   locale: en_US,
 };
 
-export interface ConfigContextOptions extends ComponentCommonProps, ConfigCommonOptions {}
+export interface ConfigProviderProps extends ComponentCommonProps, ConfigCommonOptions {}
 
 const configContextOptions = {
   ...componentDefaultProps,
@@ -48,12 +48,12 @@ type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>;
 };
 
-export const ConfigContext = createContext<ConfigContextOptions>(configContextOptions);
+export const ConfigContext = createContext<ConfigProviderProps>(configContextOptions);
 
-const ConfigProvider: FC<DeepPartial<ConfigContextOptions>> = props => {
+const ConfigProvider: FC<DeepPartial<ConfigProviderProps>> = props => {
   const { children, ...rest } = props;
 
-  const config: ConfigContextOptions = _.merge({}, configContextOptions, rest);
+  const config: ConfigProviderProps = _.merge({}, configContextOptions, rest);
 
   return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
 };

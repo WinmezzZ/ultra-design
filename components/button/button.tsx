@@ -1,15 +1,12 @@
-import { ComponentCommonProps } from '../config-provider';
-import { useConfigContext } from '../config-provider/useConfigContext';
 import { buttonStyles } from './button-style';
 import React from 'react';
 import Ripple from '../ripple/ripple';
 import LoadingIcon from './loading-icon';
-
-export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger';
+import { useMergeProps } from '../utils/mergeProps';
 
 export type ButtonType = 'primary' | 'dashed' | 'text' | 'default';
 
-export interface BaseButtonProps {
+export interface Props {
   /**
    * @description.zh-CN 按钮类型
    * @description.en-US button type
@@ -45,12 +42,19 @@ export interface BaseButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export interface ButtonProps extends Partial<ComponentCommonProps>, React.PropsWithChildren<BaseButtonProps> {}
+type NativeAttrs = Omit<React.ButtonHTMLAttributes<any>, keyof Props>;
 
-const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (props, ref) => {
+export type ButtonProps = Props & NativeAttrs;
+
+const defaultProps = {
+  effect: true,
+};
+
+export type MergedButtonProps = typeof defaultProps & Props;
+
+const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (p, ref) => {
+  const props = useMergeProps(defaultProps, p);
   const { children, effect, type, onClick, loading, disabled, ...rest } = props;
-  const configContext = useConfigContext();
-  const styleProps = { ...configContext, ...props };
 
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (loading || disabled) {
@@ -65,7 +69,7 @@ const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonP
   const rippleElement = effect && type !== 'text' && !loading && !disabled ? <Ripple /> : null;
 
   return (
-    <button ref={ref as any} css={buttonStyles(styleProps)} onClick={clickHandler} {...rest}>
+    <button ref={ref} css={buttonStyles(props)} onClick={clickHandler} {...rest}>
       {loading && <LoadingIcon />}
       <span>{children}</span>
       {rippleElement}
@@ -74,11 +78,6 @@ const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonP
 };
 
 const Button = React.forwardRef(ButtonComponent);
-
-Button.defaultProps = {
-  effect: true,
-  loading: false,
-};
 
 Button.displayName = 'UltraButton';
 

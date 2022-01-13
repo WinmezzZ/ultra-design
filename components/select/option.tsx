@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { css } from '@emotion/react';
 import clsx from 'clsx';
 import { useConfigContext } from '../config-provider/useConfigContext';
-import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
+import { ConfigProviderProps } from '../config-provider';
 import { fade } from '../utils/fade';
 
 export interface OptionProps {
@@ -27,6 +27,10 @@ export interface OptionProps {
   style?: React.CSSProperties;
 }
 
+const defaultProps = {};
+
+export type MergedOptionProps = typeof defaultProps & OptionProps;
+
 const Option: FC<OptionProps> = props => {
   const { label, value, disabled, children, onClick, onMouseEnter, className } = props;
   const configContext = useConfigContext();
@@ -40,7 +44,7 @@ const Option: FC<OptionProps> = props => {
   return (
     <div
       className={clsx('ultra-select-option', disabled && 'ultra-select-option--disabled', className)}
-      css={optionStyle(styleProps)}
+      css={optionStyles(styleProps)}
       onClick={handleClick}
       onMouseEnter={onMouseEnter}
     >
@@ -53,9 +57,9 @@ Option.displayName = 'UltraSelectOption';
 
 export default Option;
 
-export interface OptionCSSProps extends OptionProps, ComponentCommonProps, ConfigCommonOptions {}
+type OptionStylesProps = MergedOptionProps & ConfigProviderProps;
 
-const optionStyle = (props: OptionCSSProps) => {
+const optionStyles = (props: OptionStylesProps) => {
   const { theme } = props;
   const { primaryColor } = theme.style;
   const { disabledBgColor, disabledTextColor } = theme[theme.mode];

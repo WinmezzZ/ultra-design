@@ -22,6 +22,10 @@ export interface SubMenuProps {
   className?: string;
 }
 
+const defaultProps = {};
+
+export type MergedSubMenuProps = typeof defaultProps & SubMenuProps;
+
 const SubMenuComponent: React.ForwardRefRenderFunction<HTMLLIElement, React.PropsWithChildren<SubMenuProps>> = (
   props,
   ref,

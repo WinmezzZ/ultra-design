@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
-import { MenuProps } from './menu';
-import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
+import { MergedMenuProps } from './menu';
+import { MergedSubMenuProps } from './sub-menu';
 import { fade } from '../utils/fade';
-import { SubMenuProps } from './sub-menu';
+import { ConfigProviderProps } from '../config-provider';
 
-export interface MenuCSSProps extends MenuProps, ComponentCommonProps, ConfigCommonOptions {}
+type MenuStylesProps = MergedMenuProps & ConfigProviderProps;
 
-export const menuStyle = (props: MenuCSSProps) => {
+export const menuStyles = (props: MenuStylesProps) => {
   const { theme } = props;
   const { backgroundColor, textColor } = theme[theme.mode];
 
@@ -30,7 +30,7 @@ export const menuStyle = (props: MenuCSSProps) => {
   `;
 };
 
-export interface SubMenuCSSProps extends SubMenuProps, ComponentCommonProps, ConfigCommonOptions {}
+type SubMenuCSSProps = MergedSubMenuProps & ConfigProviderProps;
 
 export const subMenuStyle = (props: SubMenuCSSProps) => {
   const { theme } = props;
