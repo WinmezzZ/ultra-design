@@ -53,4 +53,8 @@ export default function App() {
 
 ## 在线 Demo
 
-<iframe width="100%" height="600" src="https://codesandbox.io/s/icy-dawn-zbkdm?file=/src/App.js"></iframe>
+<iframe src="https://codesandbox.io/embed/icy-dawn-zbkdm?fontsize=14&hidenavigation=1&theme=dark"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="icy-dawn-zbkdm"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+   ></iframe>
