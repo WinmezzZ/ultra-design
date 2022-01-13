@@ -9,17 +9,15 @@ const createElement = (id: string): HTMLElement => {
   return el;
 };
 
-interface PortalProps {
-  id: string;
-  getContainer?: () => HTMLElement | null | undefined;
-}
+const uuid = () => URL.createObjectURL(new Blob()).substr(-36);
 
-const Portal: FC<PortalProps> = props => {
-  const { children, getContainer, id } = props;
-  const [container, setContainer] = useState<HTMLElement | null>(createElement(id));
+export const usePortal = (selectId: string, getContainer?: () => HTMLElement | undefined | null) => {
+  const id = selectId || uuid();
+  const [elSnapshot, setElSnapshot] = useState<HTMLElement | null>(createElement(id));
 
   useEffect(() => {
     const customContainer = getContainer ? getContainer() : null;
+
     const parentElement = customContainer || document.body;
     const hasElement = customContainer || parentElement.querySelector<HTMLElement>(`#${id}`);
     const el = hasElement || createElement(id);
@@ -27,12 +25,24 @@ const Portal: FC<PortalProps> = props => {
     if (!hasElement) {
       parentElement.appendChild(el);
     }
-    setContainer(el);
+    setElSnapshot(el);
   }, [getContainer]);
 
-  if (!container) return null;
+  return elSnapshot;
+};
 
-  return createPortal(children, container);
+interface PortalProps {
+  id: string;
+  getContainer?: () => HTMLElement | null | undefined;
+}
+
+const Portal: FC<PortalProps> = props => {
+  const { children, getContainer, id } = props;
+  const el = usePortal(id, getContainer);
+
+  if (!el) return null;
+
+  return createPortal(children, el);
 };
 
 export default Portal;
