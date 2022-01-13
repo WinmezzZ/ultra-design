@@ -1,10 +1,11 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const createElement = (id: string): HTMLElement => {
   const el = document.createElement('div');
 
   el.setAttribute('id', id);
+  el.setAttribute('style', 'position: absolute;top: 0px;left: 0px;width: 100%;');
 
   return el;
 };
@@ -34,15 +35,24 @@ export const usePortal = (selectId: string, getContainer?: () => HTMLElement | u
 interface PortalProps {
   id: string;
   getContainer?: () => HTMLElement | null | undefined;
+  style?: React.CSSProperties;
 }
 
 const Portal: FC<PortalProps> = props => {
-  const { children, getContainer, id } = props;
+  const { children, getContainer, id, style } = props;
   const el = usePortal(id, getContainer);
 
   if (!el) return null;
 
+  Object.assign(el.style, style);
+
   return createPortal(children, el);
+};
+
+Portal.defaultProps = {
+  style: {
+    zIndex: 1000,
+  },
 };
 
 export default Portal;

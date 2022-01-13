@@ -231,7 +231,7 @@ const Trigger: FC<TriggerProps> = p => {
 
   const isElement = React.isValidElement(children);
 
-  const layerStyle = getPosition(placement!, rect, layerOffset);
+  const layerStyle = getPosition(placement, rect, layerOffset);
 
   const childProps = {
     ref: childRef,

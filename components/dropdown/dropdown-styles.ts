@@ -24,8 +24,8 @@ export const dropdownStyles = (props: DropdownStylesProps) => {
           border-color: transparent ${thirdBackgroundColor} transparent transparent;
         }
       }
-
-      ${transitionSlide(props.transitionClassName, props.transitionTimeout)}
     }
+
+    ${transitionSlide(props.transitionClassName, props.transitionTimeout)}
   `;
 };

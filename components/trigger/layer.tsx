@@ -38,22 +38,19 @@ const Layer: FC<LayerProps> = p => {
 
   return (
     <Portal id={name} getContainer={() => getLayerContainer?.(childRef.current)}>
-      <div css={layerStyles(props)}>
-        <div>
-          <div
-            className={clsx(`${name}-layer-wrapper`, layerClassName, className)}
-            style={style}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-          >
-            <CSSTransition in={visible} unmountOnExit timeout={transitionTimeout!} classNames={transitionClassName}>
-              <div className={`${name}`}>
-                <div className={`${name}__content`}>{content}</div>
-                {showArrow && <div className={clsx(`${name}__arrow`, `${name}__arrow--placement__${placement}`)} />}
-              </div>
-            </CSSTransition>
+      <div
+        className={clsx(`${name}-layer-wrapper`, layerClassName, className)}
+        style={style}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        css={layerStyles(props)}
+      >
+        <CSSTransition in={visible} unmountOnExit timeout={transitionTimeout} classNames={transitionClassName}>
+          <div className={`${name}`}>
+            <div className={`${name}__content`}>{content}</div>
+            {showArrow && <div className={clsx(`${name}__arrow`, `${name}__arrow--placement__${placement}`)} />}
           </div>
-        </div>
+        </CSSTransition>
       </div>
     </Portal>
   );

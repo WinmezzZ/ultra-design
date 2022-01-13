@@ -11,12 +11,7 @@ export const layerStyles = (props: TriggerCSSProps) => {
 
   return css`
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    .${props.name}-layer-wrapper {
-      position: absolute;
-      z-index: 999;
+    &.${props.name}-layer-wrapper {
     }
     .${props.name} {
       background-color: ${secondReverseBgColor};
