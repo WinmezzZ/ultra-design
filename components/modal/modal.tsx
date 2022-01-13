@@ -1,12 +1,11 @@
 import React, { FC, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import Overlay from '../overlay';
 import { modalWrapperStyle } from './modal-style';
 import Button, { ButtonProps } from '../button';
 import { Close } from '@icon-park/react';
-import usePortal from '../utils/usePortal';
 import { useMergeProps } from '../utils/mergeProps';
+import Portal from '../utils/Portal';
 
 type ModalButtonProps = Pick<ButtonProps, 'disabled' | 'loading' | 'type' | 'children'>;
 
@@ -92,7 +91,6 @@ const Modal: FC<ModalProps> = p => {
   const { title, visible, onClose, onOk, confirmButton, cancelButton, keyboard, beforeClose, hideClose, children } =
     props;
   const { cancelText, okText } = props.locale.Modal;
-  const portal = usePortal('modal');
   const confirmButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: okText }, confirmButton);
   const cancelBtnProps: ModalButtonProps = Object.assign({}, { children: cancelText }, cancelButton);
 
@@ -121,35 +119,30 @@ const Modal: FC<ModalProps> = p => {
     };
   }, []);
 
-  if (!portal) return null;
-
   return (
-    <>
-      {createPortal(
-        <div>
-          <Overlay visible={visible} timeout={300} />
-          <CSSTransition in={visible} unmountOnExit timeout={300} classNames="ultra-modal-wrapper">
-            <div css={modalWrapperStyle(props)} className="ultra-modal-wrapper">
-              <div className="ultra-modal">
-                <div className="ultra-modal-header">
-                  {!hideClose && <Close className="ultra-modal-header__close" onClick={closeHandler} />}
-                  {title && <h4 className="ultra-modal-header__title">{title}</h4>}
-                </div>
-                <div className="ultra-modal-body">{children}</div>
-                {!(confirmButton === null && cancelButton === null) && (
-                  <div className="ultra-modal-footer">
-                    {confirmButton !== null && <Button {...confirmButtonProps} onClick={onOk} />}
-                    {cancelButton !== null && <Button {...cancelBtnProps} onClick={closeHandler} />}
-                  </div>
-                )}
-              </div>
+    <Portal id="ultra-modal">
+      <Overlay visible={visible} timeout={300} />
+      <CSSTransition in={visible} unmountOnExit timeout={300} classNames="ultra-modal-wrapper">
+        <div css={modalWrapperStyle(props)} className="ultra-modal-wrapper">
+          <div className="ultra-modal">
+            <div className="ultra-modal-header">
+              {!hideClose && <Close className="ultra-modal-header__close" onClick={closeHandler} />}
+              {title && <h4 className="ultra-modal-header__title">{title}</h4>}
             </div>
-          </CSSTransition>
-        </div>,
-        portal,
-      )}
-    </>
+            <div className="ultra-modal-body">{children}</div>
+            {!(confirmButton === null && cancelButton === null) && (
+              <div className="ultra-modal-footer">
+                {confirmButton !== null && <Button {...confirmButtonProps} onClick={onOk} />}
+                {cancelButton !== null && <Button {...cancelBtnProps} onClick={closeHandler} />}
+              </div>
+            )}
+          </div>
+        </div>
+      </CSSTransition>
+    </Portal>
   );
 };
+
+Modal.displayName = 'UltraModal';
 
 export default Modal;
