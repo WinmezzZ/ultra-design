@@ -8,6 +8,7 @@ export interface ModalCSSProps extends ModalProps, ConfigCommonOptions {}
 export const modalWrapperStyle = (props: ModalCSSProps) => {
   const { center, top, width, theme } = props;
   const { radius } = theme.style;
+  const { thirdBackgroundColor } = theme[theme.mode];
 
   return css`
     position: fixed;
@@ -31,7 +32,7 @@ export const modalWrapperStyle = (props: ModalCSSProps) => {
       position: relative;
       width: ${width};
       max-width: 90%;
-      background-color: #fff;
+      background-color: ${thirdBackgroundColor};
       padding: 20px;
       border-radius: ${radius}px;
       margin: 0 auto;
