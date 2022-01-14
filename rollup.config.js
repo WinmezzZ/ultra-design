@@ -24,6 +24,35 @@ const entryInput = path.resolve('components/index.ts');
 
 componentEnties.push(entryInput);
 
+/** @type{import('rollup').Plugin[] */
+const plugins = [
+  babel({
+    exclude: 'node_modules/**',
+    extensions,
+    babelHelpers: 'runtime',
+    ignore: ['node_modules/**'],
+    presets: [
+      ['@babel/preset-env', { modules: false }],
+      ['@babel/preset-react', { runtime: 'automatic', importSource: '@emotion/react' }],
+      '@babel/preset-typescript',
+    ],
+    plugins: [
+      [
+        '@babel/plugin-transform-runtime',
+
+        // removed useEsModules option, see: https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
+        // { useEsModules: item.format === 'es' }
+      ],
+      'babel-plugin-typescript-to-proptypes',
+    ],
+  }),
+  resolve({
+    browser: true,
+    extensions,
+  }),
+  commonjs(),
+];
+
 /** @type{import('rollup').OutputOptions[]}*/
 const output = [
   // {
@@ -57,36 +86,22 @@ const configs = output.map(item => {
     external: item.format === 'umd' ? external : esExtelrnals,
     input: item.format === 'umd' ? entryInput : componentEnties,
     output: item,
-    plugins: [
-      babel({
-        exclude: 'node_modules/**',
-        extensions,
-        babelHelpers: 'runtime',
-        ignore: ['node_modules/**'],
-        presets: [
-          ['@babel/preset-env', { modules: false }],
-          ['@babel/preset-react', { runtime: 'automatic', importSource: '@emotion/react' }],
-          '@babel/preset-typescript',
-        ],
-        plugins: [
-          [
-            '@babel/plugin-transform-runtime',
-
-            // removed useEsModules option, see: https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
-            // { useEsModules: item.format === 'es' }
-          ],
-          'babel-plugin-typescript-to-proptypes',
-        ],
-      }),
-      resolve({
-        browser: true,
-        extensions,
-      }),
-      commonjs(),
-    ],
+    plugins,
   };
 
   return config;
 });
+
+const buildLocaleConfigs = {
+  input: path.join(__dirname, 'components/locale/index.ts'),
+  output: {
+    format: 'umd',
+    name: 'UltraLocale',
+    file: 'dist/with-locale.js',
+  },
+  plugins,
+};
+
+configs.push(buildLocaleConfigs);
 
 export default configs;
