@@ -4,6 +4,7 @@ import glob from 'glob';
 import babel from '@rollup/plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import replace from '@rollup/plugin-replace';
 import pkg from './package.json';
 
 const globals = {
@@ -51,6 +52,10 @@ const plugins = [
     extensions,
   }),
   commonjs(),
+  replace({
+    'process.env.NODE_ENV': JSON.stringify('production'),
+    preventAssignment: true,
+  }),
 ];
 
 /** @type{import('rollup').OutputOptions[]}*/
