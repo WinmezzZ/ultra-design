@@ -10,7 +10,6 @@ import pkg from './package.json';
 const globals = {
   react: 'React',
   'react-dom': 'ReactDOM',
-  'prop-types': 'PropTypes',
 };
 const external = Object.keys(globals);
 // https://www.npmjs.com/package/@rollup/plugin-babel/v/5.2.1#babelhelpers
