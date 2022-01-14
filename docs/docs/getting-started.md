@@ -60,3 +60,27 @@ Ultra Design supports tree shaping based on ES modules by default. For the JS pa
   </script>
 </body>
 ```
+
+### internationalization
+
+If you need to use internationalization features at the same time, you also need to introduce language related CDN
+
+```html
+<head>
+  <script src="https://unpkg.com/browse/ultra-design@latest/dist/index.js"></script>
+  <script src="https://unpkg.com/browse/ultra-design@latest/dist/with-locale.js"></script>
+</head>
+<body>
+  <script type="text/babel">
+    const { Button, ConfigProvider } = UltraDesign;
+    const { zh_CN } = UltraLocale;
+
+    ReactDOM.render(
+      <ConfigProvider locale={zh_CN}>
+        <Button>Button</Button>
+      </ConfigProvider>,
+      document.getElementById('root'),
+    );
+  </script>
+</body>
+```
