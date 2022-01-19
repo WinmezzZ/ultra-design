@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const mergeRef = <T>(refs: Array<React.MutableRefObject<T>>): React.RefCallback<T> => {
+export const mergeRef = <T>(refs: Array<React.Ref<T>>): React.RefCallback<T> => {
   return value => {
     refs.forEach(ref => {
       if (typeof ref === 'function') {

@@ -1,10 +1,9 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useClickOutSide } from '../utils/useClickOutSide';
 import { getPosition, Placement } from './placement';
 import Layer from './layer';
-import { css } from '@emotion/react';
-import clsx from 'clsx';
 import { useMergeProps } from '../utils/mergeProps';
+import { mergeRef } from '../utils/mergeRef';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
 
@@ -116,11 +115,12 @@ export interface TriggerProps {
   transitionTimeout?: number;
   name?: string;
   id?: string;
+  children?: React.ReactNode;
 }
 
 export type MergedTriggerProps = typeof defaultProps & TriggerProps;
 
-const Trigger: FC<TriggerProps> = p => {
+const TriggerInternal: React.ForwardRefRenderFunction<HTMLElement, TriggerProps> = (p, ref) => {
   const props = useMergeProps(defaultProps, p);
   const {
     children,
@@ -134,7 +134,6 @@ const Trigger: FC<TriggerProps> = p => {
     showArrow,
     offset,
     getLayerContainer,
-    name,
   } = props;
   const [visible, setVisible] = useState(defaultVisible);
   const [rect, setRect] = useState<PositionRect>(defaultPositionRect);
@@ -142,7 +141,7 @@ const Trigger: FC<TriggerProps> = p => {
 
   const layerOffset = showArrow ? offset! : offset! - 6;
 
-  const childRef = useRef<HTMLSpanElement>(null);
+  const childRef = useRef<HTMLElement>(null);
 
   const updateRect = () => {
     if (!childRef.current) return;
@@ -233,25 +232,42 @@ const Trigger: FC<TriggerProps> = p => {
 
   const layerStyle = getPosition(placement, rect, layerOffset);
 
+  // console.log(children.type, ref);
   const childProps = {
-    ref: childRef,
+    ref: mergeRef([childRef, ref]),
     onMouseEnter: () => mouseEventHandler(true),
     onMouseLeave: () => mouseEventHandler(false),
     onClick: (e: React.MouseEvent) => {
+      console.log(props.children, defaultVisible);
       clickEventHandler();
       isElement && children.props.onClick?.(e);
     },
   };
 
+  const getChild = () => {
+    const element = children as React.ReactElement;
+    const elementType = (element && typeof element !== 'string' && element.type) as any;
+    let child = children;
+
+    if (['string', 'number'].indexOf(typeof children) > -1 || React.Children.count(children) > 1) {
+      child = <span>{children}</span>;
+    } else if (
+      element &&
+      elementType &&
+      (elementType.displayName === 'UltraTooltip' ||
+        elementType.displayName === 'UltraPopover' ||
+        elementType.displayName === 'UltraDropdown' ||
+        elementType.displayName === 'UltraSelect')
+    ) {
+      // child = element.props.children;
+    }
+
+    return React.cloneElement(child as any, childProps) || <span />;
+  };
+
   return (
-    <span
-      css={css`
-        display: inline-block;
-      `}
-      className={clsx(`${name}__trigger`, `${name}-layer__trigger`)}
-      {...childProps}
-    >
-      {children}
+    <>
+      {getChild()}
       <Layer
         {...props}
         visible={visible}
@@ -260,8 +276,10 @@ const Trigger: FC<TriggerProps> = p => {
         onMouseEnter={() => mouseEventHandler(true)}
         onMouseLeave={() => mouseEventHandler(false)}
       />
-    </span>
+    </>
   );
 };
+
+const Trigger = React.forwardRef(TriggerInternal);
 
 export default Trigger;

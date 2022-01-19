@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import Trigger, { TriggerProps } from '../trigger';
 import { useMergeProps } from '../utils/mergeProps';
 import { tooltipStyles } from './tooltip-styles';
@@ -19,11 +19,13 @@ const defaultProps = {
   transitionClassName: 'ultra-tooltip-layer-fade',
 };
 
-const Tooltip: FC<TooltipProps> = p => {
+const TooltipInternal: React.ForwardRefRenderFunction<HTMLElement, TooltipProps> = (p, ref) => {
   const { title, ...props } = useMergeProps(defaultProps, p);
 
-  return <Trigger content={title} {...props} css={tooltipStyles(props)} />;
+  return <Trigger ref={ref} content={title} {...props} css={tooltipStyles(props)} />;
 };
+
+const Tooltip = React.forwardRef(TooltipInternal);
 
 Tooltip.displayName = 'UltraTooltip';
 
