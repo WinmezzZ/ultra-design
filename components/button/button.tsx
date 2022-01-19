@@ -3,10 +3,11 @@ import React from 'react';
 import Ripple from '../ripple/ripple';
 import LoadingIcon from './loading-icon';
 import { useMergeProps } from '../utils/mergeProps';
+import { ComponentCommonProps } from '../config-provider/config-provider';
 
 export type ButtonType = 'primary' | 'dashed' | 'text' | 'default';
 
-export interface Props {
+export interface Props extends Partial<ComponentCommonProps> {
   /**
    * @description.zh-CN 按钮类型
    * @description.en-US button type
@@ -34,12 +35,6 @@ export interface Props {
    * @default true
    */
   effect?: boolean;
-
-  /**
-   * @description.zh-CN 点击事件
-   * @description.click event
-   */
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 type NativeAttrs = Omit<React.ButtonHTMLAttributes<any>, keyof Props>;
