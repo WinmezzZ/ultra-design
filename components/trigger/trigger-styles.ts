@@ -11,6 +11,7 @@ export const layerStyles = (props: TriggerCSSProps) => {
 
   return css`
     position: absolute;
+    z-index: 999;
     &.${props.name}-layer-wrapper {
     }
     .${props.name} {
