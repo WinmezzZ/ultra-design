@@ -21,6 +21,9 @@ export interface Theme {
     primaryColor: string;
     radius: number;
     boxShadow: string;
+    successColor: string;
+    warningColor: string;
+    errorColor: string;
   };
   light: ThemeModeStyle;
   dark: ThemeModeStyle;
@@ -40,6 +43,9 @@ export const defaultTheme: Theme = {
     primaryColor: '#13c2c2',
     radius: 6,
     boxShadow: '0 1px 10px 0 rgb(0 0 0 / 25%)',
+    successColor: '#00B42A',
+    warningColor: '#FF7D00',
+    errorColor: '#F53F3F',
   },
   light: {
     textColor: '#000000',
