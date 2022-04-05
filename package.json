@@ -6,6 +6,7 @@
     "react-component",
     "react-lib",
     "react-component-lib",
+    "react-design",
     "ultra-deisign"
   ],
   "publishConfig": {
