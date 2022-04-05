@@ -4,9 +4,9 @@ hero:
   desc: 用于构建现代网站和应用程序的开源 React UI 组件库。
   actions:
     - text: Github
-      link: /https://github.com/WinmezzZ/ultra-design
+      link: https://github.com/WinmezzZ/ultra-design
     - text: 文档
-      link: /docs
+      link: /zh-CN/docs
 features:
   - icon: https://gw.alipayobjects.com/zos/bmw-prod/881dc458-f20b-407b-947a-95104b5ec82b/k79dm8ih_w144_h144.png
     title: 组件
