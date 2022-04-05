@@ -35,6 +35,13 @@ export interface Props extends Partial<ComponentCommonProps> {
    * @default true
    */
   effect?: boolean;
+
+  /**
+   * @description.zh-CN 按钮状态
+   * @description.en-US button status
+   * @default true
+   */
+  status?: 'success' | 'error' | 'warning';
 }
 
 type NativeAttrs = Omit<React.ButtonHTMLAttributes<any>, keyof Props>;

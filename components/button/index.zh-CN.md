@@ -25,6 +25,21 @@ export default () => (
 );
 ```
 
+## 按钮状态
+
+```tsx
+import React from 'react';
+import { Button } from 'ultra-design';
+
+export default () => (
+  <div>
+    <Button status="success">成功</Button>
+    <Button status="warning">警告</Button>
+    <Button status="error">错误</Button>
+  </div>
+);
+```
+
 ## 按钮尺寸
 
 ```tsx

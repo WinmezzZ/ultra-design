@@ -29,13 +29,13 @@ const buttonSizeStyleMap: Record<Size, React.CSSProperties> = {
 };
 
 const buttonTypeStyleMap = (props: ButtonStyleProps) => {
-  const { theme, type } = props;
-  const { mode } = props.theme;
-
+  const { theme, type, status } = props;
+  const { mode, style } = props.theme;
   const { backgroundColor, textColor, borderColor } = theme[mode];
+  const primaryColor = status ? style[(status + 'Color') as `${typeof status}Color`] : theme.style.primaryColor;
 
-  const bgColor = type === 'primary' ? theme?.style.primaryColor : backgroundColor;
-  const txtColor = type === 'primary' ? '#fff' : textColor;
+  const bgColor = status ? primaryColor : type === 'primary' ? primaryColor : backgroundColor;
+  const txtColor = status ? '#fff' : type === 'primary' ? '#fff' : textColor;
   const bdColor = ['text', 'primary'].includes(type as string) ? 'transparent' : borderColor;
   let baseStyle = `
     background-color: ${bgColor};
@@ -46,7 +46,7 @@ const buttonTypeStyleMap = (props: ButtonStyleProps) => {
   if (type === 'text') {
     baseStyle += `
       border: none;
-      color: ${theme.style.primaryColor};
+      color: ${primaryColor};
       background-color: unset;
     `;
   } else if (type === 'dashed') {
