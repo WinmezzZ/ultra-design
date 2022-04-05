@@ -27,7 +27,6 @@ const config = {
     ['@umijs/deps/compiled/babel/preset-react', { runtime: 'automatic', importSource: '@emotion/react' }]
   ],
   extraBabelPlugins: ['@emotion/babel-plugin'],
-  ssr: {},
   styles: [
     `
       button+button {

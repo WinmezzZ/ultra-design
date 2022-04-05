@@ -36,3 +36,5 @@ export { default as Keyboard } from './keyboard';
 
 export type { ConfigProviderProps } from './config-provider';
 export { default as ConfigProvider } from './config-provider';
+
+export { default as Toast } from './toast';
