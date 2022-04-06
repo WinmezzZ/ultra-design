@@ -1,6 +1,6 @@
 ---
 nav:
-  title: Components
+  title: 组件
   path: /components
 group:
   title: 导航
@@ -17,15 +17,25 @@ import { Button, Dropdown } from 'ultra-design';
 
 export default () => {
   return (
-    <Dropdown content={ <div>
-        <Button>Click Me</Button><br/>
-        <Button>Click Me</Button><br/>
-        <Button>Click Me</Button><br/>
-        <Button>Click Me</Button><br/>
-        <Button>Click Me</Button><br/>
-        <Button>Click Me</Button><br/>
-      </div>}>
-        <Button>Click Me</Button>
+    <Dropdown
+      content={
+        <div>
+          <Button>Click Me</Button>
+          <br />
+          <Button>Click Me</Button>
+          <br />
+          <Button>Click Me</Button>
+          <br />
+          <Button>Click Me</Button>
+          <br />
+          <Button>Click Me</Button>
+          <br />
+          <Button>Click Me</Button>
+          <br />
+        </div>
+      }
+    >
+      <Button>Click Me</Button>
     </Dropdown>
   );
 };

@@ -1,4 +1,7 @@
 ---
+nav:
+  title: 文档
+  order: 1
 title: Introduction 介绍
 order: 0
 ---

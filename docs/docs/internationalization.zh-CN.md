@@ -1,4 +1,7 @@
 ---
+nav:
+  title: 文档
+  order: 1
 title: Internationalization 国际化
 order: 5
 ---

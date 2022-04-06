@@ -1,4 +1,7 @@
 ---
+nav:
+  title: 文档
+  order: 1
 title: Getting Start 快速上手
 order: 1
 ---

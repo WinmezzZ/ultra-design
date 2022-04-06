@@ -3,7 +3,8 @@ nav:
   title: Components
   path: /components
 group:
-  title: 导航
+  title: Navigation
+  order: 1
 ---
 
 # Menu

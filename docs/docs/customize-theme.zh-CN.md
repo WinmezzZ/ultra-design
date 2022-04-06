@@ -1,4 +1,7 @@
 ---
+nav:
+  title: 文档
+  order: 1
 title: Customize Theme 定制样式
 order: 3
 ---

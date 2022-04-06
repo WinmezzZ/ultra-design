@@ -1,4 +1,7 @@
 ---
+nav:
+  title: 文档
+  order: 1
 title: Dark Mode 暗黑模式
 order: 2
 ---

@@ -1,4 +1,7 @@
 ---
+nav:
+  title: 文档
+  order: 1
 title: Dynamic Theme 动态主题
 order: 4
 ---
