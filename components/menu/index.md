@@ -40,12 +40,14 @@ export default () => {
     console.log(key);
   };
   return (
-    <Menu horizontal defaultSelectedKey="home" onClick={handleClick}>
-      <Menu.SubMenu key="home">Home</Menu.SubMenu>
-      <Menu.SubMenu key="detail">Detail</Menu.SubMenu>
-      <Menu.SubMenu key="about">About</Menu.SubMenu>
-      <Menu.SubMenu key="contact">Contact</Menu.SubMenu>
-    </Menu>
+    <div style={{ height: 60, boxShadow: '0 8px 24px -2px rgb(0 0 0 / 5%)' }}>
+      <Menu style={{ height: '100%' }} horizontal defaultSelectedKey="home" onClick={handleClick}>
+        <Menu.SubMenu key="home">Home</Menu.SubMenu>
+        <Menu.SubMenu key="detail">Detail</Menu.SubMenu>
+        <Menu.SubMenu key="about">About</Menu.SubMenu>
+        <Menu.SubMenu key="contact">Contact</Menu.SubMenu>
+      </Menu>
+    </div>
   );
 };
 ```

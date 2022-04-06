@@ -30,8 +30,10 @@ export const menuStyles = (props: MenuStylesProps) => {
 
     &.ultra-menu--horizontal {
       display: flex;
+      min-height: 48px;
+      padding: 0;
       .ultra-sub-menu {
-        min-height: 48px;
+        height: 100%;
         padding: 0 20px;
         margin-bottom: 0;
         &--active {
