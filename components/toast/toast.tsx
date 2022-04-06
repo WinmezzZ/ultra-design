@@ -13,14 +13,14 @@ export interface ToastProps {
    */
   content?: React.ReactNode;
   /**
-   * @description.zh-CN 消失时长，默认 2000 ms
+   * @description.zh-CN 自动关闭时长，默认 2000 ms
    * @description.en-US leave duration, default 2000 ms
    * @default '2000'
    */
   duration?: number;
   /**
-   * @description.zh-CN 手动关闭时会触发此方法
-   * @description.en-US trigger when toast closing button clicked
+   * @description.zh-CN 关闭时触发的回调函数
+   * @description.en-US will be triggered when the toast is closed
    */
   onClose?: () => void;
   /**
@@ -72,6 +72,7 @@ export const ToastInternal: FC<ToastProps> = p => {
 
     timer.current = setTimeout(() => {
       setVisible(false);
+      onClose?.();
     }, duration);
   }, [visible]);
 
@@ -105,9 +106,11 @@ const unmountRoot = () => {
   }
 };
 
-function open(content: string): void;
+type OnClose = () => void;
+function open(content: string, duration?: number, onClose?: OnClose): void;
+
 function open(props: ToastProps): void;
-function open(data: any) {
+function open(data: string | ToastProps, duration?: number, onClose?: OnClose) {
   let root = unmountRoot();
 
   if (!root) {
@@ -119,6 +122,9 @@ function open(data: any) {
   const config: any = {};
 
   if (typeof data === 'string') {
+    config.content = data;
+    duration && (config.duration = duration);
+    onClose && (config.onClose = onClose);
     config.content = data;
   } else {
     Object.assign(config, data);
@@ -135,20 +141,23 @@ const iconMap: ToastIconMap = {
   info: <Info theme="outline" size="18" fill="#13c2c2" />,
   success: <Success theme="outline" size="18" fill="#00B42A" />,
   warning: <Info theme="outline" size="18" fill="#FF7D00" />,
-  error: <Error theme="outline" size="12" fill="#F53F3F" />,
+  error: <Error theme="outline" size="18" fill="#F53F3F" />,
 };
-
-type OnClose = () => void;
 
 type ToastInstance = typeof open & {
   info: (content: React.ReactNode, duration?: number, onClose?: OnClose) => void;
   success: (content: React.ReactNode, duration?: number, onClose?: OnClose) => void;
   warning: (content: React.ReactNode, duration?: number, onClose?: OnClose) => void;
   error: (content: React.ReactNode, duration?: number, onClose?: OnClose) => void;
-  destory: () => void;
+  clear: () => void;
 };
 
+/**
+ * toast mesaage component
+ */
 const Toast = open as ToastInstance;
+
+Toast.clear = unmountRoot;
 
 for (const key in iconMap) {
   const k = key as ToastType;
