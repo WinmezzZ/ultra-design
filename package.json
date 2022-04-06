@@ -1,6 +1,6 @@
 {
   "name": "ultra-design",
-  "version": "0.0.37-beta",
+  "version": "0.0.38-beta",
   "keywords": [
     "react",
     "react-component",
@@ -15,7 +15,6 @@
   },
   "files": [
     "dist",
-    "lib",
     "es"
   ],
   "repository": {
@@ -30,7 +29,7 @@
   "scripts": {
     "dev": "dumi dev",
     "build:doc": "dumi build",
-    "build:types": "tsc && tsc --project tsconfig.json --declarationDir lib",
+    "build:types": "tsc",
     "build:packages": "rollup -c",
     "build": "npm run build:packages && npm run build:types",
     "lint": "eslint . --ext js,ts,tsx",
