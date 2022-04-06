@@ -3,12 +3,12 @@ nav:
   title: Components
   path: /components
 group:
-  title: Navigation
+  title: 导航
 ---
 
 # Menu
 
-## Basic Usage
+## basic usage
 
 ```tsx
 import React from 'react';
@@ -19,12 +19,31 @@ export default () => {
     console.log(key);
   };
   return (
-    <Menu style={{ width: 200, borderRight: '1px solid #ccc' }} defaultSelectedKey="123" onClick={handleClick}>
-      <Menu.SubMenu key="123">123</Menu.SubMenu>
-      <Menu.SubMenu key="456">456</Menu.SubMenu>
-      <Menu.SubMenu disabled key="789">
-        789
-      </Menu.SubMenu>
+    <Menu style={{ width: 200, borderRight: '1px solid #ccc' }} defaultSelectedKey="submenu1" onClick={handleClick}>
+      <Menu.SubMenu key="submenu1">SubMenu1</Menu.SubMenu>
+      <Menu.SubMenu key="submenu2">SubMenu2</Menu.SubMenu>
+      <Menu.SubMenu key="submenu3">SubMenu3</Menu.SubMenu>
+    </Menu>
+  );
+};
+```
+
+## horizontal nav menu display
+
+```tsx
+import React from 'react';
+import { Menu } from 'ultra-design';
+
+export default () => {
+  const handleClick = (key: string) => {
+    console.log(key);
+  };
+  return (
+    <Menu horizontal defaultSelectedKey="home" onClick={handleClick}>
+      <Menu.SubMenu key="home">Home</Menu.SubMenu>
+      <Menu.SubMenu key="detail">Detail</Menu.SubMenu>
+      <Menu.SubMenu key="about">About</Menu.SubMenu>
+      <Menu.SubMenu key="contact">Contact</Menu.SubMenu>
     </Menu>
   );
 };

@@ -27,6 +27,29 @@ export const menuStyles = (props: MenuStylesProps) => {
         margin-bottom: 0;
       }
     }
+
+    &.ultra-menu--horizontal {
+      display: flex;
+      .ultra-sub-menu {
+        min-height: 48px;
+        padding: 0 20px;
+        margin-bottom: 0;
+        &--active {
+          background-color: inherit;
+          position: relative;
+          &::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: calc(100% - 20px);
+            height: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: ${theme.style.primaryColor};
+          }
+        }
+      }
+    }
   `;
 };
 
@@ -41,7 +64,7 @@ export const subMenuStyle = (props: SubMenuCSSProps) => {
     display: flex;
     align-items: center;
     padding: 0 12px;
-    min-height: 32px;
+    min-height: 40px;
     cursor: pointer;
     user-select: none;
     &.ultra-sub-menu--disabled {

@@ -6,6 +6,11 @@ import { SubMenuProps } from './sub-menu';
 
 export interface Props {
   /**
+   * @description.zh-CN 水平展示，用作于顶部导航栏
+   * @description.en-US Horizontal display, used for top navigation bar
+   */
+  horizontal?: boolean;
+  /**
    * @description.zh-CN 默认选中的子菜单项
    * @description.en-US default selected menu item
    */
@@ -31,7 +36,7 @@ const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, React.Prop
   props,
   ref,
 ) => {
-  const { children, className, style, onClick, defaultSelectedKey } = props;
+  const { children, className, style, onClick, defaultSelectedKey, horizontal } = props;
   const [activeSubMenu, setActiveSubMenu] = useState(defaultSelectedKey);
   const configContext = useConfigContext();
   const styleProps = { ...configContext, ...props };
@@ -57,7 +62,12 @@ const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, React.Prop
   };
 
   return (
-    <ul ref={ref} style={style} className={clsx('ultra-menu', className)} css={menuStyles(styleProps)}>
+    <ul
+      ref={ref}
+      style={style}
+      className={clsx('ultra-menu', className, horizontal && 'ultra-menu--horizontal')}
+      css={menuStyles(styleProps)}
+    >
       {children && React.Children.toArray(children).map((child: any) => renderItem(child, child.props))}
     </ul>
   );
