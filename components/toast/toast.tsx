@@ -30,9 +30,10 @@ function toast(data: string | ToastProps, duration?: number, onClose?: OnClose) 
 
   if (typeof data === 'string') {
     config.content = data;
-    duration && (config.duration = duration);
-    onClose && (config.onClose = onClose);
-    config.content = data;
+    config.onClose = onClose;
+    if (duration) {
+      config.duration = duration;
+    }
   } else {
     Object.assign(config, data);
   }
