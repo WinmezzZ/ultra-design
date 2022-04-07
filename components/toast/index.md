@@ -120,7 +120,7 @@ export default () => {
 
 `Toast(options: ToastOptions)`
 
-<API src="toast.tsx" export="['ToastInternal']" hideTitle />
+<API src="toast-internal.tsx" export="['ToastInternal']" hideTitle />
 
 #### Toast method
 

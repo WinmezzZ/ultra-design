@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import _ from 'lodash-es';
 import { ConfigProviderProps } from '../config-provider';
-import { MergedToastrProps } from './toast';
+import { MergedToastrProps } from './toast-internal';
 
 type ToastStylesProps = MergedToastrProps & ConfigProviderProps;
 
@@ -18,6 +18,7 @@ export const toastWrapperStyles = (props: ToastStylesProps) => {
     width: 100%;
     text-align: center;
     z-index: 1000;
+    pointer-events: none;
     * {
       box-sizing: border-box;
     }
@@ -32,6 +33,7 @@ export const toastWrapperStyles = (props: ToastStylesProps) => {
       box-shadow: ${boxShadow};
       overflow: auto;
       font-size: 14px;
+      pointer-events: all;
 
       &__close {
         margin-left: 10px;

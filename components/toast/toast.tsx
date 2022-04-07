@@ -1,100 +1,7 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { Close, Info, Success, Error } from '@icon-park/react';
-import { CSSTransition } from 'react-transition-group';
-import { toastWrapperStyles } from './toast-style';
-import { useMergeProps } from '../utils/mergeProps';
-
-export interface ToastProps {
-  /**
-   *
-   * @description.zh-CN toast 内容
-   * @description.en-US toast content
-   */
-  content?: React.ReactNode;
-  /**
-   * @description.zh-CN 自动关闭时长，默认 2000 ms
-   * @description.en-US leave duration, default 2000 ms
-   * @default '2000'
-   */
-  duration?: number;
-  /**
-   * @description.zh-CN 关闭时触发的回调函数
-   * @description.en-US will be triggered when the toast is closed
-   */
-  onClose?: () => void;
-  /**
-   * @description.zh-CN toast 相对浏览器窗口的 top 属性
-   * @description.en-US the top attribute of the toast relative to the browser window
-   * @default '20px'
-   */
-  top?: string;
-
-  /**
-   * @description.zh-CN 隐藏手动关闭按钮
-   * @description.en-US hide close icon
-   * @default false
-   */
-  hideClose?: boolean;
-  /**
-   * @description.zh-CN 自定义左侧 icon 图标
-   * @description.en-US custom left icon
-   */
-  icon?: React.ReactNode;
-}
-
-const defaultProps = {
-  duration: 2000,
-};
-
-export type MergedToastrProps = typeof defaultProps & ToastProps;
-
-export const ToastInternal: FC<ToastProps> = p => {
-  const [visible, setVisible] = useState(false);
-  const props = useMergeProps(defaultProps, p);
-  const { onClose, hideClose, duration, icon, children } = props;
-  const timer = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    setVisible(true);
-
-    // clearTimeout when component unmounted
-    return () => {
-      if (timer.current) {
-        clearTimeout(timer.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!visible) return;
-    if (!duration) return;
-
-    timer.current = setTimeout(() => {
-      setVisible(false);
-      onClose?.();
-    }, duration);
-  }, [visible]);
-
-  const closehandler = () => {
-    setVisible(false);
-    onClose?.();
-  };
-
-  return (
-    <CSSTransition in={visible} unmountOnExit timeout={300} classNames="ultra-toast-wrapper">
-      <div css={toastWrapperStyles(props)} className="ultra-toast-wrapper">
-        <div className="ultra-toast">
-          {icon && <span className="ultra-toast__icon">{icon}</span>}
-          {children}
-          {!hideClose && <Close className="ultra-toast__close" onClick={closehandler} />}
-        </div>
-      </div>
-    </CSSTransition>
-  );
-};
-
-ToastInternal.displayName = 'UltraToast';
+import { Info, Success, Error } from '@icon-park/react';
+import ToastInternal, { ToastProps } from './toast-internal';
 
 const unmountRoot = () => {
   const root = document.getElementById('ultra-toast');
@@ -107,10 +14,10 @@ const unmountRoot = () => {
 };
 
 type OnClose = () => void;
-function open(content: string, duration?: number, onClose?: OnClose): void;
+function toast(content: string, duration?: number, onClose?: OnClose): void;
 
-function open(props: ToastProps): void;
-function open(data: string | ToastProps, duration?: number, onClose?: OnClose) {
+function toast(props: ToastProps): void;
+function toast(data: string | ToastProps, duration?: number, onClose?: OnClose) {
   let root = unmountRoot();
 
   if (!root) {
@@ -130,7 +37,7 @@ function open(data: string | ToastProps, duration?: number, onClose?: OnClose) {
     Object.assign(config, data);
   }
 
-  ReactDOM.render(<ToastInternal {...config}>{config.content} </ToastInternal>, root);
+  ReactDOM.render(<ToastInternal {...config} />, root);
 }
 
 type ToastType = 'info' | 'success' | 'warning' | 'error';
@@ -144,7 +51,7 @@ const iconMap: ToastIconMap = {
   error: <Error theme="outline" size="18" fill="#F53F3F" />,
 };
 
-type ToastInstance = typeof open & {
+type ToastInstance = typeof toast & {
   info: (content: React.ReactNode, duration?: number, onClose?: OnClose) => void;
   success: (content: React.ReactNode, duration?: number, onClose?: OnClose) => void;
   warning: (content: React.ReactNode, duration?: number, onClose?: OnClose) => void;
@@ -155,7 +62,7 @@ type ToastInstance = typeof open & {
 /**
  * toast mesaage component
  */
-const Toast = open as ToastInstance;
+const Toast = toast as ToastInstance;
 
 Toast.clear = unmountRoot;
 
@@ -163,7 +70,7 @@ for (const key in iconMap) {
   const k = key as ToastType;
 
   Toast[k] = (content: React.ReactNode, duration?: number, onClose?: OnClose) => {
-    open({
+    toast({
       content,
       duration,
       onClose,
