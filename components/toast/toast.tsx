@@ -13,18 +13,21 @@ const unmountRoot = () => {
   }
 };
 
+const createRoot = () => {
+  const root = document.createElement('div');
+
+  root.id = 'ultra-toast';
+  document.body.appendChild(root);
+
+  return root;
+};
+
 type OnClose = () => void;
 function toast(content: string, duration?: number, onClose?: OnClose): void;
 
 function toast(props: ToastProps): void;
 function toast(data: string | ToastProps, duration?: number, onClose?: OnClose) {
-  let root = unmountRoot();
-
-  if (!root) {
-    root = document.createElement('div');
-    root.id = 'ultra-toast';
-    document.body.appendChild(root);
-  }
+  const root = unmountRoot() || createRoot();
 
   const config: any = {};
 
@@ -71,12 +74,7 @@ for (const key in iconMap) {
   const k = key as ToastType;
 
   Toast[k] = (content: React.ReactNode, duration?: number, onClose?: OnClose) => {
-    toast({
-      content,
-      duration,
-      onClose,
-      icon: iconMap[k],
-    });
+    toast({ content, duration, onClose, icon: iconMap[k] });
   };
 }
 
