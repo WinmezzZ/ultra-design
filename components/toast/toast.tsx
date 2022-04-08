@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Info, Success, Error } from '@icon-park/react';
 import ToastInternal, { ToastProps } from './toast-internal';
-import { PartialProviderConfig } from '../config-provider/config-provider';
+import { ConfigContext, PartialProviderConfig } from '../config-provider/config-provider';
 import { mergeProps } from '../utils/mergeProps';
 
-let taostConfig: any = {};
+let newConfig: PartialProviderConfig = {};
 
 const unmountRoot = () => {
   const root = document.getElementById('ultra-toast');
@@ -27,27 +27,36 @@ const createRoot = () => {
 };
 
 type OnClose = () => void;
-function toast(content: string, duration?: number, onClose?: OnClose): void;
 
+function toast(content: string, duration?: number, onClose?: OnClose): void;
 function toast(props: ToastProps): void;
 function toast(data: string | ToastProps, duration?: number, onClose?: OnClose) {
   const root = unmountRoot() || createRoot();
 
-  const config: any = {};
+  const options: any = {};
 
   if (typeof data === 'string') {
-    config.content = data;
-    config.onClose = onClose;
+    options.content = data;
+    options.onClose = onClose;
     if (duration) {
-      config.duration = duration;
+      options.duration = duration;
     }
   } else {
-    Object.assign(config, data);
+    Object.assign(options, data);
   }
 
   console.dir(toast);
 
-  ReactDOM.render(<ToastInternal {...mergeProps(taostConfig, config)} />, root);
+  ReactDOM.render(
+    <ConfigContext.Consumer>
+      {defaultConfig => {
+        const props = mergeProps(defaultConfig, newConfig, options);
+
+        return <ToastInternal {...props} />;
+      }}
+    </ConfigContext.Consumer>,
+    root,
+  );
 }
 
 type ToastType = 'info' | 'success' | 'warning' | 'error';
@@ -78,7 +87,7 @@ const Toast = toast as ToastInstance;
 Toast.clear = unmountRoot;
 
 Toast.config = (config: PartialProviderConfig) => {
-  taostConfig = config;
+  newConfig = config;
 };
 
 for (const key in iconMap) {
