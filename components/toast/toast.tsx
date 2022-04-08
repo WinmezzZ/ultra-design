@@ -45,8 +45,6 @@ function toast(data: string | ToastProps, duration?: number, onClose?: OnClose) 
     Object.assign(options, data);
   }
 
-  console.dir(toast);
-
   ReactDOM.render(
     <ConfigContext.Consumer>
       {defaultConfig => {
