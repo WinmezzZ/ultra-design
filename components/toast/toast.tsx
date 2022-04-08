@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Info, Success, Error } from '@icon-park/react';
 import ToastInternal, { ToastProps } from './toast-internal';
+import { PartialProviderConfig } from '../config-provider/config-provider';
+import { mergeProps } from '../utils/mergeProps';
+
+let taostConfig: any = {};
 
 const unmountRoot = () => {
   const root = document.getElementById('ultra-toast');
@@ -41,7 +45,9 @@ function toast(data: string | ToastProps, duration?: number, onClose?: OnClose) 
     Object.assign(config, data);
   }
 
-  ReactDOM.render(<ToastInternal {...config} />, root);
+  console.dir(toast);
+
+  ReactDOM.render(<ToastInternal {...mergeProps(taostConfig, config)} />, root);
 }
 
 type ToastType = 'info' | 'success' | 'warning' | 'error';
@@ -61,6 +67,7 @@ type ToastInstance = typeof toast & {
   warning: (content: React.ReactNode, duration?: number, onClose?: OnClose) => void;
   error: (content: React.ReactNode, duration?: number, onClose?: OnClose) => void;
   clear: () => void;
+  config: (config: PartialProviderConfig) => void;
 };
 
 /**
@@ -69,6 +76,10 @@ type ToastInstance = typeof toast & {
 const Toast = toast as ToastInstance;
 
 Toast.clear = unmountRoot;
+
+Toast.config = (config: PartialProviderConfig) => {
+  taostConfig = config;
+};
 
 for (const key in iconMap) {
   const k = key as ToastType;

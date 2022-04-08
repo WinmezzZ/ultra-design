@@ -1,6 +1,7 @@
 import _ from 'lodash-es';
-import { createContext, FC } from 'react';
+import { createContext, FC, useEffect } from 'react';
 import en_US from '../locale/en_US';
+import Toast from '../toast';
 import { Locale } from './locale';
 import { defaultTheme, Theme } from './theme';
 
@@ -50,10 +51,16 @@ type DeepPartial<T> = {
 
 export const ConfigContext = createContext<ConfigProviderProps>(configContextOptions);
 
-const ConfigProvider: FC<DeepPartial<ConfigProviderProps>> = props => {
+export type PartialProviderConfig = DeepPartial<ConfigProviderProps>;
+
+const ConfigProvider: FC<PartialProviderConfig> = props => {
   const { children, ...rest } = props;
 
   const config: ConfigProviderProps = _.merge({}, configContextOptions, rest);
+
+  useEffect(() => {
+    Toast.config(config);
+  }, [props]);
 
   return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
 };

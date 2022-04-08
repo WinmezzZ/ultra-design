@@ -48,7 +48,7 @@ const defaultProps = {
 
 export type MergedToastrProps = typeof defaultProps & ToastProps;
 
-export const ToastInternal: FC<ToastProps> = p => {
+const ToastInternal: FC<ToastProps> = p => {
   const [visible, setVisible] = useState(false);
   const props = useMergeProps(defaultProps, p);
 
@@ -70,10 +70,10 @@ export const ToastInternal: FC<ToastProps> = p => {
     if (!visible) return;
     if (!duration) return;
 
-    timer.current = setTimeout(() => {
-      setVisible(false);
-      onClose?.();
-    }, duration);
+    // timer.current = setTimeout(() => {
+    //   setVisible(false);
+    //   onClose?.();
+    // }, duration);
   }, [visible]);
 
   const closehandler = () => {
