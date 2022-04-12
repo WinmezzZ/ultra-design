@@ -38,3 +38,6 @@ export type { ConfigProviderProps } from './config-provider';
 export { default as ConfigProvider } from './config-provider';
 
 export { default as Toast } from './toast';
+
+export { default as Loading } from './loading';
+export { loading } from './loading';
