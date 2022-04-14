@@ -1,7 +1,7 @@
 import React from 'react';
 import { subMenuStyle } from './menu-style';
-import { useConfigContext } from '../config-provider/useConfigContext';
 import clsx from 'clsx';
+import { useMergeProps } from '../utils/mergeProps';
 
 export interface SubMenuProps {
   /**
@@ -27,19 +27,18 @@ const defaultProps = {};
 export type MergedSubMenuProps = typeof defaultProps & SubMenuProps;
 
 const SubMenuComponent: React.ForwardRefRenderFunction<HTMLLIElement, React.PropsWithChildren<SubMenuProps>> = (
-  props,
+  p,
   ref,
 ) => {
+  const props = useMergeProps(defaultProps, p);
   const { children, icon, disabled, className } = props;
-  const configContext = useConfigContext();
-  const styleProps = { ...configContext, ...props };
 
   return (
     <li
       {...props}
       ref={ref}
       className={clsx('ultra-sub-menu', disabled && 'ultra-sub-menu--disabled', className)}
-      css={subMenuStyle(styleProps)}
+      css={subMenuStyle(props)}
     >
       {icon}
       {children}

@@ -39,7 +39,7 @@ export default () => {
 
 ```jsx
 import React from 'react';
-import { Select } from 'ultra-design';
+import { Button, Select } from 'ultra-design';
 
 export default () => {
   const [value, setValue] = React.useState('2');
@@ -56,6 +56,10 @@ export default () => {
 
   return (
     <div>
+      <div>
+        <Button onClick={() => setValue('1')}>1</Button>
+        <Button onClick={() => setValue('2')}>2</Button>
+      </div>
       <Select value={value} onChange={handleControlledChange} placeholder="Controlled">
         <Select.Option value="1" label="三国演义" />
         <Select.Option value="2" label="红楼梦" />

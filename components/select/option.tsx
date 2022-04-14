@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { css } from '@emotion/react';
 import clsx from 'clsx';
-import { useConfigContext } from '../config-provider/useConfigContext';
 import { ConfigProviderProps } from '../config-provider';
 import { fade } from '../utils/fade';
+import { useMergeProps } from '../utils/mergeProps';
 
 export interface OptionProps {
   /**
@@ -31,10 +31,9 @@ const defaultProps = {};
 
 export type MergedOptionProps = typeof defaultProps & OptionProps;
 
-const Option: FC<OptionProps> = props => {
+const Option: FC<OptionProps> = p => {
+  const props = useMergeProps(defaultProps, p);
   const { label, value, disabled, children, onClick, onMouseEnter, className } = props;
-  const configContext = useConfigContext();
-  const styleProps = { ...configContext, ...props };
 
   const handleClick = () => {
     if (disabled) return;
@@ -44,7 +43,7 @@ const Option: FC<OptionProps> = props => {
   return (
     <div
       className={clsx('ultra-select-option', disabled && 'ultra-select-option--disabled', className)}
-      css={optionStyles(styleProps)}
+      css={optionStyles(props)}
       onClick={handleClick}
       onMouseEnter={onMouseEnter}
     >
