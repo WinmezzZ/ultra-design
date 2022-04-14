@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { selectLayerStyles, selectStyles } from './select-style';
 import clsx from 'clsx';
 import Input from '../input';
@@ -88,7 +88,11 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
 
       return optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label;
     }
-  }, [value, selectValue]);
+  }, [selectValue]);
+
+  useEffect(() => {
+    setSelectValue(value);
+  }, [value]);
 
   useImperativeHandle(
     ref,
