@@ -1,7 +1,9 @@
 import ReactDOM from 'react-dom';
-import LoadingInternal, { LoadingProps, defaultProps } from './loading';
+import LoadingInternal, { LoadingProps } from './loading';
 import { ConfigContext, PartialProviderConfig } from '../config-provider/config-provider';
 import { mergeProps } from '../utils/mergeProps';
+import { FC, useContext, useEffect, useState } from 'react';
+import { emitter } from '../utils/mitt';
 
 interface LoadingConfig extends Omit<LoadingProps, 'fullScreen' | 'fill'>, PartialProviderConfig {}
 
@@ -29,16 +31,37 @@ const createRoot = () => {
 function loadingFn(options?: LoadingProps) {
   const root = unmountRoot() || createRoot();
 
-  ReactDOM.render(
-    <ConfigContext.Consumer>
-      {defaultConfig => {
-        const props = mergeProps(defaultConfig, newConfig, { fullScreen: true, ...defaultProps, ...options });
+  interface LoadingWrapperProps {
+    options?: LoadingProps;
+  }
 
-        return <LoadingInternal {...props} />;
-      }}
-    </ConfigContext.Consumer>,
-    root,
-  );
+  const LoadingWrapper: FC<LoadingWrapperProps> = props => {
+    const { options } = props;
+    const context = useContext(ConfigContext);
+    const config = mergeProps(context, newConfig, options);
+
+    const [loadingOptions, setLoadingOptions] = useState(config);
+
+    useEffect(() => {
+      emitter.on('loading-config', e => {
+        setLoadingOptions(o => mergeProps(o, e));
+      });
+
+      return () => {
+        emitter.all.clear();
+      };
+    }, []);
+
+    return <LoadingInternal {...loadingOptions} />;
+  };
+
+  LoadingWrapper.defaultProps = {
+    options: {
+      fullScreen: true,
+    },
+  };
+
+  ReactDOM.render(<LoadingWrapper options={options} />, root);
 }
 
 type LoadingInstance = typeof loadingFn & {
@@ -55,6 +78,7 @@ loading.clear = unmountRoot;
 
 loading.config = (config: LoadingConfig) => {
   newConfig = config;
+  emitter.emit('loading-config', config);
 };
 
 export default loading;

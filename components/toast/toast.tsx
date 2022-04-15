@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Info, Success, Error } from '@icon-park/react';
 import ToastInternal, { ToastProps } from './toast-internal';
 import { ConfigContext, PartialProviderConfig } from '../config-provider/config-provider';
 import { mergeProps } from '../utils/mergeProps';
+import { emitter } from '../utils/mitt';
 
 let newConfig: PartialProviderConfig = {};
 
@@ -45,16 +46,31 @@ function toast(data: string | ToastProps, duration?: number, onClose?: OnClose) 
     Object.assign(options, data);
   }
 
-  ReactDOM.render(
-    <ConfigContext.Consumer>
-      {defaultConfig => {
-        const props = mergeProps(defaultConfig, newConfig, options);
+  interface ToastWrapperProps {
+    options: ToastProps;
+  }
 
-        return <ToastInternal {...props} />;
-      }}
-    </ConfigContext.Consumer>,
-    root,
-  );
+  const ToastWrapper: FC<ToastWrapperProps> = props => {
+    const { options } = props;
+    const context = useContext(ConfigContext);
+    const config = mergeProps(context, newConfig, options);
+
+    const [toastOptions, setToastOptions] = useState(config);
+
+    useEffect(() => {
+      emitter.on('toast-config', e => {
+        setToastOptions(o => mergeProps(o, e));
+      });
+
+      return () => {
+        emitter.all.clear();
+      };
+    }, []);
+
+    return <ToastInternal {...toastOptions} />;
+  };
+
+  ReactDOM.render(<ToastWrapper options={options} />, root);
 }
 
 type ToastType = 'info' | 'success' | 'warning' | 'error';
@@ -86,6 +102,7 @@ Toast.clear = unmountRoot;
 
 Toast.config = (config: PartialProviderConfig) => {
   newConfig = config;
+  emitter.emit('toast-config', config);
 };
 
 for (const key in iconMap) {

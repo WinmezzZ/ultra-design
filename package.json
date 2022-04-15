@@ -51,6 +51,7 @@
     "@winme/react-hooks": "^0.0.2",
     "clsx": "^1.1.1",
     "lodash-es": "^4.17.21",
+    "mitt": "^3.0.0",
     "prop-types": "^15.8.1",
     "react-transition-group": "^4.4.2"
   },

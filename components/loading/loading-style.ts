@@ -53,7 +53,9 @@ export const loadingWrapperStyles = (props: LoadingStylesProps) => {
       inset: 0;
       ${mask !== false &&
       css`
-        background-color: ${typeof mask === 'string' ? mask : 'rgba(0, 0, 0, 0.4)'};
+        background-color: ${typeof mask === 'string'
+          ? mask
+          : `${theme.mode === 'dark' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.4)'}`};
       `};
     }
 
