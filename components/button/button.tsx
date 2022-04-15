@@ -71,9 +71,9 @@ const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonP
   const rippleElement = effect && type !== 'text' && !loading && !disabled ? <Ripple /> : null;
 
   return (
-    <button ref={ref} css={buttonStyles(props)} onClick={clickHandler} {...rest}>
+    <button ref={ref} css={buttonStyles(props)} onClick={clickHandler} className="ultra-button" {...rest}>
       {loading && <LoadingIcon />}
-      <span>{children}</span>
+      <span className="ultra-button__text">{children}</span>
       {rippleElement}
     </button>
   );

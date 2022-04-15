@@ -107,8 +107,15 @@ export const buttonStyles = (props: ButtonStyleProps) => {
     border: 1px solid transparent;
     cursor: ${loading ? 'default' : disabled ? 'not-allowed' : 'pointer'};
     box-shadow: 0 2px #00000004;
-    ${buttonTypeStyleMap(props)}
-    ${loading && loadingLayer()}
-    ${disabled && disabledStyles(props)}
+    ${buttonTypeStyleMap(props)};
+    ${loading && loadingLayer()};
+    ${disabled && disabledStyles(props)};
+    .ultra-button__text {
+      z-index: 1;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
   `;
 };
