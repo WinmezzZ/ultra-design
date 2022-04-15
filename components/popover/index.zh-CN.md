@@ -203,7 +203,7 @@ export default () => {
 };
 ```
 
-## 嵌套 Tooltip
+<!-- ## 嵌套 Tooltip
 
 popover 组件可以和 tooltip 组件一起嵌套使用，当然，也可以嵌套它自己。
 
@@ -228,6 +228,6 @@ export default () => {
     </Popover>
   );
 };
-```
+``` -->
 
 <API src="index.ts" />

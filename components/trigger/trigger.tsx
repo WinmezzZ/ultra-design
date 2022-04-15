@@ -1,9 +1,7 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { cloneElement, FC, useEffect, useRef, useState } from 'react';
 import { useClickOutSide } from '../utils/useClickOutSide';
 import { getPosition, Placement } from './placement';
 import Layer from './layer';
-import { css } from '@emotion/react';
-import clsx from 'clsx';
 import { useMergeProps } from '../utils/mergeProps';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
@@ -233,25 +231,21 @@ const Trigger: FC<TriggerProps> = p => {
 
   const layerStyle = getPosition(placement, rect, layerOffset);
 
-  const childProps = {
-    ref: childRef,
-    onMouseEnter: () => mouseEventHandler(true),
-    onMouseLeave: () => mouseEventHandler(false),
-    onClick: (e: React.MouseEvent) => {
-      clickEventHandler();
-      isElement && children.props.onClick?.(e);
-    },
-  };
+  const child =
+    isElement &&
+    cloneElement(children, {
+      ref: childRef,
+      onMouseEnter: () => mouseEventHandler(true),
+      onMouseLeave: () => mouseEventHandler(false),
+      onClick: (e: React.MouseEvent) => {
+        clickEventHandler();
+        isElement && children.props.onClick?.(e);
+      },
+    });
 
   return (
-    <span
-      css={css`
-        display: inline-block;
-      `}
-      className={clsx(`${name}__trigger`, `${name}-layer__trigger`)}
-      {...childProps}
-    >
-      {children}
+    <>
+      {child}
       <Layer
         {...props}
         visible={visible}
@@ -260,7 +254,7 @@ const Trigger: FC<TriggerProps> = p => {
         onMouseEnter={() => mouseEventHandler(true)}
         onMouseLeave={() => mouseEventHandler(false)}
       />
-    </span>
+    </>
   );
 };
 
