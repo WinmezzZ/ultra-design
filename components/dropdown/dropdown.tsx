@@ -41,7 +41,7 @@ export type MergedDropdownProps = typeof defaultProps & DropdownProps;
 
 const defaultProps = {
   name: 'ultra-dropdown',
-  trigger: 'click',
+  trigger: 'hover',
   transitionClassName: 'ultra-dropdown-layer-slide',
   showArrow: false,
   transitionTimeout: 150,
