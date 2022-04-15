@@ -132,7 +132,6 @@ const Trigger: FC<TriggerProps> = p => {
     showArrow,
     offset,
     getLayerContainer,
-    name,
   } = props;
   const [visible, setVisible] = useState(defaultVisible);
   const [rect, setRect] = useState<PositionRect>(defaultPositionRect);
