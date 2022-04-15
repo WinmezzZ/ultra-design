@@ -41,3 +41,6 @@ export { default as Toast } from './toast';
 
 export { default as Loading } from './loading';
 export { loading } from './loading';
+
+export type { DividerProps } from './divider';
+export { default as Divider } from './divider';
