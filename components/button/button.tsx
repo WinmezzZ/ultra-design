@@ -5,7 +5,7 @@ import LoadingIcon from './loading-icon';
 import { useMergeProps } from '../utils/mergeProps';
 import { ComponentCommonProps } from '../config-provider/config-provider';
 
-export type ButtonType = 'primary' | 'dashed' | 'text' | 'default';
+export type ButtonType = 'primary' | 'dashed' | 'text' | 'default' | 'pure';
 
 export interface Props extends Partial<ComponentCommonProps> {
   /**
@@ -68,7 +68,8 @@ const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonP
     onClick?.(e);
   };
 
-  const rippleElement = effect && type !== 'text' && !loading && !disabled ? <Ripple /> : null;
+  const rippleElement =
+    effect && !['text', 'pure'].includes(type as string) && !loading && !disabled ? <Ripple /> : null;
 
   return (
     <button ref={ref} css={buttonStyles(props)} onClick={clickHandler} className="ultra-button" {...rest}>

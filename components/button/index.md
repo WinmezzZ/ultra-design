@@ -21,6 +21,7 @@ export default () => (
     <Button>Default</Button>
     <Button type="dashed">Dashed</Button>
     <Button type="text">Text</Button>
+    <Button type="pure">Pure</Button>
   </div>
 );
 ```

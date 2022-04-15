@@ -21,6 +21,7 @@ export default () => (
     <Button>默认</Button>
     <Button type="dashed">虚线</Button>
     <Button type="text">文本</Button>
+    <Button type="pure">纯净</Button>
   </div>
 );
 ```

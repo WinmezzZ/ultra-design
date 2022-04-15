@@ -53,6 +53,8 @@ const buttonTypeStyleMap = (props: ButtonStyleProps) => {
     baseStyle += `border: 1px dashed #ccc;`;
   } else if (type === 'primary') {
     baseStyle += `border-color: transparent;`;
+  } else if (type === 'pure') {
+    baseStyle += `border: none;`;
   }
 
   return baseStyle;
@@ -85,12 +87,12 @@ const disabledStyles = (props: ButtonStyleProps) => {
 };
 
 export const buttonStyles = (props: ButtonStyleProps) => {
-  const { loading, disabled } = props;
-  // const { mode } = props.theme;
+  const { loading, disabled, type } = props;
+  const { primaryColor } = props.theme.style;
 
   return css`
     height: ${buttonSizeStyleMap[props.size].height}px;
-    padding: ${buttonSizeStyleMap[props.size].padding};
+    padding: ${type === 'pure' ? 0 : buttonSizeStyleMap[props.size].padding};
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
@@ -111,6 +113,9 @@ export const buttonStyles = (props: ButtonStyleProps) => {
     ${buttonTypeStyleMap(props)};
     ${loading && loadingLayer()};
     ${disabled && disabledStyles(props)};
+    &.ultra-button--active {
+      color: ${primaryColor};
+    }
     .ultra-button__text {
       z-index: 1;
       display: inline-flex;
