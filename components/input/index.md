@@ -4,6 +4,7 @@ nav:
   path: /components
 group:
   title: Form
+  order: 5
 ---
 
 # Input
