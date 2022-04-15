@@ -1,4 +1,13 @@
-import React, { cloneElement, FC, useEffect, useRef, useState } from 'react';
+import React, {
+  cloneElement,
+  forwardRef,
+  ForwardRefRenderFunction,
+  PropsWithChildren,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { useClickOutSide } from '../utils/useClickOutSide';
 import { getPosition, Placement } from './placement';
 import Layer from './layer';
@@ -91,7 +100,7 @@ export interface TriggerProps {
   offset?: number;
   /**
    * @description.zh-CN 浮层渲染父节点，默认渲染到 body 上
-   * @description.en-US layer parent node, render in body element default
+   * @description.en-US layer parent node, render in body layerElement default
    * @default () => document.body;
    */
   getLayerContainer?: (trigger?: HTMLElement | null) => HTMLElement;
@@ -116,9 +125,16 @@ export interface TriggerProps {
   id?: string;
 }
 
+export interface TriggerRef {
+  layerElement?: HTMLElement;
+  update: () => void;
+  visible: boolean;
+  changeVisible: (visible: boolean) => void;
+}
+
 export type MergedTriggerProps = typeof defaultProps & TriggerProps;
 
-const Trigger: FC<TriggerProps> = p => {
+const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerProps>> = (p, r) => {
   const props = useMergeProps(defaultProps, p);
   const {
     children,
@@ -231,6 +247,17 @@ const Trigger: FC<TriggerProps> = p => {
     [layerRef],
   );
 
+  useImperativeHandle(
+    r,
+    () => ({
+      layerElement: layerRef.current!,
+      update: updateRect,
+      visible,
+      changeVisible,
+    }),
+    [layerRef, visible],
+  );
+
   const isElement = React.isValidElement(children);
 
   const layerStyle = getPosition(placement, rect, layerOffset);
@@ -263,4 +290,4 @@ const Trigger: FC<TriggerProps> = p => {
   );
 };
 
-export default Trigger;
+export default forwardRef(Trigger);
