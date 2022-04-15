@@ -280,7 +280,7 @@ export default () => {
 };
 ```
 
-## nest with tooltip
+<!-- ## nest with tooltip
 
 Popover component can nested use with tooltip component together. Of course, it can also nest itself.
 
@@ -305,6 +305,6 @@ export default () => {
     </Popover>
   );
 };
-```
+``` -->
 
 <API src="index.ts" />
