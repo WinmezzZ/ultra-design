@@ -1,4 +1,4 @@
-import React, { FC, MutableRefObject } from 'react';
+import React, { forwardRef, ForwardRefRenderFunction, MutableRefObject } from 'react';
 import clsx from 'clsx';
 import { layerStyles } from './trigger-styles';
 import { CSSTransition } from 'react-transition-group';
@@ -14,7 +14,7 @@ interface LayerProps extends MergedTriggerProps {
   className?: string;
 }
 
-const Layer: FC<LayerProps> = p => {
+const Layer: ForwardRefRenderFunction<HTMLDivElement, LayerProps> = (p, ref) => {
   const props = useMergeProps({}, p);
 
   const {
@@ -39,6 +39,7 @@ const Layer: FC<LayerProps> = p => {
   return (
     <Portal id={name} getContainer={() => getLayerContainer?.(childRef.current)}>
       <div
+        ref={ref}
         className={clsx(`${name}-layer-wrapper`, layerClassName, className)}
         style={style}
         onMouseEnter={onMouseEnter}
@@ -56,4 +57,4 @@ const Layer: FC<LayerProps> = p => {
   );
 };
 
-export default Layer;
+export default forwardRef(Layer);

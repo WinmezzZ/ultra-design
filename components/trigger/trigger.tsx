@@ -112,6 +112,7 @@ export interface TriggerProps {
    * @default 300
    */
   transitionTimeout?: number;
+  name?: string;
   id?: string;
 }
 
@@ -138,7 +139,8 @@ const Trigger: FC<TriggerProps> = p => {
 
   const layerOffset = showArrow ? offset! : offset! - 6;
 
-  const childRef = useRef<HTMLSpanElement>(null);
+  const childRef = useRef<HTMLElement>(null);
+  const layerRef = useRef<HTMLDivElement>(null);
 
   const updateRect = () => {
     if (!childRef.current) return;
@@ -221,9 +223,13 @@ const Trigger: FC<TriggerProps> = p => {
     trigger === 'click' && changeVisible(!visible);
   };
 
-  useClickOutSide(childRef, () => {
-    trigger === 'click' && changeVisible(false);
-  });
+  useClickOutSide(
+    childRef,
+    () => {
+      trigger === 'click' && changeVisible(false);
+    },
+    [layerRef],
+  );
 
   const isElement = React.isValidElement(children);
 
@@ -245,6 +251,7 @@ const Trigger: FC<TriggerProps> = p => {
     <>
       {child}
       <Layer
+        ref={layerRef}
         {...props}
         visible={visible}
         childRef={childRef}
