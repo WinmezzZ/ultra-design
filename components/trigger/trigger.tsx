@@ -54,7 +54,7 @@ export interface TriggerProps {
   /**
    * @description.zh-CN 提示框出现的方位
    * @description.en-US trigger position
-   * @default 'hover'
+   * @default 'bottom'
    */
   placement?: Placement;
   /**

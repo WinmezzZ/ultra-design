@@ -1,15 +1,31 @@
 ---
 nav:
-  title: 组件
+  title: Components
   path: /components
 group:
-  title: 导航
+  title: Navigation
   order: 1
 ---
 
 # Dropdown 下拉框
 
-## basic usage
+## 基本用法
+
+```tsx
+import React from 'react';
+import { Button, Dropdown } from 'ultra-design';
+
+export default () => {
+  const li = <li style={{ padding: 8 }}>This is some text...</li>;
+  return (
+    <Dropdown content={<ol style={{ padding: '0 10px', margin: 0 }}>{new Array(8).fill(li)}</ol>}>
+      <Button>Click Me</Button>
+    </Dropdown>
+  );
+};
+```
+
+## DropdownItem
 
 ```tsx
 import React from 'react';
@@ -19,26 +35,21 @@ export default () => {
   return (
     <Dropdown
       content={
-        <div>
-          <Button>Click Me</Button>
-          <br />
-          <Button>Click Me</Button>
-          <br />
-          <Button>Click Me</Button>
-          <br />
-          <Button>Click Me</Button>
-          <br />
-          <Button>Click Me</Button>
-          <br />
-          <Button>Click Me</Button>
-          <br />
-        </div>
+        <>
+          <Dropdown.DropdownItem>JavaScript</Dropdown.DropdownItem>
+          <Dropdown.Divider />
+          <Dropdown.DropdownItem>PHP</Dropdown.DropdownItem>
+          <Dropdown.DropdownItem>Go</Dropdown.DropdownItem>
+          <Dropdown.DropdownItem>Python</Dropdown.DropdownItem>
+          <Dropdown.DropdownItem>Ruby</Dropdown.DropdownItem>
+          <Dropdown.DropdownItem>Rust</Dropdown.DropdownItem>
+        </>
       }
     >
-      <Button>Click Me</Button>
+      <Button>DropdownItem</Button>
     </Dropdown>
   );
 };
 ```
 
-<API src="index.ts" />
+<API hideTitle src="./dropdown.tsx" />

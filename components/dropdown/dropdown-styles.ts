@@ -1,7 +1,9 @@
 import { css } from '@emotion/react';
 import { ConfigProviderProps } from '../config-provider';
 import { transitionSlide } from '../styles/transition/slide';
+import { fade } from '../utils/fade';
 import { MergedDropdownProps } from './dropdown';
+import { MergedDropdownItemProps } from './dropdown-item';
 
 type DropdownStylesProps = MergedDropdownProps & ConfigProviderProps;
 
@@ -26,6 +28,53 @@ export const dropdownStyles = (props: DropdownStylesProps) => {
       }
     }
 
+    .ultra-divider:not(.ultra-divider--vetical) {
+      margin: 4px 0;
+    }
+
     ${transitionSlide(props.transitionClassName, props.transitionTimeout)}
+  `;
+};
+
+type SubMenuCSSProps = MergedDropdownItemProps & ConfigProviderProps;
+
+export const dropdownItemStyle = (props: SubMenuCSSProps) => {
+  const { theme } = props;
+  const { primaryColor } = theme.style;
+  const { textColor, disabledBgColor, disabledTextColor } = theme[theme.mode];
+
+  return css`
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    min-height: 32px;
+    cursor: pointer;
+    user-select: none;
+    &.ultra-dropdown-item--disabled {
+      background-color: ${disabledBgColor};
+      color: ${disabledTextColor};
+      cursor: not-allowed;
+    }
+
+    &.ultra-dropdown-item--active {
+      ${theme.mode === 'dark'
+        ? css`
+            background-color: ${primaryColor};
+            color: ${textColor};
+          `
+        : css`
+            background-color: ${fade(primaryColor, 0.1)};
+            color: ${primaryColor};
+          `}
+    }
+    &:hover:not(.ultra-dropdown-item--disabled, .ultra-dropdown-item--active) {
+      ${theme.mode === 'dark'
+        ? css`
+            color: ${fade(textColor, 1)};
+          `
+        : css`
+            background-color: #f0f1f3;
+          `}
+    }
   `;
 };
