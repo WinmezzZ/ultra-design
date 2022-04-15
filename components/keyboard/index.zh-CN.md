@@ -4,6 +4,7 @@ nav:
   path: /components
 group:
   title: Data Display
+  order: 3
 ---
 
 # Keyboard 键盘
