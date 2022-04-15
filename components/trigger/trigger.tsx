@@ -112,7 +112,6 @@ export interface TriggerProps {
    * @default 300
    */
   transitionTimeout?: number;
-  name?: string;
   id?: string;
 }
 
