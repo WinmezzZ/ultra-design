@@ -123,6 +123,7 @@ export interface TriggerProps {
   transitionTimeout?: number;
   name?: string;
   id?: string;
+  children?: React.ReactNode;
 }
 
 export interface TriggerRef {
