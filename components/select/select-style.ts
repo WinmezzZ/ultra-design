@@ -67,6 +67,7 @@ export const selectStyles = (props: SelectStylesProps) => {
       flex: 1;
       display: flex;
       align-items: center;
+      white-space: nowrap;
     }
 
     .ultra-select__placeholder {
