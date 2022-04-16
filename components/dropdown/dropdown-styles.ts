@@ -78,3 +78,20 @@ export const dropdownItemStyle = (props: SubMenuCSSProps) => {
     }
   `;
 };
+
+export const dropdownTitleStyle = (props: SubMenuCSSProps) => {
+  const { theme } = props;
+  const { textColor } = theme[theme.mode];
+
+  return css`
+    display: flex;
+    align-items: center;
+    height: 28px;
+    user-select: none;
+    font-size: 12px;
+    padding: 8px 12px 4px;
+    color: ${fade(textColor, 0.4)};
+    transition: all 0.3s;
+    box-sizing: border-box;
+  `;
+};

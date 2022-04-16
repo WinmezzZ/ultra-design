@@ -19,13 +19,13 @@ export default () => {
   const li = <li style={{ padding: 8 }}>This is some text...</li>;
   return (
     <Dropdown content={<ol style={{ padding: '0 10px', margin: 0 }}>{new Array(8).fill(li)}</ol>}>
-      <Button>Click Me</Button>
+      <Button>Hover Me</Button>
     </Dropdown>
   );
 };
 ```
 
-## DropdownItem
+## Dropdown Item
 
 ```tsx
 import React from 'react';
@@ -36,17 +36,20 @@ export default () => {
     <Dropdown
       content={
         <>
-          <Dropdown.DropdownItem>JavaScript</Dropdown.DropdownItem>
+          <Dropdown.Title>Dyamic Languages</Dropdown.Title>
+          <Dropdown.Item>JavaScript</Dropdown.Item>
+          <Dropdown.Item>PHP</Dropdown.Item>
+          <Dropdown.Item>Python</Dropdown.Item>
+          <Dropdown.Title>Static Languages</Dropdown.Title>
+          <Dropdown.Item>Go</Dropdown.Item>
+          <Dropdown.Item>Ruby</Dropdown.Item>
+          <Dropdown.Item>Rust</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.DropdownItem>PHP</Dropdown.DropdownItem>
-          <Dropdown.DropdownItem>Go</Dropdown.DropdownItem>
-          <Dropdown.DropdownItem>Python</Dropdown.DropdownItem>
-          <Dropdown.DropdownItem>Ruby</Dropdown.DropdownItem>
-          <Dropdown.DropdownItem>Rust</Dropdown.DropdownItem>
+          <Dropdown.Item>Other</Dropdown.Item>
         </>
       }
     >
-      <Button>DropdownItem</Button>
+      <Button>Item</Button>
     </Dropdown>
   );
 };
