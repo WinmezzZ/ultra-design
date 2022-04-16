@@ -252,7 +252,8 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
   const prevCustomVisbile = usePrevious(customVisible);
 
   useEffect(() => {
-    if (customVisible === undefined || prevCustomVisbile === undefined) return;
+    if (customVisible === undefined) return;
+    if (prevCustomVisbile === undefined && prevCustomVisbile === customVisible) return;
     changeVisible(customVisible);
   }, [customVisible]);
 

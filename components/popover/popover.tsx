@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { forwardRef } from 'react';
 import Trigger, { TriggerProps } from '../trigger';
 import { useMergeProps } from '../utils/mergeProps';
 import { popoverStyles } from './popover-styles';
@@ -14,11 +14,11 @@ const defaultProps = {
   transitionClassName: 'ultra-popover-layer-fade',
 };
 
-const Popover: FC<PopoverProps> = p => {
+const Popover = forwardRef<any, PopoverProps>((p, r) => {
   const props = useMergeProps(defaultProps, p);
 
-  return <Trigger {...props} css={popoverStyles(props)} />;
-};
+  return <Trigger ref={r} {...props} css={popoverStyles(props)} />;
+});
 
 Popover.displayName = 'UltraPopover';
 
