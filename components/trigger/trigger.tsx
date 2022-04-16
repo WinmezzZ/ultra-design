@@ -12,6 +12,7 @@ import { useClickOutSide } from '../utils/useClickOutSide';
 import { getPosition, Placement } from './placement';
 import Layer from './layer';
 import { useMergeProps } from '../utils/mergeProps';
+import usePrevious from '../utils/usePrevious';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
 
@@ -127,9 +128,13 @@ export interface TriggerProps {
   /**
    * @description.zh-CN 自定义触发元素，不仅仅是通过 children
    * @description.en-US custom trigger element, not only by children
-   * @default 300
    */
   triggerRef?: React.RefObject<HTMLElement | null>;
+  /**
+   * @description.zh-CN 完全自定义 layer 位置等其他 css 信息
+   * @description.en-US fully customize the layer position and other CSS information
+   */
+  layerStyle?: React.CSSProperties;
 }
 
 export interface TriggerRef {
@@ -156,6 +161,7 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
     offset,
     getLayerContainer,
     triggerRef,
+    layerStyle: customLayerStyle,
   } = props;
   const [visible, setVisible] = useState(defaultVisible);
   const [rect, setRect] = useState<PositionRect>(defaultPositionRect);
@@ -243,8 +249,10 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
     }, hideDelayWithoutClick);
   };
 
+  const prevCustomVisbile = usePrevious(customVisible);
+
   useEffect(() => {
-    if (customVisible === undefined) return;
+    if (customVisible === undefined || prevCustomVisbile === undefined) return;
     changeVisible(customVisible);
   }, [customVisible]);
 
@@ -311,7 +319,7 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
         {...props}
         visible={visible}
         childRef={childRef.current ? childRef : triggerRef}
-        style={layerStyle}
+        style={customLayerStyle || layerStyle}
         onMouseEnter={() => mouseEventHandler(true)}
         onMouseLeave={() => mouseEventHandler(false)}
       />

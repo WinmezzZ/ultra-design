@@ -34,10 +34,8 @@ const Layer: ForwardRefRenderFunction<HTMLDivElement, LayerProps> = (p, ref) => 
     className,
   } = props;
 
-  if (!childRef || !childRef.current) return null;
-
   return (
-    <Portal id={name} getContainer={() => getLayerContainer?.(childRef.current)}>
+    <Portal id={name} getContainer={() => getLayerContainer?.(childRef?.current)}>
       <div
         ref={ref}
         className={clsx(`${name}-layer-wrapper`, layerClassName, className)}
