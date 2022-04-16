@@ -175,6 +175,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   const renderOptionItem = (option: any, props: OptionProps, index: number) => {
     return React.cloneElement(option, {
       ...props,
+      key: index,
       className: clsx(
         selectedIndex === index && 'ultra-select-option--active',
         hoverIndex === index && 'ultra-select-option--hover',

@@ -142,6 +142,7 @@ export interface TriggerRef {
   update: () => void;
   visible: boolean;
   changeVisible: (visible: boolean) => void;
+  updateLayerStyle: (style: React.CSSProperties) => void;
 }
 
 export type MergedTriggerProps = typeof defaultProps & TriggerProps;
@@ -173,33 +174,31 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
   const layerRef = useRef<HTMLDivElement>(null);
 
   const updateRect = () => {
-    const ch = childRef?.current,
-      tr = triggerRef?.current;
+    const trigger = triggerRef || childRef;
 
-    if (!ch && !tr) return;
+    if (!trigger.current) return;
 
-    const childRect = tr?.getBoundingClientRect() || ch?.getBoundingClientRect();
+    if (customLayerStyle) return;
 
-    if (!childRect) return;
+    const triggerRect = trigger.current.getBoundingClientRect();
 
     if (!getLayerContainer) {
       const { scrollTop, scrollLeft } = document.documentElement;
 
       setRect({
-        ...childRect,
-        width: childRect.width || rect.right - rect.left,
-        height: childRect.height || rect.bottom - rect.top,
-        top: childRect.top + scrollTop,
-        bottom: childRect.bottom + scrollTop,
-        left: childRect.left + scrollLeft,
-        right: childRect.right + scrollLeft,
+        ...triggerRect,
+        width: triggerRect.width || rect.right - rect.left,
+        height: triggerRect.height || rect.bottom - rect.top,
+        top: triggerRect.top + scrollTop,
+        bottom: triggerRect.bottom + scrollTop,
+        left: triggerRect.left + scrollLeft,
+        right: triggerRect.right + scrollLeft,
       });
     } else {
-      if (!tr || !ch) return;
-      const { offsetHeight, offsetLeft, offsetTop, offsetWidth } = ch || tr;
+      const { offsetHeight, offsetLeft, offsetTop, offsetWidth } = trigger.current;
 
       setRect({
-        ...childRect,
+        ...triggerRect,
         width: offsetWidth,
         height: offsetHeight,
         top: offsetTop,
@@ -270,6 +269,18 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
     [layerRef],
   );
 
+  const updateLayerStyle = (style: React.CSSProperties = {}) => {
+    setTimeout(() => {
+      for (const key in style) {
+        const k: any = key;
+
+        if (layerRef.current) {
+          layerRef.current.style[k] = (style as any)[k];
+        }
+      }
+    }, 0);
+  };
+
   useImperativeHandle(
     r,
     () => ({
@@ -277,8 +288,9 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
       update: updateRect,
       visible,
       changeVisible,
+      updateLayerStyle,
     }),
-    [layerRef, visible],
+    [layerRef.current, visible],
   );
 
   const isElement = React.isValidElement(children);
