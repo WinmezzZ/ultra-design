@@ -124,6 +124,12 @@ export interface TriggerProps {
   name?: string;
   id?: string;
   children?: React.ReactNode;
+  /**
+   * @description.zh-CN 自定义触发元素，不仅仅是通过 children
+   * @description.en-US custom trigger element, not only by children
+   * @default 300
+   */
+  triggerRef?: React.RefObject<HTMLElement | null>;
 }
 
 export interface TriggerRef {
@@ -149,6 +155,7 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
     showArrow,
     offset,
     getLayerContainer,
+    triggerRef,
   } = props;
   const [visible, setVisible] = useState(defaultVisible);
   const [rect, setRect] = useState<PositionRect>(defaultPositionRect);
@@ -160,8 +167,14 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
   const layerRef = useRef<HTMLDivElement>(null);
 
   const updateRect = () => {
-    if (!childRef.current) return;
-    const childRect = childRef.current.getBoundingClientRect();
+    const ch = childRef?.current,
+      tr = triggerRef?.current;
+
+    if (!ch && !tr) return;
+
+    const childRect = tr?.getBoundingClientRect() || ch?.getBoundingClientRect();
+
+    if (!childRect) return;
 
     if (!getLayerContainer) {
       const { scrollTop, scrollLeft } = document.documentElement;
@@ -176,7 +189,8 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
         right: childRect.right + scrollLeft,
       });
     } else {
-      const { offsetHeight, offsetLeft, offsetTop, offsetWidth } = childRef.current;
+      if (!tr || !ch) return;
+      const { offsetHeight, offsetLeft, offsetTop, offsetWidth } = ch || tr;
 
       setRect({
         ...childRect,
@@ -192,7 +206,7 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
 
   useEffect(() => {
     updateRect();
-  }, [childRef, visible]);
+  }, [childRef.current ? childRef : triggerRef, visible]);
 
   useEffect(() => {
     window.addEventListener('resize', updateRect);
@@ -231,7 +245,6 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
 
   useEffect(() => {
     if (customVisible === undefined) return;
-
     changeVisible(customVisible);
   }, [customVisible]);
 
@@ -241,7 +254,7 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
   };
 
   useClickOutSide(
-    childRef,
+    childRef.current ? childRef : triggerRef!,
     () => {
       trigger === 'click' && changeVisible(false);
     },
@@ -275,6 +288,21 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
       },
     });
 
+  useEffect(() => {
+    if (!triggerRef?.current) return;
+
+    triggerRef.current.addEventListener('mouseenter', () => mouseEventHandler(true));
+    triggerRef.current.addEventListener('mouseleave', () => mouseEventHandler(false));
+    triggerRef.current.addEventListener('click', clickEventHandler);
+
+    return () => {
+      if (!triggerRef?.current) return;
+      triggerRef.current.removeEventListener('mouseenter', () => mouseEventHandler(true));
+      triggerRef.current.removeEventListener('mouseleave', () => mouseEventHandler(false));
+      triggerRef.current.removeEventListener('click', clickEventHandler);
+    };
+  }, [triggerRef]);
+
   return (
     <>
       {child}
@@ -282,7 +310,7 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
         ref={layerRef}
         {...props}
         visible={visible}
-        childRef={childRef}
+        childRef={childRef.current ? childRef : triggerRef}
         style={layerStyle}
         onMouseEnter={() => mouseEventHandler(true)}
         onMouseLeave={() => mouseEventHandler(false)}
