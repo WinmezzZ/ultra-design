@@ -1,9 +1,9 @@
 import { buttonStyles } from './button-style';
 import React from 'react';
-import Ripple from '../ripple/ripple';
 import LoadingIcon from './loading-icon';
 import { useMergeProps } from '../utils/mergeProps';
 import { ComponentCommonProps } from '../config-provider/config-provider';
+import clsx from 'clsx';
 
 export type ButtonType = 'primary' | 'dashed' | 'text' | 'default' | 'pure';
 
@@ -56,7 +56,7 @@ export type MergedButtonProps = typeof defaultProps & Props;
 
 const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (p, ref) => {
   const props = useMergeProps(defaultProps, p);
-  const { children, effect, type, onClick, loading, disabled, ...rest } = props;
+  const { children, onClick, loading, disabled, effect: _1, type, ...rest } = props;
 
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (loading || disabled) {
@@ -68,14 +68,17 @@ const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonP
     onClick?.(e);
   };
 
-  const rippleElement =
-    effect && !['text', 'pure'].includes(type as string) && !loading && !disabled ? <Ripple /> : null;
-
   return (
-    <button ref={ref} css={buttonStyles(props)} onClick={clickHandler} className="ultra-button" {...rest}>
+    <button
+      ref={ref}
+      css={buttonStyles(props)}
+      onClick={clickHandler}
+      className={clsx('ultra-button', `ultra-button--${type}`)}
+      {...rest}
+    >
       {loading && <LoadingIcon />}
       <span className="ultra-button__text">{children}</span>
-      {rippleElement}
+      {/* {rippleElement} */}
     </button>
   );
 };
