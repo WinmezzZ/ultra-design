@@ -44,3 +44,6 @@ export { loading } from './loading';
 
 export type { DividerProps } from './divider';
 export { default as Divider } from './divider';
+
+export type { CheckboxProps } from './checkbox';
+export { default as Checkbox } from './checkbox';
