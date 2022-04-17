@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import Trigger, { TriggerProps } from '../trigger';
 import { TriggerRef } from '../trigger/trigger';
 import { useMergeProps } from '../utils/mergeProps';
@@ -50,54 +50,39 @@ const defaultProps = {
   placement: 'bottomLeft',
 };
 
-const Dropdown = forwardRef<any, DropdownProps>(
-  (p, triggerRef: React.RefObject<TriggerRef | null> | React.ForwardedRef<TriggerRef>) => {
-    const props = useMergeProps(defaultProps, p);
+const Dropdown = forwardRef<any, DropdownProps>((p, r) => {
+  const props = useMergeProps(defaultProps, p);
+  const triggerRef = useRef<TriggerRef>(null);
 
-    const hideDropdown = () => {
-      (triggerRef as React.RefObject<TriggerRef | null>).current?.changeVisible(false);
-    };
+  const hideDropdown = () => {
+    triggerRef.current?.changeVisible(false);
+  };
 
-    const onVisibleChange = (visible: boolean) => {
-      if (!visible || !triggerRef) return;
+  useImperativeHandle(r, () => triggerRef.current?.layerElement, [triggerRef]);
 
-      const layer = (triggerRef as React.RefObject<TriggerRef | null>).current?.layerElement;
+  const onVisibleChange = (visible: boolean) => {
+    if (!visible) return;
+    const layer = triggerRef.current?.layerElement;
 
-      if (!layer) return;
-      layer.querySelectorAll<HTMLDivElement>('.ultra-dropdown-item').forEach(item => {
-        item.addEventListener('click', hideDropdown);
+    if (!layer) return;
+    layer.querySelectorAll<HTMLDivElement>('.ultra-dropdown-item').forEach(item => {
+      item.addEventListener('click', hideDropdown);
+    });
+  };
+
+  useEffect(() => {
+    return () => {
+      const layer = triggerRef.current?.layerElement;
+      const dropdownItems = layer?.querySelectorAll<HTMLDivElement>('.ultra-dropdown-item');
+
+      dropdownItems?.forEach(item => {
+        item.removeEventListener('click', hideDropdown);
       });
     };
+  }, []);
 
-    useEffect(() => {
-      return () => {
-        const layer = (triggerRef as React.RefObject<TriggerRef | null>).current?.layerElement;
-        const dropdownItems = layer?.querySelectorAll<HTMLDivElement>('.ultra-dropdown-item');
-
-        dropdownItems?.forEach(item => {
-          item.removeEventListener('click', hideDropdown);
-        });
-      };
-    }, []);
-
-    return (
-      <Trigger
-        onVisibleChange={onVisibleChange}
-        ref={node => {
-          if (typeof triggerRef === 'function') {
-            triggerRef(node);
-          } else {
-            if (triggerRef) {
-              (triggerRef as React.MutableRefObject<TriggerRef | null>)!.current = node;
-            }
-          }
-        }}
-        {...props}
-        css={dropdownStyles(props)}
-      />
-    );
-  },
-);
+  return <Trigger onVisibleChange={onVisibleChange} ref={triggerRef} {...props} css={dropdownStyles(props)} />;
+});
 
 Dropdown.displayName = 'UltraDropdown';
 

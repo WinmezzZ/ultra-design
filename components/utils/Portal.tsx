@@ -46,7 +46,7 @@ const Portal: FC<PortalProps> = props => {
 
   Object.assign(el.style, style);
 
-  return createPortal(children, el);
+  return createPortal(children, document.body);
 };
 
 Portal.defaultProps = {

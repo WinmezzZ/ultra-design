@@ -247,7 +247,7 @@ export default () => {
 };
 ```
 
-## Set scroll container
+<!-- ## Set scroll container
 
 By default, the `Popover` popover position will only scroll with the `body`, but if the `Popover` trigger is inside the inner scroll element, the popover will not scroll with the inner scroll element. You can fix this by setting `getLayerContainer` to be the render parent of the popover
 
@@ -278,7 +278,7 @@ export default () => {
     </div>
   );
 };
-```
+``` -->
 
 <!-- ## nest with tooltip
 

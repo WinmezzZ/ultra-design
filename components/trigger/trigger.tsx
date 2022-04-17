@@ -142,7 +142,6 @@ export interface TriggerRef {
   update: () => void;
   visible: boolean;
   changeVisible: (visible: boolean) => void;
-  updateLayerStyle: (style: React.CSSProperties) => void;
 }
 
 export type MergedTriggerProps = typeof defaultProps & TriggerProps;
@@ -269,18 +268,6 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
     [layerRef],
   );
 
-  const updateLayerStyle = (style: React.CSSProperties = {}) => {
-    setTimeout(() => {
-      for (const key in style) {
-        const k: any = key;
-
-        if (layerRef.current) {
-          layerRef.current.style[k] = (style as any)[k];
-        }
-      }
-    }, 0);
-  };
-
   useImperativeHandle(
     r,
     () => ({
@@ -288,7 +275,6 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
       update: updateRect,
       visible,
       changeVisible,
-      updateLayerStyle,
     }),
     [layerRef.current, visible],
   );
