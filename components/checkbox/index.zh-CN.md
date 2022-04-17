@@ -3,7 +3,7 @@ nav:
   title: 组件
   path: /components
 group:
-  title: 表单
+  title: Form 表单
   order: 5
 ---
 
