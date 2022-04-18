@@ -34,6 +34,8 @@ const Layer: ForwardRefRenderFunction<HTMLDivElement, LayerProps> = (p, ref) => 
     className,
   } = props;
 
+  if (getLayerContainer && !childRef?.current) return null;
+
   return (
     <Portal id={name} getContainer={() => getLayerContainer?.(childRef?.current)}>
       <div

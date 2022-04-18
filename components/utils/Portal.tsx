@@ -1,36 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { createPortal } from 'react-dom';
-
-const createElement = (id: string): HTMLElement => {
-  const el = document.createElement('div');
-
-  el.setAttribute('id', id);
-  el.setAttribute('style', 'position: absolute;top: 0px;left: 0px;width: 100%;');
-
-  return el;
-};
-
-const uuid = () => URL.createObjectURL(new Blob()).substr(-36);
-
-export const usePortal = (selectId: string, getContainer?: () => HTMLElement | undefined | null) => {
-  const id = selectId || uuid();
-  const [elSnapshot, setElSnapshot] = useState<HTMLElement | null>(createElement(id));
-
-  useEffect(() => {
-    const customContainer = getContainer ? getContainer() : null;
-
-    const parentElement = customContainer || document.body;
-    const hasElement = customContainer || parentElement.querySelector<HTMLElement>(`#${id}`);
-    const el = hasElement || createElement(id);
-
-    if (!hasElement) {
-      parentElement.appendChild(el);
-    }
-    setElSnapshot(el);
-  }, [getContainer]);
-
-  return elSnapshot;
-};
+import useSSR from 'use-ssr';
 
 interface PortalProps {
   id: string;
@@ -39,20 +9,30 @@ interface PortalProps {
 }
 
 const Portal: FC<PortalProps> = props => {
-  const { children, getContainer, id, style } = props;
-  const el = usePortal(id, getContainer);
+  const { children, getContainer, id } = props;
+  const { isBrowser } = useSSR();
+  const portalContainer = React.useMemo(() => {
+    if (!isBrowser) {
+      return;
+    }
+    if (typeof getContainer === 'function' && getContainer()) return getContainer();
+    const id$ = id || 'ultra-portal';
+    let searchModalContainer$ = document.querySelector(`#${id}`);
 
-  if (!el) return null;
+    if (!searchModalContainer$) {
+      const containerDiv = document.createElement('div');
 
-  Object.assign(el.style, style);
+      containerDiv.id = id$;
+      containerDiv.setAttribute('style', 'position: absolute;top: 0px;left: 0px;width: 100%;z-index:1000');
 
-  return createPortal(children, document.body);
-};
+      document.body.appendChild(containerDiv);
+      searchModalContainer$ = containerDiv;
+    }
 
-Portal.defaultProps = {
-  style: {
-    zIndex: 1000,
-  },
+    return searchModalContainer$;
+  }, []);
+
+  return createPortal(children, portalContainer || document.body);
 };
 
 export default Portal;
