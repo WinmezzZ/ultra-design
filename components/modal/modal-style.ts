@@ -76,6 +76,9 @@ export const modalWrapperStyles = (props: ModalStylesProps) => {
       }
       .ultra-modal-footer {
         text-align: right;
+        button + button {
+          margin-left: 10px;
+        }
       }
     }
 
