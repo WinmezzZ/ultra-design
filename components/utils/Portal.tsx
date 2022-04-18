@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { createPortal } from 'react-dom';
-import useSSR from 'use-ssr';
+import useIsBrowser from './useIsBrowser';
 
 interface PortalProps {
   id: string;
@@ -10,7 +10,7 @@ interface PortalProps {
 
 const Portal: FC<PortalProps> = props => {
   const { children, getContainer, id } = props;
-  const { isBrowser } = useSSR();
+  const isBrowser = useIsBrowser();
   const portalContainer = React.useMemo(() => {
     if (!isBrowser) {
       return;
