@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import _ from 'lodash-es';
 import { ConfigProviderProps } from '../config-provider';
 import { MergedModalrProps } from './modal';
+import { MergedConfirmModalrProps } from './modal-confirm';
 
 type ModalStylesProps = MergedModalrProps & ConfigProviderProps;
 
@@ -61,7 +62,7 @@ export const modalWrapperStyles = (props: ModalStylesProps) => {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          font-weight: 400;
+          font-weight: 500;
           font-size: 16px;
         }
 
@@ -99,6 +100,29 @@ export const modalWrapperStyles = (props: ModalStylesProps) => {
       transform: scale(0);
       transition-property: transform opacity;
       transition: 300ms;
+    }
+  `;
+};
+
+type ConfirmModalStylesProps = MergedConfirmModalrProps & ConfigProviderProps;
+
+export const confirmModalStyles = (_props: ConfirmModalStylesProps) => {
+  return css`
+    .ultra-modal {
+      min-width: 300px;
+      &-header__title {
+        display: flex;
+        align-items: center;
+        .i-icon {
+          display: inline-flex;
+          align-items: center;
+          margin-right: 8px;
+        }
+      }
+      &-body {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+      }
     }
   `;
 };

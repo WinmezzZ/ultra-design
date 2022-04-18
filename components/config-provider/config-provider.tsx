@@ -1,6 +1,7 @@
 import _ from 'lodash-es';
 import { createContext, FC, useEffect } from 'react';
 import en_US from '../locale/en_US';
+import Modal from '../modal';
 import Toast from '../toast';
 import { Locale } from './locale';
 import { defaultTheme, Theme } from './theme';
@@ -60,6 +61,7 @@ const ConfigProvider: FC<PartialProviderConfig> = props => {
 
   useEffect(() => {
     Toast.config(config);
+    Modal.config(config);
   }, [props]);
 
   return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
