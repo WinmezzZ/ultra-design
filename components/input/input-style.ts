@@ -69,3 +69,21 @@ export const inputStyles = (props: InputStylesProps) => {
     }
   `;
 };
+
+export const inputWithLabelStyles = (props: InputStylesProps) => {
+  const { theme } = props;
+  const { textColor } = theme[theme.mode];
+
+  return css`
+    font-size: 14px;
+    display: flex;
+    color: ${textColor};
+
+    .ultra-input__label {
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
+    }
+  `;
+};

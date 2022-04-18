@@ -1,5 +1,5 @@
 import React, { HTMLInputTypeAttribute, useRef, useState } from 'react';
-import { inputStyles } from './input-style';
+import { inputStyles, inputWithLabelStyles } from './input-style';
 import clsx from 'clsx';
 import { Close } from '@icon-park/react';
 import { useMergeProps } from '../utils/mergeProps';
@@ -50,6 +50,11 @@ export interface Props {
    * @description.en-US auto focused when show
    */
   autoFocus?: boolean;
+  /**
+   * @description.zh-CN 输入框标题
+   * @description.en-US input label
+   */
+  label?: React.ReactNode;
   onInput?: (value: string, e: React.FormEvent<HTMLInputElement>) => void;
   /**
    * @description.zh-CN 输入或时的回调
@@ -86,6 +91,7 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
     onInput,
     value,
     type,
+    label,
     placeholder,
     autoFocus,
     clearable,
@@ -133,33 +139,49 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
     onClear?.('', fakeEvent as any as React.MouseEvent<HTMLDivElement>);
   };
 
-  return (
-    <div
-      className={clsx(['ultra-input', focus && 'ultra-input--focused', disabled && 'ultra-input--disabled', className])}
-      css={inputStyles(props)}
-    >
-      {icon && <span className="ultra-input__icon">{icon}</span>}
-      <input
-        ref={inputRef}
-        type={type}
-        value={value}
-        defaultValue={defaultValue}
-        disabled={disabled}
-        readOnly={readOnly}
-        placeholder={placeholder}
-        autoFocus={autoFocus}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onInput={handleInput}
-        {...rest}
-      />
-      {inputValue && clearable && (
-        <span className="ultra-input__clear" onClick={handleClear}>
-          {<Close className="ultra-icon" />}
-        </span>
-      )}
+  const inputRender = () => {
+    return (
+      <div
+        className={clsx([
+          'ultra-input',
+          focus && 'ultra-input--focused',
+          disabled && 'ultra-input--disabled',
+          className,
+        ])}
+        css={inputStyles(props)}
+      >
+        {icon && <span className="ultra-input__icon">{icon}</span>}
+        <input
+          ref={inputRef}
+          type={type}
+          value={value}
+          defaultValue={defaultValue}
+          disabled={disabled}
+          readOnly={readOnly}
+          placeholder={placeholder}
+          autoFocus={autoFocus}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onInput={handleInput}
+          {...rest}
+        />
+        {inputValue && clearable && (
+          <span className="ultra-input__clear" onClick={handleClear}>
+            {<Close className="ultra-icon" />}
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  return label ? (
+    <div className="ultra-input-with_label" css={inputWithLabelStyles(props)}>
+      {label && <span className="ultra-input__label">{label}</span>}
+      {inputRender()}
     </div>
+  ) : (
+    inputRender()
   );
 };
 
