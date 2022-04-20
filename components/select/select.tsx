@@ -7,7 +7,6 @@ import { Down, Up } from '@icon-park/react';
 import Trigger from '../trigger';
 import { useMergeProps } from '../utils/mergeProps';
 import { useClickOutSide } from '@winme/react-hooks';
-import { TriggerRef } from '../trigger/trigger';
 
 export interface SelectProps {
   /**
@@ -79,7 +78,6 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   const optionsData: React.PropsWithChildren<OptionProps>[] = children
     ? React.Children.toArray(children).map((item: any) => item.props)
     : options || [];
-  const triggerRef = useRef<TriggerRef>(null);
 
   const selectionLabel = useMemo(() => {
     if (!selectValue) return undefined;
@@ -190,8 +188,8 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     });
   };
 
-  useClickOutSide({ current: triggerRef.current?.layerElement }, () => {
-    setFocus(true);
+  useClickOutSide(selfRef, () => {
+    setFocus(false);
   });
 
   return (
@@ -201,7 +199,6 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
       showArrow={false}
       placement="bottomLeft"
       trigger="click"
-      ref={triggerRef}
       content={
         children
           ? React.Children.toArray(children).map((child: any, i) => renderOptionItem(child, child.props, i))
