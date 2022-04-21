@@ -1,12 +1,9 @@
 import { css } from '@emotion/react';
-import { ComponentCommonProps, ConfigCommonOptions, Size } from '../config-provider';
+import { ConfigProviderProps, Size } from '../config-provider/config-provider';
 import React from 'react';
-import { ButtonProps } from '.';
+import { MergedButtonProps } from './button';
 
-export interface ButtonStyleProps
-  extends Omit<ButtonProps, keyof ComponentCommonProps>,
-    ComponentCommonProps,
-    ConfigCommonOptions {}
+type ButtonStyleProps = MergedButtonProps & ConfigProviderProps;
 
 const buttonSizeStyleMap: Record<Size, React.CSSProperties> = {
   mini: {
@@ -32,13 +29,13 @@ const buttonSizeStyleMap: Record<Size, React.CSSProperties> = {
 };
 
 const buttonTypeStyleMap = (props: ButtonStyleProps) => {
-  const { theme, type } = props;
-  const { mode } = props.theme;
-
+  const { theme, type, status } = props;
+  const { mode, style } = props.theme;
   const { backgroundColor, textColor, borderColor } = theme[mode];
+  const primaryColor = status ? style[(status + 'Color') as `${typeof status}Color`] : theme.style.primaryColor;
 
-  const bgColor = type === 'primary' ? theme?.style.primaryColor : backgroundColor;
-  const txtColor = type === 'primary' ? '#fff' : textColor;
+  const bgColor = status ? primaryColor : type === 'primary' ? primaryColor : backgroundColor;
+  const txtColor = status ? '#fff' : type === 'primary' ? '#fff' : textColor;
   const bdColor = ['text', 'primary'].includes(type as string) ? 'transparent' : borderColor;
   let baseStyle = `
     background-color: ${bgColor};
@@ -49,13 +46,15 @@ const buttonTypeStyleMap = (props: ButtonStyleProps) => {
   if (type === 'text') {
     baseStyle += `
       border: none;
-      color: ${theme.style.primaryColor};
+      color: ${primaryColor};
       background-color: unset;
     `;
   } else if (type === 'dashed') {
     baseStyle += `border: 1px dashed #ccc;`;
   } else if (type === 'primary') {
     baseStyle += `border-color: transparent;`;
+  } else if (type === 'pure') {
+    baseStyle += `border: none;`;
   }
 
   return baseStyle;
@@ -76,7 +75,7 @@ const loadingLayer = () => css`
   }
 `;
 
-const disabledStyle = (props: ButtonStyleProps) => {
+const disabledStyles = (props: ButtonStyleProps) => {
   const { theme, type } = props;
   const { disabledBgColor, disabledTextColor, disabledBorderColor } = theme[theme.mode];
 
@@ -88,14 +87,17 @@ const disabledStyle = (props: ButtonStyleProps) => {
 };
 
 export const buttonStyles = (props: ButtonStyleProps) => {
-  const { loading, disabled } = props;
-  // const { mode } = props.theme;
+  const { loading, disabled, type, effect } = props;
+  const { primaryColor } = props.theme.style;
+
+  const activeStyle = effect && !['text', 'pure'].includes(type as string) && !loading && !disabled ? true : false;
 
   return css`
     height: ${buttonSizeStyleMap[props.size].height}px;
-    padding: ${buttonSizeStyleMap[props.size].padding};
+    padding: ${type === 'pure' ? 0 : buttonSizeStyleMap[props.size].padding};
     box-sizing: border-box;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     border-radius: ${props.theme.style.radius}px;
     font-weight: 400;
     font-size: 14px;
@@ -105,13 +107,33 @@ export const buttonStyles = (props: ButtonStyleProps) => {
     justify-content: center;
     text-align: center;
     white-space: nowrap;
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     position: relative;
     border: 1px solid transparent;
     cursor: ${loading ? 'default' : disabled ? 'not-allowed' : 'pointer'};
     box-shadow: 0 2px #00000004;
-    ${buttonTypeStyleMap(props)}
-    ${loading && loadingLayer()}
-    ${disabled && disabledStyle(props)}
+    ${buttonTypeStyleMap(props)};
+    ${loading && loadingLayer()};
+    ${disabled && disabledStyles(props)};
+    &.ultra-button--active {
+      color: ${primaryColor};
+    }
+    ${activeStyle &&
+    css`
+      &:active {
+        transform: translateY(2px);
+        transition: transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+      }
+    `};
+    &:not(.ultra-button--text, .ultra-button--pure):hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .ultra-button__text {
+      z-index: 1;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
   `;
 };

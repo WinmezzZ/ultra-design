@@ -1,6 +1,6 @@
 ---
 nav:
-  title: Components
+  title: 组件
   path: /components
 group:
   title: 反馈
@@ -115,6 +115,31 @@ export default () => {
           <li>this is a text</li>
         </ul>
       </Modal>
+    </div>
+  );
+};
+```
+
+## 确认弹出框
+
+在 `onOk` 或 `onCancel` 中返回 `false` 将阻止关闭，支持 `Promise` 异步
+
+```tsx
+import React from 'react';
+import { Button, Modal } from 'ultra-design';
+
+export default () => {
+  const showConfirm = () => {
+    Modal.confirm({
+      content: '2333',
+      onOk: () => {
+        return false;
+      },
+    });
+  };
+  return (
+    <div>
+      <Button onClick={showConfirm}>打开确认弹出框</Button>
     </div>
   );
 };

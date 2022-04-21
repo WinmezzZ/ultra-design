@@ -120,11 +120,35 @@ export default () => {
 };
 ```
 
-<API src="index.ts" />
+## confirm modal
+
+return false in `onOk` or `onCancel` will stop closing event, support `Promise`
+
+```tsx
+import React from 'react';
+import { Button, Modal } from 'ultra-design';
+
+export default () => {
+  const showConfirm = () => {
+    Modal.confirm({
+      content: '2333',
+      onOk: () => {
+        return false;
+      },
+    });
+  };
+  return (
+    <div>
+      <Button onClick={showConfirm}>open conform</Button>
+    </div>
+  );
+};
+```
+
+<API src="modal.tsx" />
 
 ## Attention
 
 - When `confirmButton` and `cancelButton` are both set to `undefined`, the entire bottom component will be hidden
 
 - The `top` attribute defaults to 10vh, but if you set the center attribute, the default value of top will be cancelled, but you can still set the value of the `top` attribute manually
-

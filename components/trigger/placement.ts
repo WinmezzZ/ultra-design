@@ -1,5 +1,5 @@
 import React from 'react';
-import { PositionRect } from './tooltip';
+import { PositionRect } from './trigger';
 
 export type Placement =
   | 'topLeft'
@@ -15,13 +15,13 @@ export type Placement =
   | 'left'
   | 'leftTop';
 
-export const defaultTooltipPosition = {
+export const defaultTriggerPosition = {
   top: '-1000px',
   left: '-1000px',
   transform: 'none',
 };
 
-export interface TooltipPosition {
+export interface TriggerPosition {
   top: string;
   left: string;
   transform: string;

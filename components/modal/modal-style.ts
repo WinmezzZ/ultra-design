@@ -1,13 +1,15 @@
 import { css } from '@emotion/react';
 import _ from 'lodash-es';
-import { ConfigCommonOptions } from '../config-provider';
-import { ModalProps } from './modal';
+import { ConfigProviderProps } from '../config-provider';
+import { MergedModalrProps } from './modal';
+import { MergedConfirmModalrProps } from './modal-confirm';
 
-export interface ModalCSSProps extends ModalProps, ConfigCommonOptions {}
+type ModalStylesProps = MergedModalrProps & ConfigProviderProps;
 
-export const modalWrapperStyle = (props: ModalCSSProps) => {
+export const modalWrapperStyles = (props: ModalStylesProps) => {
   const { center, top, width, theme } = props;
   const { radius } = theme.style;
+  const { thirdBackgroundColor } = theme[theme.mode];
 
   return css`
     position: fixed;
@@ -31,7 +33,7 @@ export const modalWrapperStyle = (props: ModalCSSProps) => {
       position: relative;
       width: ${width};
       max-width: 90%;
-      background-color: #fff;
+      background-color: ${thirdBackgroundColor};
       padding: 20px;
       border-radius: ${radius}px;
       margin: 0 auto;
@@ -60,7 +62,7 @@ export const modalWrapperStyle = (props: ModalCSSProps) => {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          font-weight: 400;
+          font-weight: 500;
           font-size: 16px;
         }
 
@@ -74,6 +76,9 @@ export const modalWrapperStyle = (props: ModalCSSProps) => {
       }
       .ultra-modal-footer {
         text-align: right;
+        button + button {
+          margin-left: 10px;
+        }
       }
     }
 
@@ -98,6 +103,29 @@ export const modalWrapperStyle = (props: ModalCSSProps) => {
       transform: scale(0);
       transition-property: transform opacity;
       transition: 300ms;
+    }
+  `;
+};
+
+type ConfirmModalStylesProps = MergedConfirmModalrProps & ConfigProviderProps;
+
+export const confirmModalStyles = (_props: ConfirmModalStylesProps) => {
+  return css`
+    .ultra-modal {
+      min-width: 300px;
+      &-header__title {
+        display: flex;
+        align-items: center;
+        .i-icon {
+          display: inline-flex;
+          align-items: center;
+          margin-right: 8px;
+        }
+      }
+      &-body {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+      }
     }
   `;
 };

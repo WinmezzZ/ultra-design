@@ -196,7 +196,7 @@ export default () => {
         <Tooltip
           defaultVisible
           trigger="click"
-          getLayerContainer={trigger => trigger.parentNode as HTMLElement}
+          getLayerContainer={trigger => trigger?.parentNode as HTMLElement}
           title="哈哈"
         >
           <Button>Click Me</Button>

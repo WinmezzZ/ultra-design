@@ -21,6 +21,22 @@ export default () => (
     <Button>Default</Button>
     <Button type="dashed">Dashed</Button>
     <Button type="text">Text</Button>
+    <Button type="pure">Pure</Button>
+  </div>
+);
+```
+
+## button status
+
+```tsx
+import React from 'react';
+import { Button } from 'ultra-design';
+
+export default () => (
+  <div>
+    <Button status="success">Success</Button>
+    <Button status="warning">Warning</Button>
+    <Button status="error">Error</Button>
   </div>
 );
 ```

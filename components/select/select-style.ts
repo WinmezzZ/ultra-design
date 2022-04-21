@@ -1,11 +1,34 @@
 import { css } from '@emotion/react';
-import { SelectProps } from './select';
-import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
+import { MergedSelectProps } from './select';
 import { fade } from '../utils/fade';
+import { transitionSlide } from '../styles/transition/slide';
+import { ConfigProviderProps } from '../config-provider';
 
-export interface SelectCSSProps extends SelectProps, ComponentCommonProps, ConfigCommonOptions {}
+type SelectStylesProps = MergedSelectProps & ConfigProviderProps;
 
-export const selectStyle = (props: SelectCSSProps) => {
+export const selectLayerStyles = (props: SelectStylesProps) => {
+  const { theme } = props;
+  const { radius, boxShadow } = theme.style;
+  const { textColor, thirdBackgroundColor } = theme[theme.mode];
+
+  return css`
+    &.${props.name}-layer-wrapper {
+      .${props.name} {
+        transform-origin: top;
+        background-color: ${thirdBackgroundColor};
+        color: ${textColor};
+        box-shadow: ${boxShadow};
+        border-radius: ${radius}px;
+        &__content {
+          padding: 8px 0;
+        }
+      }
+      ${transitionSlide('ultra-select-layer-slide')}
+    }
+  `;
+};
+
+export const selectStyles = (props: SelectStylesProps) => {
   const { theme } = props;
   const { primaryColor, radius } = theme.style;
   const { borderColor, backgroundColor, textColor, disabledBgColor, disabledTextColor } = theme[theme.mode];
@@ -44,6 +67,7 @@ export const selectStyle = (props: SelectCSSProps) => {
       flex: 1;
       display: flex;
       align-items: center;
+      white-space: nowrap;
     }
 
     .ultra-select__placeholder {

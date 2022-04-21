@@ -1,11 +1,12 @@
 {
   "name": "ultra-design",
-  "version": "0.0.30-beta",
+  "version": "0.0.68-beta",
   "keywords": [
     "react",
     "react-component",
     "react-lib",
     "react-component-lib",
+    "react-design",
     "ultra-deisign"
   ],
   "publishConfig": {
@@ -14,7 +15,6 @@
   },
   "files": [
     "dist",
-    "lib",
     "es"
   ],
   "repository": {
@@ -23,13 +23,13 @@
     "branch": "master",
     "platform": "github"
   },
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
   "scripts": {
     "dev": "dumi dev",
     "build:doc": "dumi build",
-    "build:types": "tsc && tsc --project tsconfig.json --declarationDir lib",
+    "build:types": "tsc",
     "build:packages": "rollup -c",
     "build": "npm run build:packages && npm run build:types",
     "lint": "eslint . --ext js,ts,tsx",
@@ -48,8 +48,11 @@
     "@emotion/babel-plugin": "^11.3.0",
     "@emotion/react": "^11.7.0",
     "@icon-park/react": "^1.3.5",
+    "@winme/react-hooks": "^0.0.2",
     "clsx": "^1.1.1",
     "lodash-es": "^4.17.21",
+    "mitt": "^3.0.0",
+    "prop-types": "^15.8.1",
     "react-transition-group": "^4.4.2"
   },
   "devDependencies": {
@@ -61,6 +64,7 @@
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-replace": "^3.0.1",
     "@testing-library/dom": "^8.11.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@types/enzyme": "^3.10.10",
@@ -77,6 +81,7 @@
     "babel-plugin-typescript-to-proptypes": "^2.0.0",
     "dumi": "^1.1.37",
     "enzyme": "^3.11.0",
+    "glob": "^7.2.0",
     "jest": "^27.4.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

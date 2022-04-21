@@ -1,5 +1,9 @@
 import _ from 'lodash-es';
-import { createContext, FC } from 'react';
+import { createContext, FC, useEffect } from 'react';
+import en_US from '../locale/en_US';
+import Modal from '../modal';
+import Toast from '../toast';
+import { Locale } from './locale';
 import { defaultTheme, Theme } from './theme';
 
 export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger';
@@ -19,6 +23,11 @@ export interface ConfigCommonOptions {
    * @description.en-US theme color
    */
   theme: Theme;
+  /**
+   * @description.zh-CN 地区
+   * @description.en-US region locale
+   */
+  locale: Locale;
 }
 
 export const componentDefaultProps: ComponentCommonProps = {
@@ -27,9 +36,10 @@ export const componentDefaultProps: ComponentCommonProps = {
 
 const configCommonOptions: ConfigCommonOptions = {
   theme: defaultTheme,
+  locale: en_US,
 };
 
-export interface ConfigContextOptions extends ComponentCommonProps, ConfigCommonOptions {}
+export interface ConfigProviderProps extends ComponentCommonProps, ConfigCommonOptions {}
 
 const configContextOptions = {
   ...componentDefaultProps,
@@ -40,12 +50,19 @@ type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>;
 };
 
-export const ConfigContext = createContext<ConfigContextOptions>(configContextOptions);
+export const ConfigContext = createContext<ConfigProviderProps>(configContextOptions);
 
-const ConfigProvider: FC<DeepPartial<ConfigContextOptions>> = props => {
+export type PartialProviderConfig = DeepPartial<ConfigProviderProps>;
+
+const ConfigProvider: FC<PartialProviderConfig> = props => {
   const { children, ...rest } = props;
 
-  const config: ConfigContextOptions = _.merge({}, configContextOptions, rest);
+  const config: ConfigProviderProps = _.merge({}, configContextOptions, rest);
+
+  useEffect(() => {
+    Toast.config(config);
+    Modal.config(config);
+  }, [props]);
 
   return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
 };

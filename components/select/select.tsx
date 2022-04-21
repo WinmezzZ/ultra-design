@@ -1,27 +1,58 @@
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { selectStyle } from './select-style';
+import { selectLayerStyles, selectStyles } from './select-style';
 import clsx from 'clsx';
-import { useConfigContext } from '../config-provider/useConfigContext';
 import Input from '../input';
-import Dropdown from '../dropdown';
 import Option, { OptionProps } from './option';
 import { Down, Up } from '@icon-park/react';
-import { isNil } from 'lodash-es';
+import Trigger from '../trigger';
+import { useMergeProps } from '../utils/mergeProps';
+import { useClickOutSide } from '@winme/react-hooks';
 
 export interface SelectProps {
+  /**
+   * @description.zh-CN 值
+   * @description.en-US value
+   */
   value?: string;
+  /**
+   * @description.zh-CN 默认值值
+   * @description.en-US default value
+   */
   defaultValue?: string;
+  /**
+   * @description.zh-CN 占位符
+   * @description.en-US placeholder
+   */
   placeholder?: string;
   clearable?: boolean;
   filterable?: boolean;
+  /**
+   * @description.zh-CN 是否禁用
+   * @description.en-US whether disable
+   */
   disabled?: boolean;
+  /**
+   * @description.zh-CN 选择时触发的回调
+   * @description.en-US triggered when selecting an option
+   */
   onChange?: (value: any) => void;
+  /**
+   * @description.zh-CN option
+   * @description.en-US list of configuration items for options
+   */
   options?: OptionProps[];
   className?: string;
   style?: React.CSSProperties;
 }
 
-const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithChildren<SelectProps>> = (props, ref) => {
+const defaultProps = {
+  name: 'ultra-select',
+};
+
+export type MergedSelectProps = typeof defaultProps & SelectProps;
+
+const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithChildren<SelectProps>> = (p, ref) => {
+  const props = useMergeProps(defaultProps, p);
   const {
     disabled,
     onChange,
@@ -38,78 +69,57 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   const selfRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [selectValue, setSelectValue] = useState<string | number | boolean | undefined>(value || defaultValue);
+  const [selectValue, setSelectValue] = useState<string | number | boolean | undefined>(
+    'value' in props ? value : defaultValue,
+  );
   const [hoverIndex, setHoverIndex] = useState(-1);
   const [dropdownVisivle, setDropdownVisivle] = useState(false);
   const [focus, setFocus] = useState(false);
-  const configContext = useConfigContext();
-  const styleProps = { ...configContext, ...props };
   const optionsData: React.PropsWithChildren<OptionProps>[] = children
     ? React.Children.toArray(children).map((item: any) => item.props)
     : options || [];
 
   const selectionLabel = useMemo(() => {
-    if ('value' in props) {
-      const defaultOptionIndex = optionsData.findIndex(opt => opt.value === value);
+    if (!selectValue) return undefined;
+
+    const defaultOptionIndex = optionsData.findIndex(opt => (opt.value ?? (opt.children || opt.label)) === selectValue);
+
+    if (defaultOptionIndex >= 0) {
+      setSelectedIndex(defaultOptionIndex);
 
       return optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label;
-    } else {
-      if (defaultValue) {
-        return defaultValue;
-      } else {
-        if (!selectValue) return undefined;
-        const defaultOptionIndex = optionsData.findIndex(opt => (opt.children || opt.label) === selectValue);
-
-        if (defaultOptionIndex >= 0) {
-          return optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label;
-        }
-      }
     }
-  }, [value, defaultValue, selectValue]);
+  }, [selectValue]);
 
   useEffect(() => {
-    if (defaultValue && !value && optionsData) {
-      const defaultOptionIndex = optionsData.findIndex(opt =>
-        [opt.value, opt.children, opt.label].includes(defaultValue),
-      );
-
-      setSelectedIndex(defaultOptionIndex);
-
-      return;
-    }
-    if (!isNil(value) && optionsData) {
-      const defaultOptionIndex = optionsData.findIndex(opt => opt.value === value);
-
-      setSelectedIndex(defaultOptionIndex);
-
-      return;
-    }
-  }, []);
-
-  useImperativeHandle(ref, () => {
-    return {
-      value: selectValue,
-    };
-  });
-
-  useEffect(() => {
-    if (value === undefined) return;
     setSelectValue(value);
   }, [value]);
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        value: selectValue,
+      };
+    },
+    [selectValue],
+  );
 
   const handleChange = (data: React.PropsWithChildren<OptionProps>, i: number) => {
     const { value: optionValue } = data;
 
-    setSelectedIndex(i);
     const finalValue = optionValue ?? (data.children || data.label);
 
+    setSelectedIndex(i);
     setSelectValue(finalValue as any);
 
     if (!optionsData.length) return;
     const v = optionsData.find(o => o.value === optionValue);
 
     if (v) {
-      onChange?.(optionValue);
+      setTimeout(() => {
+        onChange?.(finalValue);
+      });
     }
 
     setFocus(true);
@@ -158,12 +168,15 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     setInputValue('');
     setSelectValue(undefined);
 
-    onChange?.(selectValue);
+    setTimeout(() => {
+      onChange?.(selectValue);
+    });
   };
 
   const renderOptionItem = (option: any, props: OptionProps, index: number) => {
     return React.cloneElement(option, {
       ...props,
+      key: index,
       className: clsx(
         selectedIndex === index && 'ultra-select-option--active',
         hoverIndex === index && 'ultra-select-option--hover',
@@ -175,17 +188,27 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     });
   };
 
+  useClickOutSide(selfRef, () => {
+    setFocus(false);
+  });
+
   return (
-    <Dropdown
-      id="select"
+    <Trigger
       visible={dropdownVisivle}
       onVisibleChange={v => setDropdownVisivle(v)}
+      showArrow={false}
+      placement="bottomLeft"
+      trigger="click"
       content={
         children
           ? React.Children.toArray(children).map((child: any, i) => renderOptionItem(child, child.props, i))
           : options?.map((option, i) => renderOptionItem(Option, option, i))
       }
-      getLayerContainer={node => node.parentNode as HTMLElement}
+      {...props}
+      name="ultra-select"
+      transitionClassName="ultra-select-layer-slide"
+      getLayerContainer={node => node?.parentNode as HTMLElement}
+      css={selectLayerStyles(props)}
     >
       <div
         className={clsx([
@@ -196,7 +219,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
         ])}
         tabIndex={0}
         style={style}
-        css={selectStyle(styleProps)}
+        css={selectStyles(props)}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
         onKeyDown={handleKeyDown}
@@ -222,7 +245,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
           {dropdownVisivle ? <Up className="ultra-icon" /> : <Down className="ultra-icon" />}
         </div>
       </div>
-    </Dropdown>
+    </Trigger>
   );
 };
 

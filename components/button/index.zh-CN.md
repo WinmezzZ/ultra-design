@@ -1,6 +1,6 @@
 ---
 nav:
-  title: Components
+  title: 组件
   path: /components
 group:
   title: 基本组件
@@ -21,6 +21,22 @@ export default () => (
     <Button>默认</Button>
     <Button type="dashed">虚线</Button>
     <Button type="text">文本</Button>
+    <Button type="pure">纯净</Button>
+  </div>
+);
+```
+
+## 按钮状态
+
+```tsx
+import React from 'react';
+import { Button } from 'ultra-design';
+
+export default () => (
+  <div>
+    <Button status="success">成功</Button>
+    <Button status="warning">警告</Button>
+    <Button status="error">错误</Button>
   </div>
 );
 ```

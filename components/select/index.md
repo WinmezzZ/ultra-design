@@ -4,6 +4,7 @@ nav:
   path: /components
 group:
   title: Form
+  order: 5
 ---
 
 ## Select
@@ -63,7 +64,7 @@ export default () => {
         <Select.Option value="4" label="水浒传" />
       </Select>
       <hr />
-      <Select ref={selectRef} defaultValue="三国演义" onChange={handleUnControlledChange} placeholder="Uncontrolled">
+      <Select ref={selectRef} defaultValue="1" onChange={handleUnControlledChange} placeholder="Uncontrolled">
         <Select.Option value="1" label="三国演义" />
         <Select.Option value="2" label="红楼梦" />
         <Select.Option value="3" label="西游记" />
@@ -74,4 +75,12 @@ export default () => {
 };
 ```
 
-<API src="./index.ts" />
+## API
+
+#### Select
+
+<API hideTitle src="./select.tsx" />
+
+#### Select.Option
+
+<API hideTitle src="./option.tsx" />

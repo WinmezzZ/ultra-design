@@ -1,15 +1,13 @@
-import { ComponentCommonProps } from '../config-provider';
-import { useConfigContext } from '../config-provider/useConfigContext';
 import { buttonStyles } from './button-style';
 import React from 'react';
-import Ripple from '../ripple/ripple';
 import LoadingIcon from './loading-icon';
+import { useMergeProps } from '../utils/mergeProps';
+import { ComponentCommonProps } from '../config-provider/config-provider';
+import clsx from 'clsx';
 
-export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger';
+export type ButtonType = 'primary' | 'dashed' | 'text' | 'default' | 'pure';
 
-export type ButtonType = 'primary' | 'dashed' | 'text' | 'default';
-
-export interface BaseButtonProps {
+export interface Props extends Partial<ComponentCommonProps> {
   /**
    * @description.zh-CN 按钮类型
    * @description.en-US button type
@@ -39,18 +37,26 @@ export interface BaseButtonProps {
   effect?: boolean;
 
   /**
-   * @description.zh-CN 点击事件
-   * @description.click event
+   * @description.zh-CN 按钮状态
+   * @description.en-US button status
+   * @default true
    */
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  status?: 'success' | 'error' | 'warning';
 }
 
-export interface ButtonProps extends Partial<ComponentCommonProps>, React.PropsWithChildren<BaseButtonProps> {}
+type NativeAttrs = Omit<React.ButtonHTMLAttributes<any>, keyof Props>;
 
-const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (props, ref) => {
-  const { children, effect, type, onClick, loading, disabled, ...rest } = props;
-  const configContext = useConfigContext();
-  const styleProps = { ...configContext, ...props };
+export type ButtonProps = Props & NativeAttrs;
+
+const defaultProps = {
+  effect: true,
+};
+
+export type MergedButtonProps = typeof defaultProps & Props;
+
+const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (p, ref) => {
+  const props = useMergeProps(defaultProps, p);
+  const { children, onClick, loading, disabled, effect: _1, type, ...rest } = props;
 
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (loading || disabled) {
@@ -62,23 +68,22 @@ const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonP
     onClick?.(e);
   };
 
-  const rippleElement = effect && type !== 'text' && !loading && !disabled ? <Ripple /> : null;
-
   return (
-    <button ref={ref as any} css={buttonStyles(styleProps)} onClick={clickHandler} {...rest}>
+    <button
+      ref={ref}
+      css={buttonStyles(props)}
+      onClick={clickHandler}
+      className={clsx('ultra-button', `ultra-button--${type}`)}
+      {...rest}
+    >
       {loading && <LoadingIcon />}
-      <span>{children}</span>
-      {rippleElement}
+      <span className="ultra-button__text">{children}</span>
+      {/* {rippleElement} */}
     </button>
   );
 };
 
 const Button = React.forwardRef(ButtonComponent);
-
-Button.defaultProps = {
-  effect: true,
-  loading: false,
-};
 
 Button.displayName = 'UltraButton';
 

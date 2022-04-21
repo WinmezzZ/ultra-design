@@ -1,7 +1,7 @@
-import { defineConfig, IConfig } from 'dumi';
+import { defineConfig } from 'dumi';
 import path from 'path';
 
-const config: IConfig = {
+const config = {
   title: 'ultra-design',
   favicon: 'https://cdn.hyyar.com/favicon.ico',
   logo: 'https://cdn.hyyar.com/logo.jpg',
@@ -27,7 +27,6 @@ const config: IConfig = {
     ['@umijs/deps/compiled/babel/preset-react', { runtime: 'automatic', importSource: '@emotion/react' }]
   ],
   extraBabelPlugins: ['@emotion/babel-plugin'],
-  ssr: {},
   styles: [
     `
       button+button {
@@ -56,7 +55,15 @@ const config: IConfig = {
         list-style: none;
       }
     `
-  ]
+  ],
+  apiParser: {
+    propFilter: {
+      skipNodeModules: true,
+      // skipPropsWithName: ['title'],
+      skipPropsWithoutDoc: true,
+    },
+  }
+  
   // more config: https://d.umijs.org/config
 }
 

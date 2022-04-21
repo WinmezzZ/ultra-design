@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import { InputProps } from 'ultra-design';
-import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
+import { ConfigProviderProps } from '../config-provider';
 import { fade } from '../utils/fade';
 
-export interface InputCSSProps extends InputProps, ComponentCommonProps, ConfigCommonOptions {}
+type InputStylesProps = InputProps & ConfigProviderProps;
 
-export const inputStyle = (props: InputCSSProps) => {
+export const inputStyles = (props: InputStylesProps) => {
   const { theme } = props;
   const { primaryColor, radius } = theme.style;
   const { borderColor, backgroundColor, textColor, disabledBgColor, disabledTextColor } = theme[theme.mode];
@@ -66,6 +66,24 @@ export const inputStyle = (props: InputCSSProps) => {
       display: flex;
       align-items: center;
       cursor: pointer;
+    }
+  `;
+};
+
+export const inputWithLabelStyles = (props: InputStylesProps) => {
+  const { theme } = props;
+  const { textColor } = theme[theme.mode];
+
+  return css`
+    font-size: 14px;
+    display: flex;
+    color: ${textColor};
+
+    .ultra-input__label {
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
     }
   `;
 };

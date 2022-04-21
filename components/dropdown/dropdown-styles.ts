@@ -1,43 +1,97 @@
 import { css } from '@emotion/react';
-import { DropdownProps } from './dropdown';
+import { ConfigProviderProps } from '../config-provider';
+import { transitionSlide } from '../styles/transition/slide';
+import { fade } from '../utils/fade';
+import { MergedDropdownProps } from './dropdown';
+import { MergedDropdownItemProps } from './dropdown-item';
 
-export const dropdownStyles: DropdownProps['cssProps'] = props => {
-  const { mode } = props.theme;
+type DropdownStylesProps = MergedDropdownProps & ConfigProviderProps;
+
+export const dropdownStyles = (props: DropdownStylesProps) => {
   const { boxShadow, radius } = props.theme.style;
-  const { thirdBackgroundColor, textColor } = props.theme[mode];
+  const { thirdBackgroundColor, textColor } = props.theme[props.theme.mode];
 
   return css`
-    .ultra-tooltip {
-      transform-origin: top;
-      background-color: ${thirdBackgroundColor};
-      color: ${textColor};
-      box-shadow: ${boxShadow};
-      border-radius: ${radius}px;
-      &__title {
-        padding: 8px 0;
-      }
-      &__arrow {
-        border-color: transparent ${thirdBackgroundColor} transparent transparent;
+    &.${props.name}-layer-wrapper {
+      .${props.name} {
+        transform-origin: top;
+        background-color: ${thirdBackgroundColor};
+        color: ${textColor};
+        box-shadow: ${boxShadow};
+        border-radius: ${radius}px;
+        &__content {
+          padding: 8px 0;
+        }
+        &__arrow {
+          border-color: transparent ${thirdBackgroundColor} transparent transparent;
+        }
       }
     }
 
-    .ultra-dropdown-animate-slide-enter {
-      transform: scaleY(0.6);
-      opacity: 0;
+    .ultra-divider:not(.ultra-divider--vetical) {
+      margin: 4px 0;
     }
-    .ultra-dropdown-animate-slide-enter-active {
-      transform: scaleY(1);
-      opacity: 1;
-      transition: all 300ms ease;
+
+    ${transitionSlide(props.transitionClassName, props.transitionTimeout)}
+  `;
+};
+
+type SubMenuCSSProps = MergedDropdownItemProps & ConfigProviderProps;
+
+export const dropdownItemStyle = (props: SubMenuCSSProps) => {
+  const { theme } = props;
+  const { primaryColor } = theme.style;
+  const { textColor, disabledBgColor, disabledTextColor } = theme[theme.mode];
+
+  return css`
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    min-height: 32px;
+    cursor: pointer;
+    user-select: none;
+    &.ultra-dropdown-item--disabled {
+      background-color: ${disabledBgColor};
+      color: ${disabledTextColor};
+      cursor: not-allowed;
     }
-    .ultra-dropdown-animate-slide-exit {
-      transform: scaleY(1);
-      opacity: 1;
+
+    &.ultra-dropdown-item--active {
+      ${theme.mode === 'dark'
+        ? css`
+            background-color: ${primaryColor};
+            color: ${textColor};
+          `
+        : css`
+            background-color: ${fade(primaryColor, 0.1)};
+            color: ${primaryColor};
+          `}
     }
-    .ultra-dropdown-animate-slide-exit-active {
-      transform: scaleY(0.6);
-      opacity: 0;
-      transition: all 300ms ease;
+    &:hover:not(.ultra-dropdown-item--disabled, .ultra-dropdown-item--active) {
+      ${theme.mode === 'dark'
+        ? css`
+            color: ${fade(textColor, 1)};
+          `
+        : css`
+            background-color: #f0f1f3;
+          `}
     }
+  `;
+};
+
+export const dropdownTitleStyle = (props: SubMenuCSSProps) => {
+  const { theme } = props;
+  const { textColor } = theme[theme.mode];
+
+  return css`
+    display: flex;
+    align-items: center;
+    height: 28px;
+    user-select: none;
+    font-size: 12px;
+    padding: 8px 12px 4px;
+    color: ${fade(textColor, 0.4)};
+    transition: all 0.3s;
+    box-sizing: border-box;
   `;
 };

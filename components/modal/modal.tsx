@@ -1,12 +1,12 @@
 import React, { FC, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import Overlay from '../overlay';
-import { modalWrapperStyle } from './modal-style';
+import { modalWrapperStyles } from './modal-style';
 import Button, { ButtonProps } from '../button';
 import { Close } from '@icon-park/react';
-import { useConfigContext } from '../config-provider/useConfigContext';
-import usePortal from '../utils/usePortal';
+import { useMergeProps } from '../utils/mergeProps';
+import Portal from '../utils/Portal';
+import clsx from 'clsx';
 
 type ModalButtonProps = Pick<ButtonProps, 'disabled' | 'loading' | 'type' | 'children'>;
 
@@ -15,7 +15,7 @@ export interface ModalProps {
    * @description.zh-CN 对话框标题
    * @description.en-US modal's title
    */
-  title?: string;
+  title?: React.ReactNode;
   /**
    * @description.zh-CN 是否显示
    * @description.en-US modal's visible
@@ -79,16 +79,25 @@ export interface ModalProps {
    * @default { children: 'Cancel' }
    */
   cancelButton?: ModalButtonProps | null;
+  children?: React.ReactNode;
+  wrapperClassName?: string;
 }
 
-const Modal: FC<ModalProps> = props => {
+const defaultProps = {
+  visible: false,
+  keyboard: true,
+  width: '50%',
+};
+
+export type MergedModalrProps = typeof defaultProps & ModalProps;
+
+const Modal: FC<ModalProps> = p => {
+  const props = useMergeProps(defaultProps, p);
   const { title, visible, onClose, onOk, confirmButton, cancelButton, keyboard, beforeClose, hideClose, children } =
     props;
-  const configContext = useConfigContext();
-  const cssProps = { ...configContext, ...props };
-  const portal = usePortal('modal');
-  const confirmButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: '确定' }, confirmButton);
-  const cancelBtnProps: ModalButtonProps = Object.assign({}, { children: '取消' }, cancelButton);
+  const { cancelText, okText } = props.locale.Modal;
+  const confirmButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: okText }, confirmButton);
+  const cancelBtnProps: ModalButtonProps = Object.assign({}, { children: cancelText }, cancelButton);
 
   const closeHandler = async (e: KeyboardEvent | React.MouseEvent) => {
     if (beforeClose) {
@@ -115,41 +124,34 @@ const Modal: FC<ModalProps> = props => {
     };
   }, []);
 
-  if (!portal) return null;
-
   return (
-    <>
-      {createPortal(
-        <div>
-          <Overlay visible={visible} timeout={300} />
-          <CSSTransition in={visible} unmountOnExit timeout={300} classNames="ultra-modal-wrapper">
-            <div css={modalWrapperStyle(cssProps)} className="ultra-modal-wrapper">
-              <div className="ultra-modal">
-                <div className="ultra-modal-header">
-                  {!hideClose && <Close className="ultra-modal-header__close" onClick={closeHandler} />}
-                  {title && <h4 className="ultra-modal-header__title">{title}</h4>}
-                </div>
-                <div className="ultra-modal-body">{children}</div>
-                {!(confirmButton === null && cancelButton === null) && (
-                  <div className="ultra-modal-footer">
-                    {confirmButton !== null && <Button {...confirmButtonProps} onClick={onOk} />}
-                    {cancelButton !== null && <Button {...cancelBtnProps} onClick={closeHandler} />}
-                  </div>
+    <Portal id="ultra-modal">
+      <Overlay visible={visible} timeout={300} />
+      <CSSTransition in={visible} unmountOnExit timeout={300} classNames="ultra-modal-wrapper">
+        <div css={modalWrapperStyles(props)} className={clsx('ultra-modal-wrapper', props.wrapperClassName)}>
+          <div className="ultra-modal">
+            <div className="ultra-modal-header">
+              {!hideClose && <Close className="ultra-modal-header__close" onClick={closeHandler} />}
+              {title && <h4 className="ultra-modal-header__title">{title}</h4>}
+            </div>
+            <div className="ultra-modal-body">{children}</div>
+            {!(confirmButton === null && cancelButton === null) && (
+              <div className="ultra-modal-footer">
+                {cancelButton !== null && (
+                  <Button {...{ theme: props.theme }} {...cancelBtnProps} onClick={closeHandler} />
+                )}
+                {confirmButton !== null && (
+                  <Button {...{ theme: props.theme }} {...confirmButtonProps} onClick={onOk} />
                 )}
               </div>
-            </div>
-          </CSSTransition>
-        </div>,
-        portal,
-      )}
-    </>
+            )}
+          </div>
+        </div>
+      </CSSTransition>
+    </Portal>
   );
 };
 
-Modal.defaultProps = {
-  visible: false,
-  keyboard: true,
-  width: '50%',
-};
+Modal.displayName = 'UltraModal';
 
 export default Modal;

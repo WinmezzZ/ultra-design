@@ -247,7 +247,7 @@ export default () => {
 };
 ```
 
-## Set scroll container
+<!-- ## Set scroll container
 
 By default, the `Popover` popover position will only scroll with the `body`, but if the `Popover` trigger is inside the inner scroll element, the popover will not scroll with the inner scroll element. You can fix this by setting `getLayerContainer` to be the render parent of the popover
 
@@ -262,7 +262,7 @@ export default () => {
       <div style={{ display: 'flex', justifyContent: 'flex-end', width: 240 }}>
         <Popover
           defaultVisible
-          getLayerContainer={trigger => trigger.parentNode as HTMLElement}
+          getLayerContainer={trigger => trigger?.parentNode as HTMLElement}
           content={
             <ul>
               <li>正文1</li>
@@ -278,9 +278,9 @@ export default () => {
     </div>
   );
 };
-```
+``` -->
 
-## nest with tooltip
+<!-- ## nest with tooltip
 
 Popover component can nested use with tooltip component together. Of course, it can also nest itself.
 
@@ -305,6 +305,6 @@ export default () => {
     </Popover>
   );
 };
-```
+``` -->
 
 <API src="index.ts" />

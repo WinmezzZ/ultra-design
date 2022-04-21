@@ -1,40 +1,88 @@
-import React, { FC } from 'react';
-import Tooltip, { TooltipProps } from '../tooltip';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import Trigger, { TriggerProps } from '../trigger';
+import { TriggerRef } from '../trigger/trigger';
+import { useMergeProps } from '../utils/mergeProps';
 import { dropdownStyles } from './dropdown-styles';
 
-export interface DropdownProps extends Omit<TooltipProps, 'title' | 'placement'> {
+export interface DropdownProps extends TriggerProps {
   /**
-   * @description.zh-CN 气泡卡片内容
-   * @description.en-US dropdown content
+   * @description.zh-CN dropdown 出现的方位
+   * @description.en-US dropdown position
+   * @default 'bottomLeft'
    */
-  content?: React.ReactNode;
+  placement?: TriggerProps['placement'];
   /**
-   * @description.zh-CN 触发气泡卡片的方式
-   * @description.en-US dropdown trigger mode
-   * @default 'click'
+   * @description.zh-CN 在提示显示前的延迟
+   * @description.en-US delay before dropdown is shown
+   * @default 50
    */
-  trigger?: 'hover' | 'click';
+  showDelay?: number;
+  /**
+   * @description.zh-CN 关闭提示前的延迟
+   * @description.en-US delay before dropdown is hidden (only work in 'hover' mode)
+   * @default 50
+   */
+  hideDelay?: number;
+  /**
+   * @description.zh-CN 是否显示箭头
+   * @description.en-US show arrow icon
+   * @default false
+   */
+  showArrow?: boolean;
+  /**
+   * @description.zh-CN 渐变的持续的时间，尽量和 css 中的保持一致，此值将提供给 `CSSTransition`
+   * @description.en-US timeout of `CSSTransition`, be best set to same as transition duration in css
+   * @default 150
+   */
+  transitionTimeout?: number;
 }
 
-const Dropdown: FC<DropdownProps> = props => {
-  const { content, ...rest } = props;
+export type MergedDropdownProps = typeof defaultProps & DropdownProps;
 
-  return (
-    <Tooltip
-      id="dropdown"
-      cssProps={styleProps => dropdownStyles!(styleProps)}
-      {...rest}
-      title={content}
-      showArrow={false}
-      placement="bottomLeft"
-      transitionClassName="ultra-dropdown-animate-slide"
-    />
-  );
+const defaultProps = {
+  name: 'ultra-dropdown',
+  trigger: 'hover',
+  transitionClassName: 'ultra-dropdown-layer-slide',
+  showArrow: false,
+  transitionTimeout: 150,
+  showDelay: 50,
+  hideDelay: 50,
+  placement: 'bottomLeft',
 };
 
-Dropdown.defaultProps = {
-  trigger: 'click',
-};
+const Dropdown = forwardRef<any, DropdownProps>((p, r) => {
+  const props = useMergeProps(defaultProps, p);
+  const triggerRef = useRef<TriggerRef>(null);
+
+  const hideDropdown = () => {
+    triggerRef.current?.changeVisible(false);
+  };
+
+  useImperativeHandle(r, () => triggerRef.current?.layerElement, [triggerRef]);
+
+  const onVisibleChange = (visible: boolean) => {
+    if (!visible) return;
+    const layer = triggerRef.current?.layerElement;
+
+    if (!layer) return;
+    layer.querySelectorAll<HTMLDivElement>('.ultra-dropdown-item').forEach(item => {
+      item.addEventListener('click', hideDropdown);
+    });
+  };
+
+  useEffect(() => {
+    return () => {
+      const layer = triggerRef.current?.layerElement;
+      const dropdownItems = layer?.querySelectorAll<HTMLDivElement>('.ultra-dropdown-item');
+
+      dropdownItems?.forEach(item => {
+        item.removeEventListener('click', hideDropdown);
+      });
+    };
+  }, []);
+
+  return <Trigger onVisibleChange={onVisibleChange} ref={triggerRef} {...props} css={dropdownStyles(props)} />;
+});
 
 Dropdown.displayName = 'UltraDropdown';
 

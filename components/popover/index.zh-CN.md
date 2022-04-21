@@ -1,6 +1,6 @@
 ---
 nav:
-  title: Components
+  title: 组件
   path: /components
 group:
   title: 反馈
@@ -179,7 +179,7 @@ export default () => {
 };
 ```
 
-## 设置弹框的父元素
+<!-- ## 设置弹框的父元素
 
 默认 `Popover` 弹窗位置只会随着 `body` 一起滚动， 但如果 `Popover` 的触发器存在于内部滚动元素中 ，此时再滚动内部元素的话，弹窗不会跟着一起滚动。这时可以设置 `getLayerContainer` 为弹窗的渲染父节点来解决这个问题
 
@@ -192,7 +192,7 @@ export default () => {
     <div style={{ height: 200, width: 200, overflow: 'auto', position: 'relative' }}>
       <div style={{ height: 170 }}></div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', width: 240 }}>
-        <Popover defaultVisible getLayerContainer={trigger => trigger.parentNode as HTMLElement} content="哈哈">
+        <Popover defaultVisible getLayerContainer={trigger => trigger?.parentNode as HTMLElement} content="哈哈">
           <Button>Click Me</Button>
         </Popover>
         <div style={{ width: 40 }}></div>
@@ -201,9 +201,9 @@ export default () => {
     </div>
   );
 };
-```
+``` -->
 
-## 嵌套 Tooltip
+<!-- ## 嵌套 Tooltip
 
 popover 组件可以和 tooltip 组件一起嵌套使用，当然，也可以嵌套它自己。
 
@@ -228,6 +228,6 @@ export default () => {
     </Popover>
   );
 };
-```
+``` -->
 
 <API src="index.ts" />

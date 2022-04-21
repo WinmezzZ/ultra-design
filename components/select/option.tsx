@@ -1,23 +1,39 @@
 import React, { FC } from 'react';
 import { css } from '@emotion/react';
 import clsx from 'clsx';
-import { useConfigContext } from '../config-provider/useConfigContext';
-import { ComponentCommonProps, ConfigCommonOptions } from '../config-provider';
+import { ConfigProviderProps } from '../config-provider';
 import { fade } from '../utils/fade';
+import { useMergeProps } from '../utils/mergeProps';
 
 export interface OptionProps {
+  /**
+   * @description.zh-CN 选项的内容
+   * @description.en-US option's content
+   */
   label?: React.ReactNode;
-  value?: string | number | boolean;
+  /**
+   * @description.zh-CN 选项的值，必须是唯一的
+   * @description.en-US option's value, must be unique
+   */
+  value?: string | number;
+  /**
+   * @description.zh-CN 选项的禁用状态
+   * @description.en-US disabled status of option
+   */
   disabled?: boolean;
-  onClick?: (value?: string | number | boolean) => void;
+  onClick?: (value?: string | number) => void;
   onMouseEnter?: (e: React.MouseEvent) => void;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-const Option: FC<OptionProps> = props => {
+const defaultProps = {};
+
+export type MergedOptionProps = typeof defaultProps & OptionProps;
+
+const Option: FC<OptionProps> = p => {
+  const props = useMergeProps(defaultProps, p);
   const { label, value, disabled, children, onClick, onMouseEnter, className } = props;
-  const configContext = useConfigContext();
-  const styleProps = { ...configContext, ...props };
 
   const handleClick = () => {
     if (disabled) return;
@@ -27,7 +43,7 @@ const Option: FC<OptionProps> = props => {
   return (
     <div
       className={clsx('ultra-select-option', disabled && 'ultra-select-option--disabled', className)}
-      css={optionStyle(styleProps)}
+      css={optionStyles(props)}
       onClick={handleClick}
       onMouseEnter={onMouseEnter}
     >
@@ -40,9 +56,9 @@ Option.displayName = 'UltraSelectOption';
 
 export default Option;
 
-export interface OptionCSSProps extends OptionProps, ComponentCommonProps, ConfigCommonOptions {}
+type OptionStylesProps = MergedOptionProps & ConfigProviderProps;
 
-const optionStyle = (props: OptionCSSProps) => {
+const optionStyles = (props: OptionStylesProps) => {
   const { theme } = props;
   const { primaryColor } = theme.style;
   const { disabledBgColor, disabledTextColor } = theme[theme.mode];
