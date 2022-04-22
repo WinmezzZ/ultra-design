@@ -14,14 +14,17 @@ export const uploadStyles = (props: UploadStylesProps) => {
       box-sizing: border-box;
     }
     box-sizing: border-box;
+    font-size: 14px;
     color: ${textColor};
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    .ultra-uplopd-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
     .ultra-uplopd-item {
       position: relative;
+      overflow: hidden;
       cursor: pointer;
-
       border-radius: ${radius}px;
       border: 1px solid ${borderColor};
       width: 100px;
@@ -30,10 +33,14 @@ export const uploadStyles = (props: UploadStylesProps) => {
       align-items: center;
       justify-content: center;
       transition: background-color 0.3s;
+      &.ultra-uplopd-item--add {
+        border-style: dashed;
+      }
       &:not(.ultra-uplopd-item--add) {
         .ultra-uplopd-item__img {
-          width: 100%;
-          height: 100%;
+          width: 100px;
+          height: 100px;
+          border-radius: ${radius}px;
           object-fit: cover;
         }
         .ultra-uplopd-item__remove {

@@ -47,3 +47,6 @@ export { default as Divider } from './divider';
 
 export type { CheckboxProps } from './checkbox';
 export { default as Checkbox } from './checkbox';
+
+export type { UploadProps } from './upload';
+export { default as Upload } from './upload';
