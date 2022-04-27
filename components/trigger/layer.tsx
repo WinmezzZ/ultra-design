@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import { layerStyles } from './trigger-styles';
 import { CSSTransition } from 'react-transition-group';
 import { MergedTriggerProps } from './trigger';
-import Portal from '../utils/Portal';
 import { useMergeProps } from '../utils/mergeProps';
+import usePortal from '../utils/Portal';
 
 interface LayerProps extends MergedTriggerProps {
   childRef: MutableRefObject<HTMLElement | null> | undefined;
@@ -35,9 +35,10 @@ const Layer: ForwardRefRenderFunction<HTMLDivElement, LayerProps> = (p, ref) => 
   } = props;
 
   if (getLayerContainer && !childRef?.current) return null;
+  const { Portal } = usePortal({ id: getLayerContainer?.(childRef?.current) || name });
 
   return (
-    <Portal id={name} getContainer={() => getLayerContainer?.(childRef?.current)}>
+    <Portal>
       <div
         ref={ref}
         className={clsx(`${name}-layer-wrapper`, layerClassName, className)}

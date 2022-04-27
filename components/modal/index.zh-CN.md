@@ -145,7 +145,7 @@ export default () => {
 };
 ```
 
-<API src="index.ts" />
+<API src="modal.tsx" />
 
 ## 注意事项
 

@@ -5,8 +5,8 @@ import { modalWrapperStyles } from './modal-style';
 import Button, { ButtonProps } from '../button';
 import { Close } from '@icon-park/react';
 import { useMergeProps } from '../utils/mergeProps';
-import Portal from '../utils/Portal';
 import clsx from 'clsx';
+import usePortal from '../utils/Portal';
 
 type ModalButtonProps = Pick<ButtonProps, 'disabled' | 'loading' | 'type' | 'children'>;
 
@@ -95,6 +95,7 @@ const Modal: FC<ModalProps> = p => {
   const props = useMergeProps(defaultProps, p);
   const { title, visible, onClose, onOk, confirmButton, cancelButton, keyboard, beforeClose, hideClose, children } =
     props;
+  const { Portal } = usePortal({ id: 'ultra-modal' });
   const { cancelText, okText } = props.locale.Modal;
   const confirmButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: okText }, confirmButton);
   const cancelBtnProps: ModalButtonProps = Object.assign({}, { children: cancelText }, cancelButton);
@@ -125,7 +126,7 @@ const Modal: FC<ModalProps> = p => {
   }, []);
 
   return (
-    <Portal id="ultra-modal">
+    <Portal>
       <Overlay visible={visible} timeout={300} />
       <CSSTransition in={visible} unmountOnExit timeout={300} classNames="ultra-modal-wrapper">
         <div css={modalWrapperStyles(props)} className={clsx('ultra-modal-wrapper', props.wrapperClassName)}>
