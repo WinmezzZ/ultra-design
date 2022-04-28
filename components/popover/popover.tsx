@@ -1,5 +1,6 @@
-import { forwardRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import Trigger, { TriggerProps } from '../trigger';
+import { TriggerRef } from '../trigger/trigger';
 import { useMergeProps } from '../utils/mergeProps';
 import { popoverStyles } from './popover-styles';
 
@@ -16,6 +17,9 @@ const defaultProps = {
 
 const Popover = forwardRef<any, PopoverProps>((p, r) => {
   const props = useMergeProps(defaultProps, p);
+  const triggerRef = useRef<TriggerRef>(null);
+
+  useImperativeHandle(r, () => triggerRef.current?.layerElement, [triggerRef]);
 
   return <Trigger ref={r} {...props} css={popoverStyles(props)} />;
 });

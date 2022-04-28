@@ -9319,6 +9319,22 @@ wicked-good-xpath@^1.3.0:
   resolved "https://registry.yarnpkg.com/wicked-good-xpath/-/wicked-good-xpath-1.3.0.tgz#81b0e95e8650e49c94b22298fff8686b5553cf6c"
   integrity sha1-gbDpXoZQ5JyUsiKY//hoa1VTz2w=
 
+winhooks@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/winhooks/-/winhooks-0.0.2.tgz#5dd74202dc4cac4494980ea5e24119ddf1cd78f8"
+  integrity sha512-4bfp/O2VyCNVV0TupRNdkQLLRmfygvD57JpAVMPbAqkMRK5oQZL3GpvNQmETsdY2iQKxVndOtOVcvRqyDCSeyg==
+  dependencies:
+    "@mdx-js/loader" "^2.1.1"
+    "@mdx-js/react" "^2.1.1"
+    react "17.0.2"
+    react-dom "17.0.2"
+    react-router-dom "^6.3.0"
+    react-syntax-highlighter "^15.5.0"
+    rehype-autolink-headings "^6.1.1"
+    rehype-slug "^5.0.1"
+    remark-gfm "^3.0.1"
+    ultra-design "^0.0.40-beta"
+
 word-wrap@^1.2.3, word-wrap@~1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"

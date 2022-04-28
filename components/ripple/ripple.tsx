@@ -1,4 +1,4 @@
-import { useCallbackState } from '../utils/useCallbackState';
+import { useCallbackState } from 'winhooks';
 import { CSSProperties, useEffect, useRef } from 'react';
 import { css } from '@emotion/react';
 import { useMergeProps } from '../utils/mergeProps';
