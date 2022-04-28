@@ -92,6 +92,5 @@ export const dropdownTitleStyle = (props: SubMenuCSSProps) => {
     padding: 8px 12px 4px;
     color: ${fade(textColor, 0.4)};
     transition: all 0.3s;
-    box-sizing: border-box;
   `;
 };

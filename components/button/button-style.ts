@@ -95,7 +95,6 @@ export const buttonStyles = (props: ButtonStyleProps) => {
   return css`
     height: ${buttonSizeStyleMap[props.size].height}px;
     padding: ${type === 'pure' ? 0 : buttonSizeStyleMap[props.size].padding};
-    box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     border-radius: ${props.theme.style.radius}px;

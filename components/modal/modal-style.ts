@@ -9,15 +9,13 @@ type ModalStylesProps = MergedModalrProps & ConfigProviderProps;
 export const modalWrapperStyles = (props: ModalStylesProps) => {
   const { center, top, width, theme } = props;
   const { radius } = theme.style;
-  const { thirdBackgroundColor } = theme[theme.mode];
+  const { textColor, thirdBackgroundColor } = theme[theme.mode];
 
   return css`
     position: fixed;
     inset: 0;
     z-index: 1000;
-    * {
-      box-sizing: border-box;
-    }
+    color: ${textColor};
     ${center &&
     css`
       text-align: center;

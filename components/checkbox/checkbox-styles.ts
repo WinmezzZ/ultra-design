@@ -12,9 +12,8 @@ export const checkboxStyles = (props: CheckboxStylesProps) => {
     theme[theme.mode];
 
   return css`
-    box-sizing: border-box;
     color: ${textColor};
-    font-size: 14px;
+
     display: inline-flex;
     justify-content: center;
     align-items: center;

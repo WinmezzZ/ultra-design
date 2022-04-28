@@ -3,6 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import { toastWrapperStyles } from './toast-style';
 import { useMergeProps } from '../utils/mergeProps';
 import { Close } from '@icon-park/react';
+import withStyle from '../utils/withStyle';
 
 export interface ToastProps {
   /**
@@ -96,4 +97,4 @@ const ToastInternal: FC<ToastProps> = p => {
 
 ToastInternal.displayName = 'UltraToast';
 
-export default ToastInternal;
+export default withStyle(ToastInternal);

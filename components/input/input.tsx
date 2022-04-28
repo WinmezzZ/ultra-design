@@ -3,6 +3,7 @@ import { inputStyles, inputWithLabelStyles } from './input-style';
 import clsx from 'clsx';
 import { Close } from '@icon-park/react';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 
 export interface Props {
   /**
@@ -187,4 +188,4 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
 
 const Input = React.forwardRef(InputComponent);
 
-export default Input;
+export default withStyle(Input);

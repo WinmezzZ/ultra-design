@@ -10,10 +10,6 @@ export const uploadStyles = (props: UploadStylesProps) => {
   const { textColor, borderColor } = props.theme[props.theme.mode];
 
   return css`
-    * {
-      box-sizing: border-box;
-    }
-    box-sizing: border-box;
     font-size: 14px;
     color: ${textColor};
     .ultra-uplopd-content {

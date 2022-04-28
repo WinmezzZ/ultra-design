@@ -11,7 +11,6 @@ export const inputStyles = (props: InputStylesProps) => {
   const { borderColor, backgroundColor, textColor, disabledBgColor, disabledTextColor } = theme[theme.mode];
 
   return css`
-    box-sizing: border-box;
     margin: 0;
     list-style: none;
     position: relative;
@@ -20,7 +19,6 @@ export const inputStyles = (props: InputStylesProps) => {
     min-width: 0;
     padding: 7px 11px;
     color: ${textColor};
-    font-size: 14px;
     background-color: ${backgroundColor};
     background-image: none;
     border: 1px solid ${borderColor};

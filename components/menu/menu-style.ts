@@ -11,7 +11,6 @@ export const menuStyles = (props: MenuStylesProps) => {
   const { backgroundColor, textColor } = theme[theme.mode];
 
   return css`
-    box-sizing: border-box;
     margin: 0;
     list-style: none;
     position: relative;

@@ -8,7 +8,7 @@ type ToastStylesProps = MergedToastrProps & ConfigProviderProps;
 export const toastWrapperStyles = (props: ToastStylesProps) => {
   const { theme } = props;
   const { radius, boxShadow } = theme.style;
-  const { thirdBackgroundColor } = theme[theme.mode];
+  const { textColor, thirdBackgroundColor } = theme[theme.mode];
 
   const top = props.top ?? '20px';
 
@@ -19,9 +19,7 @@ export const toastWrapperStyles = (props: ToastStylesProps) => {
     text-align: center;
     z-index: 1000;
     pointer-events: none;
-    * {
-      box-sizing: border-box;
-    }
+    color: ${textColor};
     .ultra-toast {
       display: inline-flex;
       align-items: center;

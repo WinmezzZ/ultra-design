@@ -2,6 +2,7 @@ import { dividerStyles } from './divider-styles';
 import React from 'react';
 import { useMergeProps } from '../utils/mergeProps';
 import clsx from 'clsx';
+import withStyle from '../utils/withStyle';
 
 export type DividerType = 'primary' | 'dashed' | 'text' | 'default';
 
@@ -32,4 +33,4 @@ const Divider: React.FC<DividerProps> = p => {
 
 Divider.displayName = 'UltraDivider';
 
-export default Divider;
+export default withStyle(Divider);

@@ -7,6 +7,7 @@ import { Down, Up } from '@icon-park/react';
 import Trigger from '../trigger';
 import { useMergeProps } from '../utils/mergeProps';
 import { useClickOutSide } from '@winme/react-hooks';
+import withStyle from '../utils/withStyle';
 
 export interface SelectProps {
   /**
@@ -253,4 +254,4 @@ const Select = React.forwardRef(SelectComponent);
 
 Select.displayName = 'UltraSelect';
 
-export default Select;
+export default withStyle(Select);

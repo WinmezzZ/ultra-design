@@ -2,6 +2,7 @@ import React from 'react';
 import { subMenuStyle } from './menu-style';
 import clsx from 'clsx';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 
 export interface SubMenuProps {
   /**
@@ -50,4 +51,4 @@ const SubMenu = React.forwardRef(SubMenuComponent);
 
 SubMenu.displayName = 'UltraSubMenu';
 
-export default SubMenu;
+export default withStyle(SubMenu);

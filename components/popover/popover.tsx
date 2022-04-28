@@ -2,6 +2,7 @@ import { forwardRef, useImperativeHandle, useRef } from 'react';
 import Trigger, { TriggerProps } from '../trigger';
 import { TriggerRef } from '../trigger/trigger';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 import { popoverStyles } from './popover-styles';
 
 export interface PopoverProps extends TriggerProps {}
@@ -26,4 +27,4 @@ const Popover = forwardRef<any, PopoverProps>((p, r) => {
 
 Popover.displayName = 'UltraPopover';
 
-export default Popover;
+export default withStyle(Popover);

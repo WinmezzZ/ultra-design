@@ -3,6 +3,7 @@ import { isNil } from 'lodash-es';
 import React, { ChangeEvent, useMemo, useRef, useState } from 'react';
 import Tooltip from '../tooltip';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 import { uploadStyles } from './upload-styles';
 
 export interface UploadProps {
@@ -288,4 +289,4 @@ const Upload: React.FC<UploadProps> = p => {
 
 Upload.displayName = 'UltraUpload';
 
-export default Upload;
+export default withStyle(Upload);

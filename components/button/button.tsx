@@ -4,6 +4,7 @@ import LoadingIcon from './loading-icon';
 import { useMergeProps } from '../utils/mergeProps';
 import { ComponentCommonProps } from '../config-provider/config-provider';
 import clsx from 'clsx';
+import withStyle from '../utils/withStyle';
 
 export type ButtonType = 'primary' | 'dashed' | 'text' | 'default' | 'pure';
 
@@ -87,4 +88,4 @@ const Button = React.forwardRef(ButtonComponent);
 
 Button.displayName = 'UltraButton';
 
-export default Button;
+export default withStyle(Button);

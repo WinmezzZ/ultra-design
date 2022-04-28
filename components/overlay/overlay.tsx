@@ -1,6 +1,7 @@
 import { css, Global } from '@emotion/react';
 import React, { FC } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import withStyle from '../utils/withStyle';
 import { overlayStyle } from './overlay-style';
 
 export interface OverlayProps {
@@ -36,4 +37,4 @@ Overlay.defaultProps = {
   timeout: 300,
 };
 
-export default Overlay;
+export default withStyle(Overlay);

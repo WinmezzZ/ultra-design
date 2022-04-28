@@ -9,8 +9,10 @@ type LoadingStylesProps = MergedLoadingrProps & ConfigProviderProps;
 export const loadingWrapperStyles = (props: LoadingStylesProps) => {
   const { mask, fill, fullScreen, theme } = props;
   const { primaryColor } = theme.style;
+  const { textColor } = theme[theme.mode];
 
   return css`
+    color: ${textColor};
     ${fill || fullScreen
       ? css`
           position: ${fullScreen ? 'fixed' : 'absolute'};
@@ -26,9 +28,6 @@ export const loadingWrapperStyles = (props: LoadingStylesProps) => {
     justify-content: center;
     align-items: center;
     color: ${primaryColor};
-    * {
-      box-sizing: border-box;
-    }
     .ultra-loading {
       display: inline-flex;
       align-items: center;

@@ -3,6 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import { loadingWrapperStyles } from './loading-style';
 import { useMergeProps } from '../utils/mergeProps';
 import { LoadingFour } from '@icon-park/react';
+import withStyle from '../utils/withStyle';
 
 export interface LoadingProps {
   /**
@@ -77,4 +78,4 @@ const LoadingInternal: FC<LoadingNativeProps> = p => {
 
 LoadingInternal.displayName = 'UltraLoading';
 
-export default LoadingInternal;
+export default withStyle(LoadingInternal);

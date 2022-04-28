@@ -7,6 +7,7 @@ import { Close } from '@icon-park/react';
 import { useMergeProps } from '../utils/mergeProps';
 import clsx from 'clsx';
 import { usePortal } from 'winhooks';
+import withStyle from '../utils/withStyle';
 
 type ModalButtonProps = Pick<ButtonProps, 'disabled' | 'loading' | 'type' | 'children'>;
 
@@ -155,4 +156,4 @@ const Modal: FC<ModalProps> = p => {
 
 Modal.displayName = 'UltraModal';
 
-export default Modal;
+export default withStyle(Modal);

@@ -1,7 +1,6 @@
 import React, {
   cloneElement,
   forwardRef,
-  ForwardRefRenderFunction,
   PropsWithChildren,
   useEffect,
   useImperativeHandle,
@@ -12,6 +11,7 @@ import { useClickOutSide, usePrevious } from 'winhooks';
 import { getPosition, Placement } from './placement';
 import Layer from './layer';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
 
@@ -145,7 +145,7 @@ export interface TriggerRef {
 
 export type MergedTriggerProps = typeof defaultProps & TriggerProps;
 
-const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerProps>> = (p, r) => {
+const TriggerComponent = forwardRef<TriggerRef, PropsWithChildren<TriggerProps>>((p, r) => {
   const props = useMergeProps(defaultProps, p);
   const {
     children,
@@ -323,6 +323,8 @@ const Trigger: ForwardRefRenderFunction<TriggerRef, PropsWithChildren<TriggerPro
       />
     </>
   );
-};
+});
 
-export default forwardRef(Trigger);
+TriggerComponent.displayName = 'UltraTrigger';
+
+export default withStyle(TriggerComponent);

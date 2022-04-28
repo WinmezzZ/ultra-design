@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 import { useCheckbox } from './checkbox-context';
 import { checkboxStyles } from './checkbox-styles';
 
@@ -116,4 +117,4 @@ const Checkbox: React.FC<CheckboxProps> = (p: CheckboxProps) => {
 
 Checkbox.displayName = 'UltraCheckbox';
 
-export default Checkbox;
+export default withStyle(Checkbox);

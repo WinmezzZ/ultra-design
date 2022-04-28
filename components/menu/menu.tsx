@@ -3,6 +3,7 @@ import { menuStyles } from './menu-style';
 import clsx from 'clsx';
 import { SubMenuProps } from './sub-menu';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 
 export interface Props {
   /**
@@ -76,4 +77,4 @@ const Menu = React.forwardRef(MenuComponent);
 
 Menu.displayName = 'UltraMenu';
 
-export default Menu;
+export default withStyle(Menu);

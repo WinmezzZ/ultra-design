@@ -2,6 +2,7 @@ import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import Trigger, { TriggerProps } from '../trigger';
 import { TriggerRef } from '../trigger/trigger';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 import { tooltipStyles } from './tooltip-styles';
 
 export interface TooltipProps extends Omit<TriggerProps, 'content'> {
@@ -31,4 +32,4 @@ const Tooltip = forwardRef<any, TooltipProps>((p, r) => {
 
 Tooltip.displayName = 'UltraTooltip';
 
-export default Tooltip;
+export default withStyle(Tooltip);

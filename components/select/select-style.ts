@@ -37,7 +37,6 @@ export const selectStyles = (props: SelectStylesProps) => {
     display: inline-flex;
     align-items: center;
     height: 32px;
-    box-sizing: border-box;
     margin: 0;
     list-style: none;
     position: relative;

@@ -5,10 +5,12 @@ import { MergedKeyboardProps } from './keyboard';
 type KeyboardStylesProps = MergedKeyboardProps & ConfigProviderProps;
 
 export const keyboardStyles = (props: KeyboardStylesProps) => {
-  const { radius } = props.theme.style;
+  const { theme } = props;
+  const { radius } = theme.style;
   const { thirdBackgroundColor, borderColor } = props.theme[props.theme.mode];
 
   return css`
+    color: ${theme[theme.mode].textColor};
     line-height: 28px;
     text-align: center;
     display: inline-block;

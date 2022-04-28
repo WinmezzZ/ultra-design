@@ -2,6 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import Trigger, { TriggerProps } from '../trigger';
 import { TriggerRef } from '../trigger/trigger';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 import { dropdownStyles } from './dropdown-styles';
 
 export interface DropdownProps extends TriggerProps {
@@ -86,4 +87,4 @@ const Dropdown = forwardRef<any, DropdownProps>((p, r) => {
 
 Dropdown.displayName = 'UltraDropdown';
 
-export default Dropdown;
+export default withStyle(Dropdown);
