@@ -4,7 +4,7 @@ import { layerStyles } from './trigger-styles';
 import { CSSTransition } from 'react-transition-group';
 import { MergedTriggerProps } from './trigger';
 import { useMergeProps } from '../utils/mergeProps';
-import usePortal from '../utils/Portal';
+import { usePortal } from 'winhooks';
 
 interface LayerProps extends MergedTriggerProps {
   childRef: MutableRefObject<HTMLElement | null> | undefined;
@@ -33,8 +33,6 @@ const Layer: ForwardRefRenderFunction<HTMLDivElement, LayerProps> = (p, ref) => 
     name,
     className,
   } = props;
-
-  if (getLayerContainer && !childRef?.current) return null;
   const { Portal } = usePortal({ id: getLayerContainer?.(childRef?.current) || name });
 
   return (

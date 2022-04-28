@@ -8,11 +8,10 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useClickOutSide } from '../utils/useClickOutSide';
+import { useClickOutSide, usePrevious } from 'winhooks';
 import { getPosition, Placement } from './placement';
 import Layer from './layer';
 import { useMergeProps } from '../utils/mergeProps';
-import usePrevious from '../utils/usePrevious';
 
 export type PositionRect = Omit<DOMRect, 'toJSON'>;
 

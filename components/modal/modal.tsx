@@ -6,7 +6,7 @@ import Button, { ButtonProps } from '../button';
 import { Close } from '@icon-park/react';
 import { useMergeProps } from '../utils/mergeProps';
 import clsx from 'clsx';
-import usePortal from '../utils/Portal';
+import { usePortal } from 'winhooks';
 
 type ModalButtonProps = Pick<ButtonProps, 'disabled' | 'loading' | 'type' | 'children'>;
 

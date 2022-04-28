@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import Trigger, { TriggerProps } from '../trigger';
+import { TriggerRef } from '../trigger/trigger';
 import { useMergeProps } from '../utils/mergeProps';
 import { tooltipStyles } from './tooltip-styles';
 
@@ -19,11 +20,14 @@ const defaultProps = {
   transitionClassName: 'ultra-tooltip-layer-fade',
 };
 
-const Tooltip: FC<TooltipProps> = p => {
+const Tooltip = forwardRef<any, TooltipProps>((p, r) => {
   const { title, ...props } = useMergeProps(defaultProps, p);
+  const triggerRef = useRef<TriggerRef>(null);
 
-  return <Trigger content={title} {...props} css={tooltipStyles(props)} />;
-};
+  useImperativeHandle(r, () => triggerRef.current?.layerElement, [triggerRef]);
+
+  return <Trigger content={title} ref={triggerRef} {...props} css={tooltipStyles(props)} />;
+});
 
 Tooltip.displayName = 'UltraTooltip';
 
