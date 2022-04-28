@@ -1,5 +1,6 @@
 import React from 'react';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 import { keyboardStyles } from './keyboard-styles';
 
 interface Props {
@@ -50,4 +51,4 @@ const Keyboard: React.FC<KeyboardProps> = p => {
 
 Keyboard.displayName = 'UltraKeyboard';
 
-export default Keyboard;
+export default withStyle(Keyboard);

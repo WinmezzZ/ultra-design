@@ -9,18 +9,18 @@ export const keyboardStyles = (props: KeyboardStylesProps) => {
   const { thirdBackgroundColor, borderColor } = props.theme[props.theme.mode];
 
   return css`
-    line-height: 2em;
+    line-height: 28px;
     text-align: center;
     display: inline-block;
     background-color: ${thirdBackgroundColor};
     border-radius: ${radius}px;
     border: 1px solid ${borderColor};
-    font-size: 14px;
-    min-height: 2em;
-    min-width: 2em;
+    min-height: 28px;
+    min-width: 28px;
     padding: 0 5px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+      'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     span {
-      font-size: 14px;
       text-align: center;
     }
     span + span {

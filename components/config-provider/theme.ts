@@ -48,7 +48,7 @@ export const defaultTheme: Theme = {
     errorColor: '#F53F3F',
   },
   light: {
-    textColor: '#000000',
+    textColor: '#555555',
     borderColor: '#d9d9d9',
     reverseTextColor: '#FFFFFF',
     backgroundColor: lightBg_1,
