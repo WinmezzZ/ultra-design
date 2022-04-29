@@ -18,12 +18,10 @@ export const drawerWrapperStyles = (props: DrawerStylesProps) => {
     .ultra-drawer {
       pointer-events: all;
       position: absolute;
-      right: 0;
-      height: 100%;
-      max-width: 90%;
       background-color: ${thirdBackgroundColor};
       padding: 20px;
       overflow: auto;
+      transition: transform 300ms cubic-bezier(0.1, 0.6, 0.1, 1);
       .ultra-drawer-header {
         display: flex;
         align-items: center;

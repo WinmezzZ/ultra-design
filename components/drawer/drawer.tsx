@@ -13,7 +13,7 @@ export type Placement = 'top' | 'left' | 'bottom' | 'right';
 
 export interface DrawerProps {
   /**
-   * @description.zh-CN 对话框标题
+   * @description.zh-CN 抽屉标题
    * @description.en-US drawer's title
    */
   title?: React.ReactNode;
@@ -29,23 +29,29 @@ export interface DrawerProps {
    */
   placement?: Placement;
   /**
-   * @description.zh-CN 对话框关闭时会触发此方法，比如点击取消按钮、点击关闭图标、按下 esc 键的时候
+   * @description.zh-CN 抽屉关闭时会触发此方法，比如点击取消按钮、点击关闭图标、按下 esc 键的时候
    * @description.en-US trigger when drawer closed, like clicked cancel button, close icon and pressed escape key
    */
   onClose?: (e: React.MouseEvent | KeyboardEvent) => void;
   /**
-   * @description.zh-CN 关闭前执行的方法，如果此方法返回 false，那么将会阻止对话框关闭，支持异步。用途：比如关闭前确认
+   * @description.zh-CN 关闭前执行的方法，如果此方法返回 false，那么将会阻止抽屉关闭，支持异步。用途：比如关闭前确认
    * @description.en-US do something before drawer close, return `false` will stop close drawer, support sync function
    */
-  beforeClose?: () => Promise<any>;
+  beforeClose?: () => any | Promise<any>;
   /**
-   * @description.zh-CN 对话框的宽度，除了百分比，也可以设置为固定的 px
+   * @description.zh-CN 抽屉的宽度，除了百分比，也可以设置为固定的 px
    * @description.en-US The width of the drawer, in addition to the percentage, can also be set to a fixed px
    * @default 200
    */
   width?: string | number;
   /**
-   * @description.zh-CN 是否可以通过键盘的 esc 按键关闭对话框
+   * @description.zh-CN 抽屉的高度，除了百分比，也可以设置为固定的 px
+   * @description.en-US The height of the drawer, in addition to the percentage, can also be set to a fixed px
+   * @default 200
+   */
+  height?: string | number;
+  /**
+   * @description.zh-CN 是否可以通过键盘的 esc 按键关闭抽屉
    * @description.en-US close drawer when press escape key on the keyboard
    * @default true
    */
@@ -74,8 +80,6 @@ export interface DrawerProps {
 
 const defaultProps = {
   placement: 'right',
-  width: 200,
-  showClose: true,
   keyboard: true,
   overlay: true,
   closeOnClickOverlay: true,
@@ -86,7 +90,18 @@ export type MergedDrawerrProps = typeof defaultProps & DrawerProps;
 export const transitionClassNames = 'ultra-drawer-transition';
 
 const Drawer: FC<DrawerProps> = p => {
-  const props = useMergeProps(defaultProps, p);
+  const props = useMergeProps(defaultProps, { ...p });
+
+  const getWidthOrHeight = useMemo(() => {
+    if (['top', 'bottom'].includes(props.placement)) {
+      return { height: 200 };
+    } else if (['left', 'right'].includes(props.placement)) {
+      return { width: 200 };
+    }
+
+    return { width: 200 };
+  }, [p.placement]);
+
   const {
     placement,
     title,
@@ -114,7 +129,7 @@ const Drawer: FC<DrawerProps> = p => {
   };
 
   const onClickOverlay = (e: React.MouseEvent<any>) => {
-    closeOnClickOverlay && onClose?.(e);
+    closeOnClickOverlay && closeHandler(e);
   };
 
   useEffect(() => {
@@ -140,7 +155,7 @@ const Drawer: FC<DrawerProps> = p => {
         className={clsx('ultra-drawer-wrapper', `ultra-drawer-wrapper--${placement}`, props.className)}
       >
         <CSSTransition in={visible} unmountOnExit timeout={300} classNames={transitionClassNames}>
-          <div className="ultra-drawer" css={transition} style={{ width: props.width }}>
+          <div className="ultra-drawer" css={transition} style={getWidthOrHeight}>
             <div className="ultra-drawer-header">
               {showClose && <Close className="ultra-drawer-header__close" onClick={closeHandler} />}
               {title && <h4 className="ultra-drawer-header__title">{title}</h4>}

@@ -5,6 +5,7 @@ export default function getDrawerTransform(placement: Placement, prefixClassName
   const placementData: Record<Placement, SerializedStyles> = {
     top: css`
       top: 0;
+      width: 100%;
       &.${prefixClassName}-enter {
         transform: translateY(-100%);
       }
@@ -36,17 +37,18 @@ export default function getDrawerTransform(placement: Placement, prefixClassName
     `,
     bottom: css`
       bottom: 0;
+      width: 100%;
       &.${prefixClassName}-enter {
-        transform: translateY(0);
+        transform: translateY(100%);
       }
       &.${prefixClassName}-enter-active {
-        transform: translateY(-100%);
+        transform: translateY(0);
       }
       &.${prefixClassName}-exit {
-        transform: translateY(-100%);
+        transform: translateY(0);
       }
       &.${prefixClassName}-exit-active {
-        transform: translateY(0);
+        transform: translateY(100%);
       }
     `,
     right: css`
@@ -57,14 +59,12 @@ export default function getDrawerTransform(placement: Placement, prefixClassName
       }
       &.${prefixClassName}-enter-active {
         transform: translateX(0);
-        transition: transform 300ms cubic-bezier(0.1, 0.6, 0.1, 1);
       }
       &.${prefixClassName}-exit {
         transform: translateX(0);
       }
       &.${prefixClassName}-exit-active {
         transform: translateX(100%);
-        transition: transform 300ms cubic-bezier(0.1, 0.6, 0.1, 1);
       }
     `,
   };
