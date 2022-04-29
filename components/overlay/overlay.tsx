@@ -1,4 +1,5 @@
 import { css, Global } from '@emotion/react';
+import clsx from 'clsx';
 import React, { FC } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import withStyle from '../utils/withStyle';
@@ -9,13 +10,13 @@ export interface OverlayProps {
   timeout?: number;
 }
 
-const Overlay: FC<OverlayProps> = props => {
-  const { visible, timeout } = props;
+const Overlay: FC<OverlayProps & React.HTMLAttributes<any>> = props => {
+  const { visible, timeout, className, ...rest } = props;
 
   return (
     <>
       <CSSTransition in={visible} unmountOnExit timeout={timeout!} classNames="ultra-overlay">
-        <div css={overlayStyle(props)} className="ultra-overlay">
+        <div css={overlayStyle(props)} className={clsx('ultra-overlay', className)} {...rest}>
           {visible && (
             <Global
               styles={css`
