@@ -2,6 +2,7 @@ import React, { MouseEvent } from 'react';
 import { dropdownTitleStyle } from './dropdown-styles';
 import clsx from 'clsx';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 
 export interface DropdownTitleProps {
   /**
@@ -36,4 +37,4 @@ const DropdownTitle = React.forwardRef(DropdownTitleComponent);
 
 DropdownTitle.displayName = 'UltraDropdownTitle';
 
-export default DropdownTitle;
+export default withStyle(DropdownTitle);

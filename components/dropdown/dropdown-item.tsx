@@ -2,6 +2,7 @@ import React, { MouseEvent } from 'react';
 import { dropdownItemStyle } from './dropdown-styles';
 import clsx from 'clsx';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 
 export interface DropdownItemProps {
   /**
@@ -51,4 +52,4 @@ const DropdownItem = React.forwardRef(DropdownItemComponent);
 
 DropdownItem.displayName = 'UltraDropdownItem';
 
-export default DropdownItem;
+export default withStyle(DropdownItem);

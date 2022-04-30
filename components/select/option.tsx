@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { ConfigProviderProps } from '../config-provider';
 import { fade } from '../utils/fade';
 import { useMergeProps } from '../utils/mergeProps';
+import withStyle from '../utils/withStyle';
 
 export interface OptionProps {
   /**
@@ -54,7 +55,7 @@ const Option: FC<OptionProps> = p => {
 
 Option.displayName = 'UltraSelectOption';
 
-export default Option;
+export default withStyle(Option);
 
 type OptionStylesProps = MergedOptionProps & ConfigProviderProps;
 
