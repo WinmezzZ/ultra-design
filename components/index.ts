@@ -53,3 +53,6 @@ export { default as Upload } from './upload';
 
 export type { DrawerProps } from './drawer';
 export { default as Drawer } from './drawer';
+
+export type { TabsProps } from './tabs';
+export { default as Tabs } from './tabs';
