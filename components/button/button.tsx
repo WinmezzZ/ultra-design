@@ -31,13 +31,6 @@ export interface Props extends Partial<ComponentCommonProps> {
   disabled?: boolean;
 
   /**
-   * @description.zh-CN 开启涟漪效果
-   * @description.en-US enable ripple effect
-   * @default true
-   */
-  effect?: boolean;
-
-  /**
    * @description.zh-CN 按钮状态
    * @description.en-US button status
    * @default true
@@ -49,15 +42,13 @@ type NativeAttrs = Omit<React.ButtonHTMLAttributes<any>, keyof Props>;
 
 export type ButtonProps = Props & NativeAttrs;
 
-const defaultProps = {
-  effect: true,
-};
+const defaultProps = {};
 
 export type MergedButtonProps = typeof defaultProps & Props;
 
 const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (p, ref) => {
   const props = useMergeProps(defaultProps, p);
-  const { children, onClick, loading, disabled, effect: _1, type, ...rest } = props;
+  const { children, onClick, loading, disabled, type, className, ...rest } = props;
 
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (loading || disabled) {
@@ -74,7 +65,7 @@ const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonP
       ref={ref}
       css={buttonStyles(props)}
       onClick={clickHandler}
-      className={clsx('ultra-button', `ultra-button--${type}`)}
+      className={clsx('ultra-button', `ultra-button--${type}`, disabled && 'ultra-button--disabled', className)}
       {...rest}
     >
       {loading && <LoadingIcon />}

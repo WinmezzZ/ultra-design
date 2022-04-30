@@ -87,10 +87,10 @@ const disabledStyles = (props: ButtonStyleProps) => {
 };
 
 export const buttonStyles = (props: ButtonStyleProps) => {
-  const { loading, disabled, type, effect } = props;
+  const { loading, disabled, type } = props;
   const { primaryColor } = props.theme.style;
 
-  const activeStyle = effect && !['text', 'pure'].includes(type as string) && !loading && !disabled ? true : false;
+  const activeStyle = type !== 'pure' && !loading && !disabled ? true : false;
 
   return css`
     height: ${buttonSizeStyleMap[props.size].height}px;
@@ -124,7 +124,7 @@ export const buttonStyles = (props: ButtonStyleProps) => {
         transition: transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
       }
     `};
-    &:not(.ultra-button--text, .ultra-button--pure):hover {
+    &:not(.ultra-button--text, .ultra-button--pure, .ultra-button--disabled):hover {
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     .ultra-button__text {
