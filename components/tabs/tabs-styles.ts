@@ -8,7 +8,7 @@ type TabsStylesProps = MergedTabsProps & ConfigProviderProps;
 export const tabsStyles = (props: TabsStylesProps) => {
   const { theme } = props;
   const { primaryColor, radius } = theme.style;
-  const { borderColor } = props.theme[props.theme.mode];
+  const { borderColor, disabledTextColor } = props.theme[props.theme.mode];
 
   return css`
     color: ${theme[theme.mode].textColor};
@@ -45,7 +45,7 @@ export const tabsStyles = (props: TabsStylesProps) => {
           transition: opacity, transform 200ms ease-in;
           opacity: 0;
         }
-        &:hover {
+        &:hover:not(&__disabled) {
           color: ${primaryColor};
         }
         &__active {
@@ -54,6 +54,11 @@ export const tabsStyles = (props: TabsStylesProps) => {
             opacity: 1;
             transform: scaleX(1);
           }
+        }
+        &__disabled {
+          cursor: not-allowed;
+          pointer-events: none;
+          color: ${disabledTextColor};
         }
       }
     }

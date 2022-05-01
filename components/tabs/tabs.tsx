@@ -62,7 +62,11 @@ const Tabs: React.FC<TabsProps> = p => {
       <div className="ultra-tabs-header">
         {tabList.map(tab => (
           <div
-            className={clsx('ultra-tabs-header-item', selfValue === tab.value && 'ultra-tabs-header-item__active')}
+            className={clsx(
+              'ultra-tabs-header-item',
+              tab.disabled && 'ultra-tabs-header-item__disabled',
+              selfValue === tab.value && 'ultra-tabs-header-item__active',
+            )}
             key={tab.value}
             onClick={() => clickHandler(tab.value)}
           >
