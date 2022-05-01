@@ -19,6 +19,11 @@ const style = (_props: ConfigProviderProps) => {
       padding: 0;
       text-decoration: none;
     }
+
+    .i-icon {
+      display: inline-flex;
+      align-items: center;
+    }
   `;
 };
 
