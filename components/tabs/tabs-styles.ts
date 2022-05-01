@@ -17,17 +17,18 @@ export const tabsStyles = (props: TabsStylesProps) => {
     padding: 16px;
     overflow: hidden;
     .ultra-tabs-header {
-      padding: 10px;
+      padding: 0 10px;
       display: flex;
       border-bottom: 1px solid ${borderColor};
       overflow-x: auto;
       overflow-y: hidden;
       &-item {
-        padding: 0 18px;
+        padding: 14px 18px;
         cursor: pointer;
         position: relative;
         display: inline-flex;
         white-space: nowrap;
+        transition: color 0.3s;
         &__icon {
           margin-right: 8px;
           display: inline-flex;
@@ -60,7 +61,6 @@ export const tabsStyles = (props: TabsStylesProps) => {
         }
         &__disabled {
           cursor: not-allowed;
-          pointer-events: none;
           color: ${disabledTextColor};
         }
       }

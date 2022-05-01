@@ -68,7 +68,7 @@ const Tabs: React.FC<TabsProps> = p => {
               selfValue === tab.value && 'ultra-tabs-header-item__active',
             )}
             key={tab.value}
-            onClick={() => clickHandler(tab.value)}
+            onClick={() => !tab.disabled && clickHandler(tab.value)}
           >
             {tab.icon && <div className="ultra-tabs-header-item__icon">{tab.icon}</div>}
             {tab.label}
