@@ -24,6 +24,12 @@ export const tabsStyles = (props: TabsStylesProps) => {
         padding: 0 18px;
         cursor: pointer;
         position: relative;
+        display: inline-flex;
+        &__icon {
+          margin-right: 8px;
+          display: inline-flex;
+          align-items: center;
+        }
 
         &:after {
           position: absolute;

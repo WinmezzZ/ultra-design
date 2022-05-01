@@ -66,6 +66,7 @@ const Tabs: React.FC<TabsProps> = p => {
             key={tab.value}
             onClick={() => clickHandler(tab.value)}
           >
+            {tab.icon && <div className="ultra-tabs-header-item__icon">{tab.icon}</div>}
             {tab.label}
           </div>
         ))}

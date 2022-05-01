@@ -34,7 +34,7 @@ export type MergedTabsItemProps = typeof defaultProps & TabsItemProps;
 
 const TabsItem: React.FC<TabsItemProps> = p => {
   const props = useMergeProps(defaultProps, p);
-  const { theme: _t, locale: _l, label: _, value: __, children, className, ...rest } = props;
+  const { theme: _t, locale: _l, label: _, value: __, children, icon: _icon, className, ...rest } = props;
 
   return (
     <div className={clsx('ultra-tabs-item', className)} {...rest} css={tabsItemStyles(props)}>
