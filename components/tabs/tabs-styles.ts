@@ -20,11 +20,14 @@ export const tabsStyles = (props: TabsStylesProps) => {
       padding: 10px;
       display: flex;
       border-bottom: 1px solid ${borderColor};
+      overflow-x: auto;
+      overflow-y: hidden;
       &-item {
         padding: 0 18px;
         cursor: pointer;
         position: relative;
         display: inline-flex;
+        white-space: nowrap;
         &__icon {
           margin-right: 8px;
           display: inline-flex;
