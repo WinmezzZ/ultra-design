@@ -116,7 +116,7 @@ interface ImageData extends BaseImageData {
 
 const uuid = () => URL.createObjectURL(new Blob()).substr(-36);
 
-interface UploadRef {
+export interface UploadRef {
   imageList: ImageData[];
 }
 
