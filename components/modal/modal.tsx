@@ -81,7 +81,7 @@ export interface ModalProps {
    */
   cancelButton?: ModalButtonProps | null;
   children?: React.ReactNode;
-  wrapperClassName?: string;
+  className?: string;
 }
 
 const defaultProps = {
@@ -94,8 +94,19 @@ export type MergedModalrProps = typeof defaultProps & ModalProps;
 
 const Modal: FC<ModalProps> = p => {
   const props = useMergeProps(defaultProps, p);
-  const { title, visible, onClose, onOk, confirmButton, cancelButton, keyboard, beforeClose, hideClose, children } =
-    props;
+  const {
+    title,
+    visible,
+    onClose,
+    onOk,
+    confirmButton,
+    cancelButton,
+    keyboard,
+    beforeClose,
+    hideClose,
+    className,
+    children,
+  } = props;
   const { Portal } = usePortal({ id: 'ultra-modal' });
   const { cancelText, okText } = props.locale.Modal;
   const confirmButtonProps: ModalButtonProps = Object.assign({}, { type: 'primary', children: okText }, confirmButton);
@@ -130,8 +141,8 @@ const Modal: FC<ModalProps> = p => {
     <Portal>
       <Overlay visible={visible} timeout={300} />
       <CSSTransition in={visible} unmountOnExit timeout={300} classNames="ultra-modal-wrapper">
-        <div css={modalWrapperStyles(props)} className={clsx('ultra-modal-wrapper', props.wrapperClassName)}>
-          <div className="ultra-modal">
+        <div css={modalWrapperStyles(props)} className="ultra-modal-wrapper">
+          <div className={clsx('ultra-modal', className)}>
             <div className="ultra-modal-header">
               {!hideClose && <Close className="ultra-modal-header__close" onClick={closeHandler} />}
               {title && <h4 className="ultra-modal-header__title">{title}</h4>}
