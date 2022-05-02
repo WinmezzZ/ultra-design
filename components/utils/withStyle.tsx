@@ -15,8 +15,6 @@ const style = (_props: ConfigProviderProps) => {
     font-size: 14px;
     ul,
     li {
-      margin: 0;
-      padding: 0;
       text-decoration: none;
     }
 
