@@ -1,6 +1,6 @@
 import { Close, Info, Plus } from '@icon-park/react';
 import { isNil } from 'lodash-es';
-import React, { ChangeEvent, useMemo, useRef, useState } from 'react';
+import React, { ChangeEvent, forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import Tooltip from '../tooltip';
 import { useMergeProps } from '../utils/mergeProps';
 import withStyle from '../utils/withStyle';
@@ -116,7 +116,11 @@ interface ImageData extends BaseImageData {
 
 const uuid = () => URL.createObjectURL(new Blob()).substr(-36);
 
-const Upload: React.FC<UploadProps> = p => {
+interface UploadRef {
+  imageList: ImageData[];
+}
+
+const Upload = forwardRef<UploadRef, UploadProps>((p, ref) => {
   const props = useMergeProps(defaultProps, p);
   const {
     fileList,
@@ -141,6 +145,14 @@ const Upload: React.FC<UploadProps> = p => {
   });
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useImperativeHandle(
+    ref,
+    () => ({
+      imageList,
+    }),
+    [imageList],
+  );
+
   const overCountNum = useMemo(() => {
     return imageList.filter(images => isNil(images.errorCode)).length - maxCount;
   }, [imageList, maxCount]);
@@ -155,8 +167,6 @@ const Upload: React.FC<UploadProps> = p => {
         fileErrorList.push('OVER_EXTENSTIONS');
         if (typeof onOverExtensions === 'function') {
           const overExtensions = await onOverExtensions(file.name, extensions);
-
-          console.log(overExtensions);
 
           if (overExtensions === 'continue') continue;
           else if (overExtensions === 'break') break;
@@ -285,7 +295,7 @@ const Upload: React.FC<UploadProps> = p => {
       {props.footer}
     </div>
   );
-};
+});
 
 Upload.displayName = 'UltraUpload';
 
