@@ -3,7 +3,7 @@ nav:
   title: Components
   path: /components
 group:
-  title: Data Display
+  title: 数据展示
   order: 3
 ---
 

@@ -56,3 +56,6 @@ export { default as Drawer } from './drawer';
 
 export type { TabsProps } from './tabs';
 export { default as Tabs } from './tabs';
+
+export type { LayoutProps } from './layout';
+export { default as Layout } from './layout';

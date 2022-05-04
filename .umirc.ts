@@ -54,6 +54,10 @@ const config = {
         padding: 0;
         list-style: none;
       }
+
+      [class*="ultra-layout-"] {
+        text-align: center;
+      }
     `
   ],
   apiParser: {
