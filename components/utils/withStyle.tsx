@@ -3,9 +3,9 @@ import { forwardRef, PropsWithChildren, useContext } from 'react';
 import { ConfigProviderProps } from '../config-provider';
 import { ConfigContext } from '../config-provider/config-provider';
 
-const style = (_props: ConfigProviderProps) => {
-  // const { theme } = props;
-  // const { mode } = theme;
+const style = (props: ConfigProviderProps) => {
+  const { theme } = props;
+  const { primaryColor } = theme.style;
 
   return css`
     * {
@@ -16,6 +16,10 @@ const style = (_props: ConfigProviderProps) => {
     ul,
     li {
       text-decoration: none;
+    }
+
+    a {
+      color: ${primaryColor};
     }
 
     .i-icon {
