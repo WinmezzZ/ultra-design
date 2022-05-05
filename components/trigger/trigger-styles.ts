@@ -27,6 +27,8 @@ export const layerStyles = (props: TriggerCSSProps) => {
       font-size: 14px;
       min-width: 30px;
       min-height: 16px;
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
     }
     .${props.name}__arrow {
       position: absolute;
@@ -95,6 +97,20 @@ export const layerStyles = (props: TriggerCSSProps) => {
         right: -6px;
         transform: translate(0, 0) rotate(180deg);
       }
+    }
+
+    div::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 10px;
+    }
+    div::-webkit-scrollbar-thumb {
+      border-radius: 6px;
+      border: 2px solid ${mode === 'dark' ? '#000' : '#fff'};
+      background-color: ${mode === 'dark' ? '#262626' : '#d8d8d8'};
+    }
+    div::-webkit-scrollbar-track {
+      background-color: transparent;
+      border-radius: 6px;
     }
   `;
 };
