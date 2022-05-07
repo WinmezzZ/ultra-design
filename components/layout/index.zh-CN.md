@@ -3,7 +3,7 @@ nav:
   title: 组件
   path: /components
 group:
-  title: Basic
+  title: 基本组件
   order: 0
 ---
 
