@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { menuStyles } from './menu-style';
 import clsx from 'clsx';
 import { SubMenuProps } from './sub-menu';
@@ -11,6 +11,11 @@ export interface Props {
    * @description.en-US Horizontal display, used for top navigation bar
    */
   horizontal?: boolean;
+  /**
+   * @description.zh-CN 选中的子菜单项
+   * @description.en-US selected menu item
+   */
+  selectedKey?: string;
   /**
    * @description.zh-CN 默认选中的子菜单项
    * @description.en-US default selected menu item
@@ -38,13 +43,18 @@ const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, React.Prop
   ref,
 ) => {
   const props = useMergeProps(defaultProps, p);
-  const { children, className, style, onClick, defaultSelectedKey, horizontal } = props;
+  const { children, className, style, onClick, defaultSelectedKey, selectedKey, horizontal } = props;
   const [activeSubMenu, setActiveSubMenu] = useState(defaultSelectedKey);
 
   const handleClick = (item: SubMenuProps) => {
     setActiveSubMenu(item.key);
     onClick?.(item.key!);
   };
+
+  useEffect(() => {
+    if (selectedKey === undefined) return;
+    setActiveSubMenu(selectedKey);
+  }, [selectedKey]);
 
   const renderItem = (item: any, props: SubMenuProps) => {
     const key = item.key.replace(/^.\$/, '');
