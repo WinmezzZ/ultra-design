@@ -30,7 +30,8 @@ import { AddIcon } from 'ultra-icon';
  * inline: true
  */
 import React, { useState, useRef } from 'react';
-import { Input, Button } from 'ultra-design';
+import { Input } from 'ultra-design';
+import { useDebounce } from 'winhooks';
 import { css } from '@emotion/react';
 import data from './icons.json';
 
@@ -39,6 +40,7 @@ const allKeys = Object.keys(data);
 
 export default function () {
   const [visibleKeys, setVisibleKeys] = useState(allKeys);
+  const debouncedVisibleKeys = useDebounce(visibleKeys, 300);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onSearch = () => {
@@ -53,13 +55,10 @@ export default function () {
   return (
     <div css={iconPageStyle}>
       <div className="search-form">
-        <Input className="search-input" ref={inputRef} onClear={onSearch} placeholder="Please Input..." clearable />
-        <Button type="primary" onClick={onSearch}>
-          Search
-        </Button>
+        <Input className="search-input" ref={inputRef} onChange={onSearch} placeholder="Please Input..." clearable />
       </div>
       <div className="icon-list">
-        {visibleKeys.map(d => (
+        {debouncedVisibleKeys.map(d => (
           <div className="icon-item" key={d}>
             <div className="icon-name">{iconsData[d].name}</div>
             <span className="icon-wrapper" dangerouslySetInnerHTML={{ __html: iconsData[d].svg }}></span>

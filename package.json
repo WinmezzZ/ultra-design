@@ -54,7 +54,7 @@
     "mitt": "^3.0.0",
     "prop-types": "^15.8.1",
     "react-transition-group": "^4.4.2",
-    "winhooks": "^0.0.2"
+    "winhooks": "^0.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
