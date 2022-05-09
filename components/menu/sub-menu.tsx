@@ -21,8 +21,6 @@ export interface SubMenuProps {
    */
   disabled?: boolean;
   className?: string;
-  style?: React.CSSProperties;
-  onClick?: () => void;
 }
 
 const defaultProps = {};

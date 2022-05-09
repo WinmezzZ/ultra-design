@@ -21,6 +21,7 @@ export interface DropdownItemProps {
    */
   disabled?: boolean;
   className?: string;
+  style?: React.CSSProperties;
   onClick?: (e: MouseEvent) => void;
 }
 
