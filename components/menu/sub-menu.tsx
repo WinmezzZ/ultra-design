@@ -21,6 +21,8 @@ export interface SubMenuProps {
    */
   disabled?: boolean;
   className?: string;
+  style?: React.CSSProperties;
+  onClick?: () => void;
 }
 
 const defaultProps = {};
@@ -32,14 +34,14 @@ const SubMenuComponent: React.ForwardRefRenderFunction<HTMLLIElement, React.Prop
   ref,
 ) => {
   const props = useMergeProps(defaultProps, p);
-  const { children, icon, disabled, className } = props;
+  const { children, icon, disabled, className, ...rest } = props;
 
   return (
     <li
-      {...props}
       ref={ref}
       className={clsx('ultra-sub-menu', disabled && 'ultra-sub-menu--disabled', className)}
       css={subMenuStyle(props)}
+      {...rest}
     >
       {icon}
       {children}
