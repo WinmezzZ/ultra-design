@@ -22,7 +22,7 @@ export interface DropdownItemProps {
   disabled?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  onClick?: (e: MouseEvent) => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 const defaultProps = {};

@@ -59,15 +59,19 @@ const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, React.Prop
   const renderItem = (item: any, props: SubMenuProps) => {
     const key = item.key.replace(/^.\$/, '');
 
+    const { className, onClick: selfClick } = props;
+
     return React.cloneElement(item, {
       ...props,
-      className: clsx(activeSubMenu === key && 'ultra-sub-menu--active'),
-      onClick: () =>
-        !props.disabled &&
+      className: clsx(activeSubMenu === key && 'ultra-sub-menu--active', className),
+      onClick: e => {
+        if (props.disabled) return;
         handleClick({
           ...props,
           key,
-        }),
+        });
+        selfClick?.(e);
+      },
     });
   };
 

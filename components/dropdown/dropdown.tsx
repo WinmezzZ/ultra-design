@@ -66,7 +66,7 @@ const Dropdown = forwardRef<any, DropdownProps>((p, r) => {
     const layer = triggerRef.current?.layerElement;
 
     if (!layer) return;
-    layer.querySelectorAll<HTMLDivElement>('.ultra-dropdown-item').forEach(item => {
+    layer.querySelectorAll<HTMLDivElement>('.ultra-dropdown-item, .ultra-sub-menu').forEach(item => {
       item.addEventListener('click', hideDropdown);
     });
   };

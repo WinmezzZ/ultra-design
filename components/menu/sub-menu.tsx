@@ -22,7 +22,7 @@ export interface SubMenuProps {
   disabled?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 const defaultProps = {};
