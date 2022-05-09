@@ -62,7 +62,7 @@ export default function () {
         {visibleKeys.map(d => (
           <div className="icon-item" key={d}>
             <div className="icon-name">{iconsData[d].name}</div>
-            <span dangerouslySetInnerHTML={{ __html: iconsData[d].svg }}></span>
+            <span className="icon-wrapper" dangerouslySetInnerHTML={{ __html: iconsData[d].svg }}></span>
           </div>
         ))}
       </div>
@@ -105,6 +105,12 @@ const iconPageStyle = css`
         color: #222;
         font-size: 12px;
         margin-bottom: 10px;
+      }
+      .icon-wrapper {
+        svg {
+          width: 24px;
+          height: 24px;
+        }
       }
     }
   }
