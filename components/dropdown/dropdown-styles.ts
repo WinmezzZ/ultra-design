@@ -32,6 +32,14 @@ export const dropdownStyles = (props: DropdownStylesProps) => {
       margin: 4px 0;
     }
 
+    .ultra-menu {
+      padding: 0;
+      .ultra-sub-menu {
+        margin-bottom: 0;
+        min-height: 32px;
+      }
+    }
+
     ${transitionSlide(props.transitionClassName, props.transitionTimeout)}
   `;
 };
