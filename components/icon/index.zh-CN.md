@@ -29,8 +29,11 @@ import { AddIcon } from 'ultra-icon';
 /**
  * inline: true
  */
-import React, { useState, useEffect } from 'react';
-import { Input, Loading } from 'ultra-design';
+import React, { useState, useEffect, useContext } from 'react';
+import { Input, Loading, Toast } from 'ultra-design';
+import { ConfigContext, ConfigProviderProps } from '../config-provider/config-provider';
+import copy from '../utils/copyToClipboard';
+import { fade } from '../utils/fade';
 import { useDebounce } from 'winhooks';
 import { css } from '@emotion/react';
 import data from './icons.json';
@@ -43,6 +46,7 @@ export default function () {
   const [keyword, setKeyword] = useState('');
   const [loading, setLoading] = useState(false);
   const debouncedKeyword = useDebounce(keyword, 300);
+  const configContext = useContext(ConfigContext);
 
   useEffect(() => {
     setLoading(true);
@@ -51,8 +55,14 @@ export default function () {
       setLoading(false);
     }, 50);
   }, [debouncedKeyword]);
+
+  const copyToClickboard = (name: string) => {
+    copy(name);
+    Toast.success('Copied Success');
+  };
+
   return (
-    <div css={iconPageStyle}>
+    <div css={iconPageStyle(configContext)}>
       <div className="search-form">
         <Input
           className="search-input"
@@ -64,9 +74,10 @@ export default function () {
       </div>
       <div className="icon-list">
         {visibleKeys.map(d => (
-          <div className="icon-item" key={d}>
+          <div className="icon-item" key={d} onClick={() => copyToClickboard(iconsData[d].camelCaseName)}>
             <div className="icon-name">{iconsData[d].name}</div>
             <span className="icon-wrapper" dangerouslySetInnerHTML={{ __html: iconsData[d].svg }}></span>
+            <div className="copy-text">点击复制 icon name</div>
           </div>
         ))}
         {loading && <Loading fill />}
@@ -75,51 +86,72 @@ export default function () {
   );
 }
 
-const iconPageStyle = css`
-  margin-top: 20px;
-  .search-form {
-    display: flex;
-    .search-input {
-      flex: 1;
-      margin-right: 10px;
+const iconPageStyle = (configContext: ConfigProviderProps) => {
+  const { theme } = configContext;
+  const { primaryColor } = theme.style;
+  const { backgroundColor, borderColor, textColor } = theme[theme.mode];
+  return css`
+    color: ${textColor};
+    margin-top: 20px;
+    .search-form {
+      display: flex;
+      .search-input {
+        flex: 1;
+        margin-right: 10px;
+      }
+      margin-bottom: 30px;
     }
-    margin-bottom: 30px;
-  }
-  .icon-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    .icon-item {
-      display: inline-flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 200px;
-      height: 100px;
-      background: #fff;
-      border: 1px solid #f0f0f0;
-      cursor: pointer;
-      overflow: hidden;
-      &:hover {
-        box-shadow: 0 1px 10px 0 rgb(0 0 0 / 25%);
+    .icon-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      .icon-item {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        height: 100px;
+        background: ${backgroundColor};
+        border: 1px solid ${borderColor};
+        cursor: pointer;
+        overflow: hidden;
+        transition: box-shadow 300ms;
+        &:hover {
+          box-shadow: 0 1px 10px 0 rgb(0 0 0 / 25%);
+          .icon-name {
+            color: ${primaryColor};
+          }
+          .copy-text {
+            display: block;
+            opacity: 1;
+          }
+        }
         .icon-name {
-          color: #13c2c2;
+          font-size: 12px;
+          margin-bottom: 10px;
+          transition: color 300ms;
         }
-      }
-      .icon-name {
-        color: #222;
-        font-size: 12px;
-        margin-bottom: 10px;
-      }
-      .icon-wrapper {
-        svg {
-          width: 24px;
-          height: 24px;
+        .icon-wrapper {
+          svg {
+            fill: currentColor;
+            width: 24px;
+            height: 24px;
+          }
+        }
+
+        .copy-text {
+          display: none;
+          color: ${fade(textColor, 0.6)};
+          margin-top: 5px;
+          opacity: 0;
+          font-size: 12px;
+          transition: opacity 300ms;
         }
       }
     }
-  }
-`;
+  `;
+};
 ```
 
 ## API
