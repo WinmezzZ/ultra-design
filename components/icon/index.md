@@ -29,8 +29,8 @@ import { AddIcon } from 'ultra-icon';
 /**
  * inline: true
  */
-import React, { useState, useRef } from 'react';
-import { Input } from 'ultra-design';
+import React, { useState, useEffect } from 'react';
+import { Input, Loading } from 'ultra-design';
 import { useDebounce } from 'winhooks';
 import { css } from '@emotion/react';
 import data from './icons.json';
@@ -40,30 +40,36 @@ const allKeys = Object.keys(data);
 
 export default function () {
   const [visibleKeys, setVisibleKeys] = useState(allKeys);
-  const debouncedVisibleKeys = useDebounce(visibleKeys, 300);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [keyword, setKeyword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const debouncedKeyword = useDebounce(keyword, 300);
 
-  const onSearch = () => {
-    if (!inputRef.current) return;
-
-    if (!inputRef.current.value) {
-      return setVisibleKeys(allKeys);
-    }
-
-    setVisibleKeys(allKeys.filter(k => k.includes(inputRef.current!.value)));
-  };
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setVisibleKeys(allKeys.filter(k => k.includes(debouncedKeyword)));
+      setLoading(false);
+    }, 50);
+  }, [debouncedKeyword]);
   return (
     <div css={iconPageStyle}>
       <div className="search-form">
-        <Input className="search-input" ref={inputRef} onChange={onSearch} placeholder="Please Input..." clearable />
+        <Input
+          className="search-input"
+          value={keyword}
+          onChange={value => setKeyword(value)}
+          placeholder="Please Input..."
+          clearable
+        />
       </div>
       <div className="icon-list">
-        {debouncedVisibleKeys.map(d => (
+        {visibleKeys.map(d => (
           <div className="icon-item" key={d}>
             <div className="icon-name">{iconsData[d].name}</div>
             <span className="icon-wrapper" dangerouslySetInnerHTML={{ __html: iconsData[d].svg }}></span>
           </div>
         ))}
+        {loading && <Loading fill />}
       </div>
     </div>
   );
