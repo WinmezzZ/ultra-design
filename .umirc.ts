@@ -66,6 +66,9 @@ const config = {
       // skipPropsWithName: ['title'],
       skipPropsWithoutDoc: true,
     },
+  },
+  mfsu: {
+    
   }
   
   // more config: https://d.umijs.org/config
