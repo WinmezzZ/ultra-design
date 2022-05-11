@@ -1,5 +1,5 @@
 import _ from 'lodash-es';
-import { cloneElement, createContext, forwardRef, isValidElement, useEffect } from 'react';
+import { cloneElement, createContext, forwardRef, isValidElement, PropsWithChildren, useEffect } from 'react';
 import en_US from '../locale/en_US';
 import Modal from '../modal';
 import Toast from '../toast';
@@ -54,7 +54,7 @@ export const ConfigContext = createContext<ConfigProviderProps>(configContextOpt
 
 export type PartialProviderConfig = DeepPartial<ConfigProviderProps>;
 
-const ConfigProvider = forwardRef((props, ref) => {
+const ConfigProvider = forwardRef<any, PropsWithChildren<PartialProviderConfig>>((props, ref) => {
   const { children, ...rest } = props;
 
   const config: ConfigProviderProps = _.merge({}, configContextOptions, rest);
