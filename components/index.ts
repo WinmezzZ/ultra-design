@@ -59,3 +59,6 @@ export { default as Tabs } from './tabs';
 
 export type { LayoutProps } from './layout';
 export { default as Layout } from './layout';
+
+export type { ColorPickerProps } from './color-picker';
+export { default as ColorPicker } from './color-picker';
