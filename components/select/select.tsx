@@ -6,7 +6,6 @@ import Option, { OptionProps } from './option';
 import { Down, Up } from '@icon-park/react';
 import Trigger from '../trigger';
 import { useMergeProps } from '../utils/mergeProps';
-import { useClickOutSide } from '@winme/react-hooks';
 import withStyle from '../utils/withStyle';
 
 export interface SelectProps {
@@ -76,6 +75,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   const [hoverIndex, setHoverIndex] = useState(-1);
   const [dropdownVisivle, setDropdownVisivle] = useState(false);
   const [focus, setFocus] = useState(false);
+
   const optionsData: React.PropsWithChildren<OptionProps>[] = children
     ? React.Children.toArray(children).map((item: any) => item.props)
     : options || [];
@@ -123,7 +123,6 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
       });
     }
 
-    setFocus(true);
     setDropdownVisivle(false);
   };
 
@@ -165,6 +164,12 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     // }
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (dropdownVisivle) {
+      e.preventDefault();
+    }
+  };
+
   const handleClear = () => {
     setInputValue('');
     setSelectValue(undefined);
@@ -175,78 +180,82 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   };
 
   const renderOptionItem = (option: any, props: OptionProps, index: number) => {
+    const { onClick: _onClick, onMouseEnter: _onMouseEnter, className, ...rest } = props;
+
     return React.cloneElement(option, {
-      ...props,
+      ...rest,
       key: index,
       className: clsx(
+        className,
         selectedIndex === index && 'ultra-select-option--active',
         hoverIndex === index && 'ultra-select-option--hover',
       ),
-      onClick: () => !props.disabled && handleChange(props, index),
-      onMouseEnter: () => {
+      onClick: e => {
+        _onClick?.(e);
+        !props.disabled && handleChange(props, index);
+      },
+      onMouseEnter: e => {
+        _onMouseEnter?.(e);
         setHoverIndex(index);
       },
     });
   };
 
-  useClickOutSide(selfRef, () => {
-    setFocus(false);
-  });
-
   return (
-    <Trigger
-      visible={dropdownVisivle}
-      onVisibleChange={v => setDropdownVisivle(v)}
-      showArrow={false}
-      placement="bottomLeft"
-      trigger="click"
-      content={
-        children
-          ? React.Children.toArray(children).map((child: any, i) => renderOptionItem(child, child.props, i))
-          : options?.map((option, i) => renderOptionItem(Option, option, i))
-      }
-      {...props}
-      name="ultra-select"
-      transitionClassName="ultra-select-layer-slide"
-      getLayerContainer={node => node?.parentNode as HTMLElement}
-      css={selectLayerStyles(props)}
+    <div
+      className={clsx([
+        'ultra-select',
+        className,
+        focus && 'ultra-select--focused',
+        disabled && 'ultra-select--disabled',
+      ])}
+      tabIndex={1}
+      style={style}
+      css={selectStyles(props)}
+      onKeyDown={handleKeyDown}
+      onMouseDown={handleMouseDown}
+      onFocus={() => setFocus(true)}
+      onBlur={() => setFocus(false)}
+      ref={selfRef}
     >
-      <div
-        className={clsx([
-          'ultra-select',
-          className,
-          focus && 'ultra-select--focused',
-          disabled && 'ultra-select--disabled',
-        ])}
-        tabIndex={0}
-        style={style}
-        css={selectStyles(props)}
-        onFocus={() => setFocus(true)}
-        onBlur={() => setFocus(false)}
-        onKeyDown={handleKeyDown}
-        ref={selfRef}
-      >
-        {filterable ? (
-          <Input
-            defaultValue={inputValue}
-            disabled={disabled}
-            readOnly
-            clearable={clearable}
-            placeholder={placeholder}
-            onClear={handleClear}
-            onFocus={() => setFocus(true)}
-            onBlur={() => setFocus(false)}
-          />
-        ) : (
-          <div className="ultra-select__selection">
-            {selectionLabel || <span className="ultra-select__placeholder">{placeholder}</span>}
-          </div>
-        )}
-        <div className="ultra-select__icon">
-          {dropdownVisivle ? <Up className="ultra-icon" /> : <Down className="ultra-icon" />}
+      <Trigger
+        triggerRef={selfRef}
+        visible={dropdownVisivle}
+        onVisibleChange={v => setDropdownVisivle(v)}
+        showArrow={false}
+        placement="bottomLeft"
+        trigger="click"
+        content={
+          children
+            ? React.Children.toArray(children).map((child: any, i) => renderOptionItem(child, child.props, i))
+            : options?.map((option, i) => renderOptionItem(Option, option, i))
+        }
+        {...props}
+        name="ultra-select"
+        transitionClassName="ultra-select-layer-slide"
+        getLayerContainer={node => node?.parentNode as HTMLElement}
+        css={selectLayerStyles(props)}
+      ></Trigger>
+      {filterable ? (
+        <Input
+          defaultValue={inputValue}
+          disabled={disabled}
+          readOnly
+          clearable={clearable}
+          placeholder={placeholder}
+          onClear={handleClear}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+        />
+      ) : (
+        <div className="ultra-select__selection">
+          {selectionLabel || <span className="ultra-select__placeholder">{placeholder}</span>}
         </div>
+      )}
+      <div className="ultra-select__icon">
+        {dropdownVisivle ? <Up className="ultra-icon" /> : <Down className="ultra-icon" />}
       </div>
-    </Trigger>
+    </div>
   );
 };
 
