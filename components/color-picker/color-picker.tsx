@@ -170,11 +170,15 @@ const ColorPicker: FC<ColorPickerProps> = p => {
   };
 
   useEffect(() => {
-    if (selfColor === undefined) return;
     const color = colorFormat === 'RGB' ? `rgb${showOpacity ? 'a' : ''}(${valueRGB.value})` : selfColor.hex;
 
     onChange?.(color);
   }, [selfColor, valueRGB.value, colorFormat, showOpacity]);
+
+  useEffect(() => {
+    if (value === undefined) return;
+    setSelfColor(transformColor('hex', value));
+  }, [value]);
 
   return (
     <Popover
