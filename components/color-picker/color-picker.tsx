@@ -159,21 +159,23 @@ const ColorPicker: FC<ColorPickerProps> = p => {
     const newColor = transformColor('hsv', newHsv).hex;
 
     setSelfColor(newColor);
-    setHsvColor({ ...hsvColor, s: (x / WIDTH) * 100, v: 100 - (y / HEIGHT) * 100 });
+    setHsvColor(newHsv);
   };
 
   const onHUEChange = ({ x }: Position) => {
-    const newColor = transformColor('hsv', { ...hsvColor, h: (x / WIDTH) * 360 }).hex;
+    const newHsv = { ...hsvColor, h: (x / WIDTH) * 360 };
+    const newColor = transformColor('hsv', newHsv).hex;
 
     setSelfColor(newColor);
-    setHsvColor({ ...hsvColor, h: (x / WIDTH) * 360 });
+    setHsvColor(newHsv);
   };
 
   const onOpacityChange = ({ x }: Position) => {
-    const newColor = transformColor('hsv', { ...hsvColor, a: x / WIDTH }).hex;
+    const newHsv = { ...hsvColor, a: x / WIDTH };
+    const newColor = transformColor('hsv', newHsv).hex;
 
     setSelfColor(newColor);
-    setHsvColor({ ...hsvColor, h: (x / WIDTH) * 360 });
+    setHsvColor(newHsv);
   };
 
   useEffect(() => {
