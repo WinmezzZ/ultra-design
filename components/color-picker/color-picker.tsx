@@ -6,7 +6,7 @@ import Popover from '../popover';
 import { useMergeProps } from '../utils/mergeProps';
 import withStyle from '../utils/withStyle';
 import { colorPickerStyles } from './color-picker-styles';
-import { hex2rgb, rgb2hsv, rgb2hex, transformColor, toRgb, toHex } from './color-transform';
+import { hex2rgb, rgb2hsv, rgb2hex, transformColor, toRgb } from './color-transform';
 import MoveContainer, { Position } from './move-container';
 import { validHex } from './utils';
 
@@ -69,10 +69,14 @@ const HEIGHT = 150;
 const ColorPicker: FC<ColorPickerProps> = p => {
   const props = useMergeProps(defaultProps, p);
   const { children, className, layerClassName, value, colorFormat, onChange, showOpacity, ...rest } = props;
-  const [selfColor, setSelfColor] = useState(toHex(value));
-
+  const [selfColor, setSelfColor] = useState(value);
   const rgbColor = useMemo(() => hex2rgb(selfColor), [selfColor]);
-  const hsvColor = useMemo(() => rgb2hsv(hex2rgb(selfColor)), [selfColor]);
+  const [hsvColor, setHsvColor] = useState(rgb2hsv(rgbColor));
+
+  useEffect(() => {
+    setHsvColor(rgb2hsv(rgbColor));
+  }, [rgbColor]);
+
   const saturationPosition = useMemo(
     () => ({
       x: (hsvColor.s / 100) * WIDTH,
@@ -102,12 +106,6 @@ const ColorPicker: FC<ColorPickerProps> = p => {
   const rgba = useMemo(() => {
     return `${rgb}, ${rgbColor.a?.toFixed(3) ?? 1}`;
   }, [rgb, rgbColor]);
-
-  // const opacityPosition = useMemo(() => {
-  //   return {
-  //     x: (hsvColor.a ?? 1) * 200,
-  //   };
-  // }, [hsvColor.a]);
 
   const getValueRGB = useMemo(
     () => ({
@@ -157,21 +155,25 @@ const ColorPicker: FC<ColorPickerProps> = p => {
   };
 
   const onSaturationChange = ({ x, y }: Position) => {
-    const newColor = transformColor('hsv', { ...hsvColor, s: (x / WIDTH) * 100, v: 100 - (y / HEIGHT) * 100 }).hex;
+    const newHsv = { ...hsvColor, s: (x / WIDTH) * 100, v: 100 - (y / HEIGHT) * 100 };
+    const newColor = transformColor('hsv', newHsv).hex;
 
     setSelfColor(newColor);
+    setHsvColor({ ...hsvColor, s: (x / WIDTH) * 100, v: 100 - (y / HEIGHT) * 100 });
   };
 
   const onHUEChange = ({ x }: Position) => {
     const newColor = transformColor('hsv', { ...hsvColor, h: (x / WIDTH) * 360 }).hex;
 
     setSelfColor(newColor);
+    setHsvColor({ ...hsvColor, h: (x / WIDTH) * 360 });
   };
 
   const onOpacityChange = ({ x }: Position) => {
     const newColor = transformColor('hsv', { ...hsvColor, a: x / WIDTH }).hex;
 
     setSelfColor(newColor);
+    setHsvColor({ ...hsvColor, h: (x / WIDTH) * 360 });
   };
 
   useEffect(() => {

@@ -12,7 +12,7 @@ interface HSV {
   a?: number;
 }
 
-type Color = {
+export type Color = {
   hex: string;
   rgb: RGB;
   hsv: HSV;
