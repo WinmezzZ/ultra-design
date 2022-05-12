@@ -299,15 +299,15 @@ const TriggerComponent = forwardRef<TriggerRef, PropsWithChildren<TriggerProps>>
 
     triggerRef.current.addEventListener('mouseenter', () => mouseEventHandler(true));
     triggerRef.current.addEventListener('mouseleave', () => mouseEventHandler(false));
-    triggerRef.current.addEventListener('click', clickEventHandler);
+    triggerRef.current.addEventListener('click', () => changeVisible(!visible));
 
     return () => {
       if (!triggerRef?.current) return;
       triggerRef.current.removeEventListener('mouseenter', () => mouseEventHandler(true));
       triggerRef.current.removeEventListener('mouseleave', () => mouseEventHandler(false));
-      triggerRef.current.removeEventListener('click', clickEventHandler);
+      triggerRef.current.removeEventListener('click', () => changeVisible(!visible));
     };
-  }, [triggerRef]);
+  }, [triggerRef, visible]);
 
   return (
     <>
