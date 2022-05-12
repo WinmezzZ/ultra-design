@@ -22,7 +22,7 @@ export interface OptionProps {
    * @description.en-US disabled status of option
    */
   disabled?: boolean;
-  onClick?: (value?: string | number) => void;
+  onClick?: (e?: React.MouseEvent) => void;
   onMouseEnter?: (e: React.MouseEvent) => void;
   className?: string;
   style?: React.CSSProperties;
@@ -34,11 +34,11 @@ export type MergedOptionProps = typeof defaultProps & OptionProps;
 
 const Option: FC<OptionProps> = p => {
   const props = useMergeProps(defaultProps, p);
-  const { label, value, disabled, children, onClick, onMouseEnter, className } = props;
+  const { label, disabled, children, onClick, onMouseEnter, className } = props;
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
     if (disabled) return;
-    onClick?.(value);
+    onClick?.(e);
   };
 
   return (
