@@ -45,16 +45,14 @@ use `rgb` color instead of `hex`
 
 ```jsx
 import React from 'react';
-import { ColorPicker, Button, ConfigProvider } from 'ultra-design';
+import { ColorPicker, Button } from 'ultra-design';
 
 export default () => {
   const [rgb, setRgb] = React.useState('rgb(41, 104, 34)');
   return (
     <div>
       <ColorPicker colorFormat="RGB" value={rgb} onChange={value => setRgb(value)}>
-        <ConfigProvider theme={{ style: { primaryColor: rgb } }}>
-          <Button type="primary">{rgb}</Button>
-        </ConfigProvider>
+        <Button style={{ backgroundColor: rgb, color: '#fff' }}>{rgb}</Button>
       </ColorPicker>
     </div>
   );

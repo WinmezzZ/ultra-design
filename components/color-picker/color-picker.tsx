@@ -6,7 +6,7 @@ import Popover from '../popover';
 import { useMergeProps } from '../utils/mergeProps';
 import withStyle from '../utils/withStyle';
 import { colorPickerStyles } from './color-picker-styles';
-import { hex2rgb, rgb2hsv, rgb2hex, transformColor, toRgb } from './color-transform';
+import { transformColor, toRgb } from './color-transform';
 import MoveContainer, { Position } from './move-container';
 import { validHex } from './utils';
 
@@ -69,57 +69,51 @@ const HEIGHT = 150;
 const ColorPicker: FC<ColorPickerProps> = p => {
   const props = useMergeProps(defaultProps, p);
   const { children, className, layerClassName, value, colorFormat, onChange, showOpacity, ...rest } = props;
-  const [selfColor, setSelfColor] = useState(value);
-  const rgbColor = useMemo(() => hex2rgb(selfColor), [selfColor]);
-  const [hsvColor, setHsvColor] = useState(rgb2hsv(rgbColor));
-
-  useEffect(() => {
-    setHsvColor(rgb2hsv(rgbColor));
-  }, [rgbColor]);
+  const [selfColor, setSelfColor] = useState(transformColor('hex', value));
 
   const saturationPosition = useMemo(
     () => ({
-      x: (hsvColor.s / 100) * WIDTH,
-      y: ((100 - hsvColor.v) / 100) * HEIGHT,
+      x: (selfColor.hsv.s / 100) * WIDTH,
+      y: ((100 - selfColor.hsv.v) / 100) * HEIGHT,
     }),
-    [hsvColor.s, hsvColor.v],
+    [selfColor.hsv.s, selfColor.hsv.v],
   );
 
   const huePosition = useMemo(
     () => ({
-      x: (hsvColor.h / 360) * WIDTH,
+      x: (selfColor.hsv.h / 360) * WIDTH,
     }),
-    [hsvColor.h],
+    [selfColor.hsv.h],
   );
 
   const opacityPosition = useMemo(
     () => ({
-      x: (hsvColor.a ?? 1) * WIDTH,
+      x: (selfColor.hsv.a ?? 1) * WIDTH,
     }),
-    [hsvColor.a],
+    [selfColor.hsv.a],
   );
 
   const rgb = useMemo(() => {
-    return `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
-  }, [rgbColor]);
+    return `${selfColor.rgb.r}, ${selfColor.rgb.g}, ${selfColor.rgb.b}`;
+  }, [selfColor.rgb]);
 
   const rgba = useMemo(() => {
-    return `${rgb}, ${rgbColor.a?.toFixed(3) ?? 1}`;
-  }, [rgb, rgbColor]);
+    return `${rgb}, ${selfColor.rgb.a?.toFixed(3) ?? 1}`;
+  }, [rgb, selfColor.rgb]);
 
   const getValueRGB = useMemo(
     () => ({
-      value: `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}${
-        showOpacity && rgbColor.a !== undefined ? `, ${rgbColor.a?.toFixed(3)}` : ''
+      value: `${selfColor.rgb.r}, ${selfColor.rgb.g}, ${selfColor.rgb.b}${
+        showOpacity && selfColor.rgb.a !== undefined ? `, ${selfColor.rgb.a?.toFixed(3)}` : ''
       }`,
       inputted: false,
     }),
-    [rgbColor, showOpacity],
+    [selfColor.rgb, showOpacity],
   );
 
   const [valueRGB, setValueRGB] = useState(getValueRGB);
 
-  const getValueHEX = useCallback(() => ({ value: selfColor, inputted: false }), [selfColor]);
+  const getValueHEX = useCallback(() => ({ value: selfColor.hex, inputted: false }), [selfColor]);
 
   const [valueHEX, setValueHEX] = useState(getValueHEX);
 
@@ -137,8 +131,8 @@ const ColorPicker: FC<ColorPickerProps> = p => {
 
   const changeHEX = (value: string) => {
     if (validHex(value)) {
-      setSelfColor(value);
-      setValueHEX({ ...valueHEX, value });
+      setSelfColor(transformColor('hex', value));
+      setValueHEX({ ...valueHEX, value: value });
     }
   };
 
@@ -148,39 +142,36 @@ const ColorPicker: FC<ColorPickerProps> = p => {
     if (value && (value.length === 3 || (showOpacity && value.length === 4))) {
       const rgb = toRgb(value);
 
-      setSelfColor(rgb2hex(rgb));
+      setSelfColor(transformColor('rgb', rgb));
     }
 
     setValueRGB({ ...valueRGB, value: v });
   };
 
   const onSaturationChange = ({ x, y }: Position) => {
-    const newHsv = { ...hsvColor, s: (x / WIDTH) * 100, v: 100 - (y / HEIGHT) * 100 };
-    const newColor = transformColor('hsv', newHsv).hex;
+    const newHsv = { ...selfColor.hsv, s: (x / WIDTH) * 100, v: 100 - (y / HEIGHT) * 100 };
+    const newColor = transformColor('hsv', newHsv);
 
     setSelfColor(newColor);
-    setHsvColor(newHsv);
   };
 
   const onHUEChange = ({ x }: Position) => {
-    const newHsv = { ...hsvColor, h: (x / WIDTH) * 360 };
-    const newColor = transformColor('hsv', newHsv).hex;
+    const newHsv = { ...selfColor.hsv, h: (x / WIDTH) * 360 };
+    const newColor = transformColor('hsv', newHsv);
 
     setSelfColor(newColor);
-    setHsvColor(newHsv);
   };
 
   const onOpacityChange = ({ x }: Position) => {
-    const newHsv = { ...hsvColor, a: x / WIDTH };
-    const newColor = transformColor('hsv', newHsv).hex;
+    const newHsv = { ...selfColor.hsv, a: x / WIDTH };
+    const newColor = transformColor('hsv', newHsv);
 
     setSelfColor(newColor);
-    setHsvColor(newHsv);
   };
 
   useEffect(() => {
     if (selfColor === undefined) return;
-    const color = colorFormat === 'RGB' ? `rgb${showOpacity ? 'a' : ''}(${valueRGB.value})` : selfColor;
+    const color = colorFormat === 'RGB' ? `rgb${showOpacity ? 'a' : ''}(${valueRGB.value})` : selfColor.hex;
 
     onChange?.(color);
   }, [selfColor, valueRGB.value, colorFormat, showOpacity]);
@@ -196,7 +187,7 @@ const ColorPicker: FC<ColorPickerProps> = p => {
                 className="ultra-color-picker__basic_color-item"
                 key={color}
                 style={{ backgroundColor: color }}
-                onClick={() => setSelfColor(color)}
+                onClick={() => setSelfColor(transformColor('hex', color))}
               ></div>
             ))}
           </div>
@@ -204,11 +195,11 @@ const ColorPicker: FC<ColorPickerProps> = p => {
           <MoveContainer
             onChange={onSaturationChange}
             className="ultra-color-picker_saturation"
-            style={{ backgroundColor: `hsl(${transformColor('hsv', hsvColor).hsv.h}, 100%, 50%)` }}
+            style={{ backgroundColor: `hsl(${transformColor('hsv', selfColor.hsv).hsv.h}, 100%, 50%)` }}
           >
             <div
               className="ultra-color-picker_saturation_cursor"
-              style={{ left: saturationPosition.x, top: saturationPosition.y, backgroundColor: selfColor }}
+              style={{ left: saturationPosition.x, top: saturationPosition.y, backgroundColor: selfColor.hex }}
             ></div>
           </MoveContainer>
           <MoveContainer onChange={onHUEChange} className="ultra-color-picker_hue">
@@ -216,7 +207,7 @@ const ColorPicker: FC<ColorPickerProps> = p => {
               className="ultra-color-picker_hue_cursor"
               style={{
                 left: huePosition.x,
-                backgroundColor: `hsl(${transformColor('hsv', hsvColor).hsv.h}, 100%, 50%)`,
+                backgroundColor: `hsl(${transformColor('hsv', selfColor.hsv).hsv.h}, 100%, 50%)`,
               }}
             ></div>
           </MoveContainer>
@@ -262,7 +253,7 @@ const ColorPicker: FC<ColorPickerProps> = p => {
         </div>
       }
     >
-      {children || <Button style={{ backgroundColor: selfColor }} />}
+      {children || <Button style={{ backgroundColor: selfColor.hex }} />}
     </Popover>
   );
 };
