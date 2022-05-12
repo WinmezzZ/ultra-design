@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react';
 import Layout from 'dumi-theme-default/src/layout';
 import { ConfigProvider } from '../../components';
 import { usePrefersColor } from 'dumi/theme';
-import { useColorScheme } from '@winme/react-hooks';
+import { useColorScheme } from 'winhooks';
 
 const CustomLayout: FC<any> = ({ children, ...props }) => {
   const [color] = usePrefersColor();
