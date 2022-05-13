@@ -38,6 +38,11 @@ export interface Props {
    */
   onChange?: (value: string, e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   /**
+   * @description.zh-CN 输入框标题
+   * @description.en-US input label
+   */
+  label?: React.ReactNode;
+  /**
    * @description.zh-CN CSS resize 属性
    * @description.en-US CSS resize attribute
    */
@@ -67,6 +72,7 @@ const TextareaComponent: React.ForwardRefRenderFunction<HTMLTextAreaElement, Tex
     placeholder,
     resize,
     className,
+    label,
     style,
     ...rest
   } = props;
@@ -88,32 +94,43 @@ const TextareaComponent: React.ForwardRefRenderFunction<HTMLTextAreaElement, Tex
     onChange?.(e.target.value, e);
   };
 
-  return (
-    <div className="ultra-textarea-with_label" css={textareaWithLabelStyles(props)}>
-      <div
-        className={clsx([
-          'ultra-textarea',
-          focus && 'ultra-textarea--focused',
-          disabled && 'ultra-textarea--disabled',
-          className,
-        ])}
-        css={textareaStyles(props)}
-        style={style}
-      >
-        <textarea
-          ref={ref}
-          disabled={disabled}
-          readOnly={readOnly}
-          placeholder={placeholder}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          {...(isControlledComponent ? { value: textareaValue } : { defaultValue })}
-          style={{ resize }}
-          {...rest}
-        />
+  const textareaRender = () => {
+    return (
+      <div className="ultra-textarea-with_label" css={textareaWithLabelStyles(props)}>
+        <div
+          className={clsx([
+            'ultra-textarea',
+            focus && 'ultra-textarea--focused',
+            disabled && 'ultra-textarea--disabled',
+            className,
+          ])}
+          css={textareaStyles(props)}
+          style={style}
+        >
+          <textarea
+            ref={ref}
+            disabled={disabled}
+            readOnly={readOnly}
+            placeholder={placeholder}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            {...(isControlledComponent ? { value: textareaValue } : { defaultValue })}
+            style={{ resize }}
+            {...rest}
+          />
+        </div>
       </div>
+    );
+  };
+
+  return label ? (
+    <div className="ultra-textarea-with_label" css={textareaWithLabelStyles(props)}>
+      {label && <span className="ultra-textarea__label">{label}</span>}
+      {textareaRender()}
     </div>
+  ) : (
+    textareaRender()
   );
 };
 

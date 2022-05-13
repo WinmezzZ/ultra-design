@@ -72,6 +72,7 @@ export const textareaWithLabelStyles = (props: TextareaStylesProps) => {
   const { textColor } = theme[theme.mode];
 
   return css`
+    flex: 1;
     font-size: 14px;
     display: flex;
     color: ${textColor};

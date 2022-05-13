@@ -72,11 +72,13 @@ export const inputWithLabelStyles = (props: InputStylesProps) => {
   const { textColor } = theme[theme.mode];
 
   return css`
+    flex: 1;
     font-size: 14px;
     display: flex;
     color: ${textColor};
 
     .ultra-input__label {
+      width: initial;
       white-space: nowrap;
       display: flex;
       align-items: center;
