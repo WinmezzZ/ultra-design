@@ -62,3 +62,6 @@ export { default as Layout } from './layout';
 
 export type { ColorPickerProps } from './color-picker';
 export { default as ColorPicker } from './color-picker';
+
+export type { TextareaProps } from './textarea';
+export { default as Textarea } from './textarea';
