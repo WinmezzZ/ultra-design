@@ -15,8 +15,7 @@ export const inputStyles = (props: InputStylesProps) => {
     list-style: none;
     position: relative;
     display: inline-flex;
-    width: 100%;
-    min-width: 0;
+    width: inherit;
     padding: 7px 11px;
     color: ${textColor};
     background-color: ${backgroundColor};
