@@ -11,7 +11,7 @@ export interface OptionProps {
    * @description.zh-CN 选项的内容
    * @description.en-US option's content
    */
-  label?: React.ReactNode;
+  label?: string;
   /**
    * @description.zh-CN 选项的值，必须是唯一的
    * @description.en-US option's value, must be unique

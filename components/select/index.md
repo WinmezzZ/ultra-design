@@ -9,6 +9,8 @@ group:
 
 ## Select
 
+## Basic Usage
+
 ```tsx
 import React from 'react';
 import { Select } from 'ultra-design';
@@ -69,6 +71,32 @@ export default () => {
         <Select.Option value="2" label="红楼梦" />
         <Select.Option value="3" label="西游记" />
         <Select.Option value="4" label="水浒传" />
+      </Select>
+    </div>
+  );
+};
+```
+
+## Filterable
+
+```tsx
+import React from 'react';
+import { Select } from 'ultra-design';
+
+export default () => {
+  return (
+    <div>
+      <Select filterable style={{ width: 200 }} placeholder="Please Input...">
+        <Select.Option disabled>JavaScript</Select.Option>
+        <Select.Option>Java</Select.Option>
+        <Select.Option>PHP</Select.Option>
+        <Select.Option disabled>Python</Select.Option>
+        <Select.Option>Ruby</Select.Option>
+        <Select.Option disabled>Dart </Select.Option>
+        <Select.Option disabled>C#</Select.Option>
+        <Select.Option>C++</Select.Option>
+        <Select.Option>Go</Select.Option>
+        <Select.Option disabled>Rust</Select.Option>
       </Select>
     </div>
   );

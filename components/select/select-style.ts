@@ -94,5 +94,12 @@ export const selectStyles = (props: SelectStylesProps) => {
       justify-content: center;
       align-items: center;
     }
+
+    input {
+      margin-left: 12px;
+      border: 0;
+      outline: 0;
+      flex: 1;
+    }
   `;
 };

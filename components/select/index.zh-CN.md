@@ -16,7 +16,7 @@ import { Select } from 'ultra-design';
 export default () => {
   return (
     <div>
-      <Select style={{ width: 200 }} placeholder="Please Select...">
+      <Select style={{ width: 200 }} placeholder="请选择...">
         <Select.Option disabled>JavaScript</Select.Option>
         <Select.Option>Java</Select.Option>
         <Select.Option>PHP</Select.Option>
@@ -33,10 +33,10 @@ export default () => {
 };
 ```
 
-## Controlled & Uncontrolled
+## 受控 & 非受控
 
-1. For **Controlled component**, you should provide `value` and `onChange` both into input props.
-2. For **Uncontrolled component**, you can get input value by `ref` props.
+1. 对于 **受控组件**, 你应该提供 `value` 和 `onChange` input 属性
+2. For **非受控组件**, 你可以通过 `ref` 获取 `value`
 
 ```jsx
 import React from 'react';
@@ -69,6 +69,32 @@ export default () => {
         <Select.Option value="2" label="红楼梦" />
         <Select.Option value="3" label="西游记" />
         <Select.Option value="4" label="水浒传" />
+      </Select>
+    </div>
+  );
+};
+```
+
+## 搜索过滤
+
+```tsx
+import React from 'react';
+import { Select } from 'ultra-design';
+
+export default () => {
+  return (
+    <div>
+      <Select filterable style={{ width: 200 }} placeholder="请输入...">
+        <Select.Option disabled>JavaScript</Select.Option>
+        <Select.Option>Java</Select.Option>
+        <Select.Option>PHP</Select.Option>
+        <Select.Option disabled>Python</Select.Option>
+        <Select.Option>Ruby</Select.Option>
+        <Select.Option disabled>Dart </Select.Option>
+        <Select.Option disabled>C#</Select.Option>
+        <Select.Option>C++</Select.Option>
+        <Select.Option>Go</Select.Option>
+        <Select.Option disabled>Rust</Select.Option>
       </Select>
     </div>
   );

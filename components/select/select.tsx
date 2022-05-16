@@ -1,9 +1,17 @@
-import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, {
+  isValidElement,
+  PropsWithChildren,
+  ReactElement,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { selectLayerStyles, selectStyles } from './select-style';
 import clsx from 'clsx';
-import Input from '../input';
 import Option, { OptionProps } from './option';
-import { Down, Up } from '@icon-park/react';
+import { Close, Down, Up } from '@icon-park/react';
 import Trigger from '../trigger';
 import { useMergeProps } from '../utils/mergeProps';
 import withStyle from '../utils/withStyle';
@@ -69,6 +77,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   } = props;
   const selfRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState('');
+  const [filterFinished, setFilterFinished] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [selectValue, setSelectValue] = useState<string | number | boolean | undefined>(
     'value' in props ? value : defaultValue,
@@ -115,6 +124,8 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
 
     setSelectedIndex(i);
     setSelectValue(finalValue as any);
+    setInputValue(data.label || (data.children as string));
+    setFilterFinished(true);
 
     if (!optionsData.length) return;
     const v = optionsData.find(o => o.value === optionValue);
@@ -166,6 +177,12 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     // }
   };
 
+  const handleInputKeyDown = (e: React.KeyboardEvent) => {
+    if (!['ArrowDown', 'ArrowUp', 'Enter'].includes(e.code)) {
+      e.stopPropagation();
+    }
+  };
+
   const handleMouseDown = (e: React.MouseEvent) => {
     if (dropdownVisivle) {
       e.preventDefault();
@@ -203,6 +220,36 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     });
   };
 
+  const filteredList = useMemo(() => {
+    const list = (React.Children.toArray(children) || options) as (
+      | ReactElement<PropsWithChildren<OptionProps>>
+      | OptionProps
+    )[];
+
+    const res =
+      !filterable || filterFinished
+        ? list
+        : list.filter((item: any) => {
+            const label_ = 'label' in item ? item.label : item.props.children;
+
+            if (!label_) return false;
+
+            if (typeof label_ !== 'string') {
+              console.error(
+                'Warning: When set `Select` filterable property as true, You must provide label or children props of `Option` string type',
+              );
+
+              return false;
+            }
+
+            return label_.toLowerCase().includes(inputValue.toLowerCase());
+          });
+
+    return res.map((item, index) => {
+      return isValidElement(item) ? renderOptionItem(item, item.props, index) : renderOptionItem(Option, item, index);
+    });
+  }, [inputValue, filterable, hoverIndex]);
+
   return (
     <div
       className={clsx([
@@ -231,11 +278,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
         showArrow={false}
         placement="bottomLeft"
         trigger="click"
-        content={
-          children
-            ? React.Children.toArray(children).map((child: any, i) => renderOptionItem(child, child.props, i))
-            : options?.map((option, i) => renderOptionItem(Option, option, i))
-        }
+        content={filteredList.length ? filteredList : <p style={{ textAlign: 'center' }}>No Data</p>}
         {...props}
         name="ultra-select"
         transitionClassName="ultra-select-layer-slide"
@@ -248,15 +291,12 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
         ]}
       ></Trigger>
       {filterable ? (
-        <Input
-          defaultValue={inputValue}
+        <input
+          onKeyDown={handleInputKeyDown}
+          onInput={e => setInputValue(e.currentTarget.value)}
+          value={inputValue}
           disabled={disabled}
-          readOnly
-          clearable={clearable}
           placeholder={placeholder}
-          onClear={handleClear}
-          onFocus={() => setFocus(true)}
-          onBlur={() => setFocus(false)}
         />
       ) : (
         <div className="ultra-select__selection">
@@ -264,7 +304,13 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
         </div>
       )}
       <div className="ultra-select__icon">
-        {dropdownVisivle ? <Up className="ultra-icon" /> : <Down className="ultra-icon" />}
+        {clearable ? (
+          <Close onClick={handleClear} />
+        ) : dropdownVisivle ? (
+          <Up className="ultra-icon" />
+        ) : (
+          <Down className="ultra-icon" />
+        )}
       </div>
     </div>
   );
