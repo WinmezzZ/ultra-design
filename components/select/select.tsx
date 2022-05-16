@@ -7,6 +7,7 @@ import { Down, Up } from '@icon-park/react';
 import Trigger from '../trigger';
 import { useMergeProps } from '../utils/mergeProps';
 import withStyle from '../utils/withStyle';
+import { css } from '@emotion/react';
 
 export interface SelectProps {
   /**
@@ -66,7 +67,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     className,
     style,
   } = props;
-  const selfRef = useRef<HTMLDivElement>(null);
+  const selfRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [selectValue, setSelectValue] = useState<string | number | boolean | undefined>(
@@ -75,6 +76,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   const [hoverIndex, setHoverIndex] = useState(-1);
   const [dropdownVisivle, setDropdownVisivle] = useState(false);
   const [focus, setFocus] = useState(false);
+  const [layerMinWidth, setLayerMinWidth] = useState('0');
 
   const optionsData: React.PropsWithChildren<OptionProps>[] = children
     ? React.Children.toArray(children).map((item: any) => item.props)
@@ -216,7 +218,11 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
       onMouseDown={handleMouseDown}
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
-      ref={selfRef}
+      ref={node => {
+        if (!node) return;
+        selfRef.current = node;
+        setLayerMinWidth(getComputedStyle(node).width);
+      }}
     >
       <Trigger
         triggerRef={selfRef}
@@ -234,7 +240,12 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
         name="ultra-select"
         transitionClassName="ultra-select-layer-slide"
         getLayerContainer={node => node?.parentNode as HTMLElement}
-        css={selectLayerStyles(props)}
+        css={[
+          selectLayerStyles(props),
+          css`
+            min-width: ${layerMinWidth};
+          `,
+        ]}
       ></Trigger>
       {filterable ? (
         <Input

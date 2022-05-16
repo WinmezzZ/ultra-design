@@ -23,6 +23,11 @@ export const selectLayerStyles = (props: SelectStylesProps) => {
           padding: 8px 0;
         }
       }
+
+      .${props.name}__content {
+        width: 100%;
+        max-height: 300px;
+      }
       ${transitionSlide('ultra-select-layer-slide')}
     }
   `;
@@ -37,6 +42,7 @@ export const selectStyles = (props: SelectStylesProps) => {
     display: inline-flex;
     align-items: center;
     height: 32px;
+    min-width: 140px;
     margin: 0;
     list-style: none;
     position: relative;
@@ -73,20 +79,20 @@ export const selectStyles = (props: SelectStylesProps) => {
       color: ${fade(textColor, 0.3)};
     }
 
-    .ultra-select__icon {
-      width: 32px;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
     &:not(&.ultra-input--disabled):hover {
       border-color: ${primaryColor};
     }
 
     .ultra-icon {
       display: inline-flex;
+    }
+
+    .ultra-select__icon {
+      width: 32px;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   `;
 };
