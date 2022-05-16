@@ -62,7 +62,7 @@ type OptionStylesProps = MergedOptionProps & ConfigProviderProps;
 const optionStyles = (props: OptionStylesProps) => {
   const { theme } = props;
   const { primaryColor } = theme.style;
-  const { disabledBgColor, disabledTextColor } = theme[theme.mode];
+  const { textColor, disabledBgColor, disabledTextColor, reverseBgColor } = theme[theme.mode];
 
   return css`
     display: flex;
@@ -86,8 +86,8 @@ const optionStyles = (props: OptionStylesProps) => {
       }
     }
     &:not(.ultra-select-option--disabled, .ultra-select-option--active).ultra-select-option--hover {
-      background-color: #f0f1f3;
-      color: #000000;
+      background-color: ${fade(reverseBgColor, 0.1)};
+      color: ${textColor};
     }
   `;
 };
