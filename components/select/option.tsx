@@ -22,7 +22,7 @@ export interface OptionProps {
    * @description.en-US disabled status of option
    */
   disabled?: boolean;
-  onClick?: (e?: React.MouseEvent) => void;
+  onClick?: (e: React.MouseEvent) => void;
   onMouseEnter?: (e: React.MouseEvent) => void;
   className?: string;
   style?: React.CSSProperties;

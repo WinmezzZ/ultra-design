@@ -1,7 +1,7 @@
 import React, {
   isValidElement,
-  PropsWithChildren,
-  ReactElement,
+  ReactNode,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -10,12 +10,14 @@ import React, {
 } from 'react';
 import { selectLayerStyles, selectStyles } from './select-style';
 import clsx from 'clsx';
-import Option, { OptionProps } from './option';
+import Option, { OptionProps as OptionPropsWithNoChild } from './option';
 import { Close, Down, Up } from '@icon-park/react';
 import Trigger from '../trigger';
 import { useMergeProps } from '../utils/mergeProps';
 import withStyle from '../utils/withStyle';
 import { css } from '@emotion/react';
+
+interface OptionProps extends React.PropsWithChildren<OptionPropsWithNoChild> {}
 
 export interface SelectProps {
   /**
@@ -34,7 +36,11 @@ export interface SelectProps {
    */
   placeholder?: string;
   clearable?: boolean;
-  filterable?: boolean;
+  /**
+   * @description.zh-CN 支持输入过滤，如果传入函数则可以自定义过滤方法
+   * @description.en-US supported Input filtering, and custom filtering methods can be used if pass in a function type
+   */
+  filterable?: boolean | ((keyword: string, option: OptionProps) => boolean);
   /**
    * @description.zh-CN 是否禁用
    * @description.en-US whether disable
@@ -45,11 +51,6 @@ export interface SelectProps {
    * @description.en-US triggered when selecting an option
    */
   onChange?: (value: any) => void;
-  /**
-   * @description.zh-CN option
-   * @description.en-US list of configuration items for options
-   */
-  options?: OptionProps[];
   className?: string;
   style?: React.CSSProperties;
 }
@@ -62,24 +63,12 @@ export type MergedSelectProps = typeof defaultProps & SelectProps;
 
 const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithChildren<SelectProps>> = (p, ref) => {
   const props = useMergeProps(defaultProps, p);
-  const {
-    disabled,
-    onChange,
-    value,
-    defaultValue,
-    placeholder,
-    clearable,
-    options,
-    filterable,
-    children,
-    className,
-    style,
-  } = props;
+  const { disabled, onChange, value, defaultValue, placeholder, clearable, filterable, children, className, style } =
+    props;
   const selfRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [filterFinished, setFilterFinished] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [selectValue, setSelectValue] = useState<string | number | boolean | undefined>(
+  const [selectValue, setSelectValue] = useState<string | number | boolean | ReactNode | undefined>(
     'value' in props ? value : defaultValue,
   );
   const [hoverIndex, setHoverIndex] = useState(-1);
@@ -87,21 +76,62 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   const [focus, setFocus] = useState(false);
   const [layerMinWidth, setLayerMinWidth] = useState('0');
 
-  const optionsData: React.PropsWithChildren<OptionProps>[] = children
-    ? React.Children.toArray(children).map((item: any) => item.props)
-    : options || [];
+  const selfFilterMethod = (option: OptionProps, withWarn?: boolean) => {
+    const label_ = 'label' in option ? option.label : typeof option.children === 'string' ? option.children : '';
+
+    if (!label_) return false;
+
+    if (typeof label_ !== 'string' && withWarn) {
+      console.error(
+        'Warning: When set `Select` filterable property as true, You must provide label or children props of `Option` string type',
+      );
+
+      return false;
+    }
+
+    return label_.toLowerCase().includes(inputValue.toLowerCase());
+  };
+
+  const filterMethod = useCallback(
+    (option: OptionProps) => {
+      if (typeof filterable === 'function') {
+        return filterable(inputValue, option);
+      } else {
+        return selfFilterMethod(option);
+      }
+    },
+    [filterable, inputValue],
+  );
+
+  const optionList: OptionProps[] = useMemo(() => {
+    const childs: OptionProps[] = [];
+
+    React.Children.toArray(children).forEach(child => {
+      if (isValidElement(child)) {
+        childs.push(child.props);
+      }
+    });
+
+    return childs;
+  }, []);
+
+  const filteredOptionList = useMemo(() => {
+    const filteredData = !filterable || filterFinished ? optionList : optionList.filter(filterMethod);
+
+    return filteredData;
+  }, [filterable, filterFinished, optionList, filterMethod]);
+
+  const selectIndex = filteredOptionList.findIndex(opt => (opt.value || opt.label || opt.children) === selectValue);
 
   const selectionLabel = useMemo(() => {
     if (!selectValue) return undefined;
 
-    const defaultOptionIndex = optionsData.findIndex(opt => (opt.value ?? (opt.children || opt.label)) === selectValue);
+    if (selectIndex >= 0) {
+      setHoverIndex(selectIndex);
 
-    if (defaultOptionIndex >= 0) {
-      setSelectedIndex(defaultOptionIndex);
-
-      return optionsData[defaultOptionIndex].children || optionsData[defaultOptionIndex].label;
+      return filteredOptionList[selectIndex].children || filteredOptionList[selectIndex].label;
     }
-  }, [selectValue]);
+  }, [selectValue, filteredOptionList]);
 
   useEffect(() => {
     setSelectValue(value);
@@ -117,18 +147,18 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     [selectValue],
   );
 
-  const handleChange = (data: React.PropsWithChildren<OptionProps>, i: number) => {
+  const handleChange = (data: React.PropsWithChildren<OptionProps>) => {
     const { value: optionValue } = data;
 
     const finalValue = optionValue ?? (data.children || data.label);
 
-    setSelectedIndex(i);
-    setSelectValue(finalValue as any);
-    setInputValue(data.label || (data.children as string));
+    setSelectValue(finalValue);
+    if (!data.label && typeof data.children === 'string') {
+      setInputValue(data.children);
+    }
     setFilterFinished(true);
 
-    if (!optionsData.length) return;
-    const v = optionsData.find(o => o.value === optionValue);
+    const v = filteredOptionList.find(o => o.value === optionValue);
 
     if (v) {
       setTimeout(() => {
@@ -141,40 +171,48 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     e.preventDefault();
-    const optsLen = optionsData.length;
+    const optsLen = filteredOptionList.length;
 
     if (disabled || !optsLen) return;
-    if (optionsData.every(o => o.disabled)) return;
+    if (filteredOptionList.every(o => o.disabled)) return;
 
     if (e.code === 'ArrowDown' && dropdownVisivle) {
       setHoverIndex(i => {
-        while (optionsData[(i + 1) % optsLen].disabled) {
+        while (filteredOptionList[(i + 1) % optsLen].disabled) {
           i += 1;
         }
+
+        console.log(document.getElementById(`ultra-select-option_${i}`));
+
+        document.getElementById(`ultra-select-option_${i}`)?.scrollIntoView(true);
 
         return (i + 1) % optsLen;
       });
     } else if (e.code === 'ArrowUp' && dropdownVisivle) {
       setHoverIndex(i => {
-        while (optionsData[(i - 1 + optsLen) % optsLen].disabled) {
+        while (filteredOptionList[(i - 1 + optsLen) % optsLen].disabled) {
           i -= 1;
         }
+
+        document.getElementById(`ultra-select-option_${i}`)?.scrollIntoView(false);
 
         return (i - 1 + optsLen) % optsLen;
       });
     } else if (e.code === 'Enter') {
-      setDropdownVisivle(!dropdownVisivle);
       const noHover = hoverIndex <= -1;
 
+      if (noHover) {
+        return;
+      }
+      setDropdownVisivle(!dropdownVisivle);
+
       if (dropdownVisivle && !noHover) {
-        handleChange(optionsData[hoverIndex], hoverIndex);
+        if (!filteredOptionList[hoverIndex]) {
+          return;
+        }
+        handleChange(filteredOptionList[hoverIndex]);
       }
     }
-
-    // TODO: for fix ref always null
-    // if (selfRef.current) {
-    //   selfRef.current.focus();
-    // }
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent) => {
@@ -189,6 +227,12 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     }
   };
 
+  const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+    setInputValue(e.currentTarget.value);
+    setDropdownVisivle(true);
+    setFilterFinished(false);
+  };
+
   const handleClear = () => {
     setInputValue('');
     setSelectValue(undefined);
@@ -198,57 +242,37 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     });
   };
 
-  const renderOptionItem = (option: any, props: OptionProps, index: number) => {
-    const { onClick: _onClick, onMouseEnter: _onMouseEnter, className, ...rest } = props;
+  useEffect(() => {
+    if (!dropdownVisivle && !filteredOptionList.length) {
+      if (typeof selectionLabel === 'string') {
+        setInputValue(selectionLabel);
+      }
+    }
+  }, [dropdownVisivle]);
 
-    return React.cloneElement(option, {
+  const renderOptionItem = (props: OptionProps, index: number) => {
+    const { onClick: _onClick, onMouseEnter: _onMouseEnter, className, ...rest } = props;
+    const idx = filteredOptionList.findIndex(opt => (opt.value || opt.children || opt.label) === selectValue);
+
+    return React.cloneElement(<Option />, {
       ...rest,
       key: index,
+      id: `ultra-select-option_${index}`,
       className: clsx(
         className,
-        selectedIndex === index && 'ultra-select-option--active',
+        idx === index && 'ultra-select-option--active',
         hoverIndex === index && 'ultra-select-option--hover',
       ),
-      onClick: e => {
+      onClick: (e: React.MouseEvent) => {
         _onClick?.(e);
-        !props.disabled && handleChange(props, index);
+        !props.disabled && handleChange(props);
       },
-      onMouseEnter: e => {
+      onMouseEnter: (e: React.MouseEvent) => {
         _onMouseEnter?.(e);
         setHoverIndex(index);
       },
     });
   };
-
-  const filteredList = useMemo(() => {
-    const list = (React.Children.toArray(children) || options) as (
-      | ReactElement<PropsWithChildren<OptionProps>>
-      | OptionProps
-    )[];
-
-    const res =
-      !filterable || filterFinished
-        ? list
-        : list.filter((item: any) => {
-            const label_ = 'label' in item ? item.label : item.props.children;
-
-            if (!label_) return false;
-
-            if (typeof label_ !== 'string') {
-              console.error(
-                'Warning: When set `Select` filterable property as true, You must provide label or children props of `Option` string type',
-              );
-
-              return false;
-            }
-
-            return label_.toLowerCase().includes(inputValue.toLowerCase());
-          });
-
-    return res.map((item, index) => {
-      return isValidElement(item) ? renderOptionItem(item, item.props, index) : renderOptionItem(Option, item, index);
-    });
-  }, [inputValue, filterable, hoverIndex]);
 
   return (
     <div
@@ -278,7 +302,13 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
         showArrow={false}
         placement="bottomLeft"
         trigger="click"
-        content={filteredList.length ? filteredList : <p style={{ textAlign: 'center' }}>No Data</p>}
+        content={
+          filteredOptionList.length ? (
+            filteredOptionList.map(renderOptionItem)
+          ) : (
+            <p style={{ textAlign: 'center' }}>No Data</p>
+          )
+        }
         {...props}
         name="ultra-select"
         transitionClassName="ultra-select-layer-slide"
@@ -293,14 +323,14 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
       {filterable ? (
         <input
           onKeyDown={handleInputKeyDown}
-          onInput={e => setInputValue(e.currentTarget.value)}
+          onInput={handleInput}
           value={inputValue}
           disabled={disabled}
           placeholder={placeholder}
         />
       ) : (
         <div className="ultra-select__selection">
-          {selectionLabel || <span className="ultra-select__placeholder">{placeholder}</span>}
+          {selectionLabel || selectValue || <span className="ultra-select__placeholder">{placeholder}</span>}
         </div>
       )}
       <div className="ultra-select__icon">
