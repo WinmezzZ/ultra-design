@@ -67,7 +67,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     props;
   const selfRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState('');
-  const [filterFinished, setFilterFinished] = useState(false);
+  const [filterFinished, setFilterFinished] = useState(true);
   const [selectValue, setSelectValue] = useState<string | number | boolean | ReactNode | undefined>(
     'value' in props ? value : defaultValue,
   );
@@ -76,18 +76,10 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
   const [focus, setFocus] = useState(false);
   const [layerMinWidth, setLayerMinWidth] = useState('0');
 
-  const selfFilterMethod = (option: OptionProps, withWarn?: boolean) => {
+  const selfFilterMethod = (option: OptionProps) => {
     const label_ = 'label' in option ? option.label : typeof option.children === 'string' ? option.children : '';
 
     if (!label_) return false;
-
-    if (typeof label_ !== 'string' && withWarn) {
-      console.error(
-        'Warning: When set `Select` filterable property as true, You must provide label or children props of `Option` string type',
-      );
-
-      return false;
-    }
 
     return label_.toLowerCase().includes(inputValue.toLowerCase());
   };
@@ -113,7 +105,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     });
 
     return childs;
-  }, []);
+  }, [children]);
 
   const filteredOptionList = useMemo(() => {
     const filteredData = !filterable || filterFinished ? optionList : optionList.filter(filterMethod);
@@ -129,9 +121,15 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     if (selectIndex >= 0) {
       setHoverIndex(selectIndex);
 
-      return filteredOptionList[selectIndex].children || filteredOptionList[selectIndex].label;
+      const { children, label } = filteredOptionList[selectIndex];
+
+      if (filterable) {
+        setInputValue(typeof children === 'string' ? children : label!);
+      }
+
+      return children || label;
     }
-  }, [selectValue, filteredOptionList]);
+  }, [selectValue, filteredOptionList, selectIndex]);
 
   useEffect(() => {
     setSelectValue(value);
@@ -182,10 +180,6 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
           i += 1;
         }
 
-        console.log(document.getElementById(`ultra-select-option_${i}`));
-
-        document.getElementById(`ultra-select-option_${i}`)?.scrollIntoView(true);
-
         return (i + 1) % optsLen;
       });
     } else if (e.code === 'ArrowUp' && dropdownVisivle) {
@@ -193,8 +187,6 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
         while (filteredOptionList[(i - 1 + optsLen) % optsLen].disabled) {
           i -= 1;
         }
-
-        document.getElementById(`ultra-select-option_${i}`)?.scrollIntoView(false);
 
         return (i - 1 + optsLen) % optsLen;
       });
@@ -215,10 +207,11 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
     }
   };
 
-  const handleInputKeyDown = (e: React.KeyboardEvent) => {
-    if (!['ArrowDown', 'ArrowUp', 'Enter'].includes(e.code)) {
-      e.stopPropagation();
-    }
+  const handleInputKeyDown = (_e: React.KeyboardEvent) => {
+    _e.stopPropagation();
+    // if (!['ArrowDown', 'ArrowUp', 'Enter', 'Backspace'].includes(e.code)) {
+    //   e.stopPropagation();
+    // }
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
