@@ -45,6 +45,12 @@ const plugins = [
         // { useEsModules: item.format === 'es' }
       ],
       'babel-plugin-typescript-to-proptypes',
+      [
+        'babel-plugin-react-remove-properties',
+        {
+          properties: ['theme', 'locale', 'size'],
+        },
+      ],
     ],
   }),
   resolve({
