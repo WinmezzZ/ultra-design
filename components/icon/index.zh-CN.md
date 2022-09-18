@@ -30,7 +30,7 @@ import { AddIcon } from 'ultra-icon';
  * inline: true
  */
 import React, { useState, useEffect, useContext } from 'react';
-import { Input, Loading, Toast } from 'ultra-design';
+import { Loading, Toast, Tabs } from 'ultra-design';
 import { ConfigContext, ConfigProviderProps } from '../config-provider/config-provider';
 import copy from '../utils/copyToClipboard';
 import { fade } from '../utils/fade';
@@ -38,12 +38,41 @@ import { useDebounce } from 'winhooks';
 import { css } from '@emotion/react';
 import data from './icons.json';
 
-const iconsData: any = data;
-const allKeys = Object.keys(data);
+interface Icon {
+  id: number;
+  name: string;
+  svg: string;
+  camelCaseName: string;
+  type: string;
+}
+
+const iconsData: Record<string, Icon> = data;
+const iconList: Icon[] = [];
+let count = 0;
+
+const dataMap: { iconType: string; icons: Icon[] }[] = [];
+const iconTypes: string[] = [];
+
+for (const key in iconsData) {
+  count++;
+  const iconItem = iconsData[key];
+  iconList.push(iconItem);
+  const iconType = iconItem.type;
+  if (!dataMap.some(item => item.iconType === iconType)) {
+    iconTypes.push(iconType);
+    dataMap.push({
+      iconType,
+      icons: [iconItem],
+    });
+  } else {
+    const index = dataMap.findIndex(item => item.iconType === iconType);
+    dataMap[index].icons.push(iconItem);
+  }
+}
 
 export default function () {
-  const [visibleKeys, setVisibleKeys] = useState(allKeys);
-  const [keyword, setKeyword] = useState('');
+  const [keyword] = useState('');
+  const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const debouncedKeyword = useDebounce(keyword, 300);
   const configContext = useContext(ConfigContext);
@@ -51,35 +80,44 @@ export default function () {
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
-      setVisibleKeys(allKeys.filter(k => k.includes(debouncedKeyword)));
+      // setVisibleTypeIcons(allKeys.filter(k => k.includes(debouncedKeyword)));
       setLoading(false);
     }, 50);
   }, [debouncedKeyword]);
 
+  let timer: NodeJS.Timeout | null = null;
+
   const copyToClickboard = (name: string) => {
+    Toast.clear();
+    if (copied && timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+    setCopied(true);
     copy(name);
-    Toast.success('Copied Success');
+    Toast.success('已复制');
+    timer = setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
   return (
     <div css={iconPageStyle(configContext)}>
-      <div className="search-form">
-        <Input
-          className="search-input"
-          value={keyword}
-          onChange={value => setKeyword(value)}
-          placeholder="请输入..."
-          clearable
-        />
-      </div>
       <div className="icon-list">
-        {visibleKeys.map(d => (
-          <div className="icon-item" key={d} onClick={() => copyToClickboard(iconsData[d].camelCaseName)}>
-            <div className="icon-name">{iconsData[d].name}</div>
-            <span className="icon-wrapper" dangerouslySetInnerHTML={{ __html: iconsData[d].svg }}></span>
-            <div className="copy-text">点击复制 icon name</div>
-          </div>
-        ))}
+        <Tabs value={dataMap[0].iconType}>
+          {dataMap.map(iconData => (
+            <Tabs.Item label={iconData.iconType} value={iconData.iconType}>
+              {iconData.icons.map(icon => (
+                <div className="icon-item" key={icon.id} onClick={() => copyToClickboard(icon.camelCaseName)}>
+                  <div className="icon-name">{icon.name}</div>
+                  <span className="icon-wrapper" dangerouslySetInnerHTML={{ __html: icon.svg }}></span>
+                  <div className="copy-text">点击复制 icon name</div>
+                </div>
+              ))}
+            </Tabs.Item>
+          ))}
+        </Tabs>
+
         {loading && <Loading fill />}
       </div>
     </div>
@@ -123,7 +161,6 @@ const iconPageStyle = (configContext: ConfigProviderProps) => {
             color: ${primaryColor};
           }
           .copy-text {
-            display: block;
             opacity: 1;
           }
         }
