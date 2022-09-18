@@ -9,6 +9,9 @@ group:
 
 # Icon 图标
 
+`ultra-icon` 图标集合，目前已经录入 2000 多个图标，支持 `npm` 方式导入，支持 `tree shaking`
+按需加载
+
 ## 安装
 
 ```bash
@@ -103,6 +106,9 @@ export default function () {
 
   return (
     <div css={iconPageStyle(configContext)}>
+      <h4>
+        全部 icon <span className="icon-count">（{count}个）</span>
+      </h4>
       <div className="icon-list">
         <Tabs value={dataMap[0].iconType}>
           {dataMap.map(iconData => (
@@ -131,6 +137,9 @@ const iconPageStyle = (configContext: ConfigProviderProps) => {
   return css`
     color: ${textColor};
     margin-top: 20px;
+    h4 {
+      margin-bottom: 10px;
+    }
     .search-form {
       display: flex;
       .search-input {

@@ -9,6 +9,9 @@ group:
 
 # Icon
 
+`ultra-icon` icon collections，At present, more than 2000 icons have been entered, support `npm` import, support `tree shaking`
+load on demand
+
 ## Install
 
 ```bash
@@ -103,6 +106,10 @@ export default function () {
 
   return (
     <div css={iconPageStyle(configContext)}>
+      <h4>
+        All icon counts <span className="icon-count">({count})</span>
+      </h4>
+
       <div className="icon-list">
         <Tabs value={dataMap[0].iconType}>
           {dataMap.map(iconData => (
@@ -131,6 +138,9 @@ const iconPageStyle = (configContext: ConfigProviderProps) => {
   return css`
     color: ${textColor};
     margin-top: 20px;
+    h4 {
+      margin-bottom: 10px;
+    }
     .search-form {
       display: flex;
       .search-input {
