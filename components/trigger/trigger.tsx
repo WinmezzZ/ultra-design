@@ -284,7 +284,7 @@ const TriggerComponent = forwardRef<TriggerRef, PropsWithChildren<TriggerProps>>
 
   const child =
     isElement &&
-    cloneElement(children, {
+    cloneElement(children as any, {
       ref: childRef,
       onMouseEnter: () => mouseEventHandler(true),
       onMouseLeave: () => mouseEventHandler(false),

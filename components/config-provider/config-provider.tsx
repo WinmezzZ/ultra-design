@@ -66,7 +66,7 @@ const ConfigProvider = forwardRef<any, PropsWithChildren<PartialProviderConfig>>
 
   if (!isValidElement(children)) return null;
 
-  return <ConfigContext.Provider value={config}>{cloneElement(children, { ref })}</ConfigContext.Provider>;
+  return <ConfigContext.Provider value={config}>{cloneElement(children as any, { ref })}</ConfigContext.Provider>;
 });
 
 export default ConfigProvider;
