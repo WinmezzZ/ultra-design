@@ -1,6 +1,6 @@
 {
   "name": "ultra-design",
-  "version": "0.2.6",
+  "version": "0.2.9",
   "keywords": [
     "react",
     "react-component",
@@ -16,6 +16,7 @@
   },
   "files": [
     "dist",
+    "lib",
     "es"
   ],
   "repository": {
@@ -24,9 +25,13 @@
     "branch": "master",
     "platform": "github"
   },
-  "main": "dist/index.js",
-  "module": "es/index.js",
-  "typings": "es/index.d.ts",
+  "main": "./lib/index.js",
+  "module": "./es/index.js",
+  "exports": {
+    "import": "./es/index.js",
+    "require": "./lib/index.js"
+  },
+  "typings": "./es/index.d.ts",
   "scripts": {
     "dev": "dumi dev",
     "build:doc": "dumi build",
@@ -55,7 +60,7 @@
     "mitt": "^3.0.0",
     "prop-types": "^15.8.1",
     "react-transition-group": "^4.4.2",
-    "winhooks": "^0.0.3"
+    "winhooks": "^0.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

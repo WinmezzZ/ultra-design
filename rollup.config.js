@@ -66,13 +66,13 @@ const plugins = [
 
 /** @type{import('rollup').OutputOptions[]}*/
 const output = [
-  // {
-  //   format: 'cjs',
-  //   preserveModules: true,
-  //   dir: 'lib',
-  //   exports: 'named',
-  //   globals,
-  // },
+  {
+    format: 'cjs',
+    preserveModules: true,
+    dir: 'lib',
+    exports: 'named',
+    globals,
+  },
   {
     format: 'es',
     preserveModules: true,
