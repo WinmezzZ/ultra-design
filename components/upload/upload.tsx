@@ -1,6 +1,6 @@
 import { Close, Info, Plus } from '@icon-park/react';
 import { isNil } from 'lodash-es';
-import React, { ChangeEvent, forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { ChangeEvent, forwardRef, ReactNode, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import Tooltip from '../tooltip';
 import { useMergeProps } from '../utils/mergeProps';
 import withStyle from '../utils/withStyle';
@@ -85,6 +85,7 @@ export interface UploadProps {
    */
   footer?: React.ReactNode;
   name?: string;
+  children?: ReactNode;
 }
 
 const defaultProps = {
@@ -120,7 +121,7 @@ export interface UploadRef {
   imageList: ImageData[];
 }
 
-const Upload = forwardRef<UploadRef, UploadProps>((p, ref) => {
+const UploadCompoent = forwardRef<UploadRef, UploadProps>((p, ref) => {
   const props = useMergeProps(defaultProps, p);
   const {
     fileList,
@@ -297,6 +298,8 @@ const Upload = forwardRef<UploadRef, UploadProps>((p, ref) => {
   );
 });
 
-Upload.displayName = 'UltraUpload';
+UploadCompoent.displayName = 'UltraUpload';
 
-export default withStyle(Upload);
+const Upload = withStyle(UploadCompoent);
+
+export default Upload;

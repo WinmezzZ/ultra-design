@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { forwardRef, ForwardRefExoticComponent, ReactNode, useContext } from 'react';
+import { ComponentType, forwardRef, ForwardRefExoticComponent, RefAttributes, useContext } from 'react';
 import { ConfigProviderProps } from '../config-provider';
 import { ConfigContext } from '../config-provider/config-provider';
 
@@ -29,8 +29,8 @@ const style = (props: ConfigProviderProps) => {
   `;
 };
 
-const withStyle = <T, P>(Component: React.ComponentType<P & { ref?: React.Ref<T> }>) => {
-  const StyledComponent = forwardRef<T, P & { children?: ReactNode }>((props, ref) => {
+const withStyle = <T extends ComponentType<any>>(Component: T) => {
+  const StyledComponent = forwardRef<any, any>((props, ref) => {
     const configContext = useContext<ConfigProviderProps>(ConfigContext);
 
     return <Component css={style(configContext)} {...props} ref={ref} />;
@@ -38,7 +38,11 @@ const withStyle = <T, P>(Component: React.ComponentType<P & { ref?: React.Ref<T>
 
   StyledComponent.displayName = Component.displayName;
 
-  return StyledComponent as ForwardRefExoticComponent<P & { ref?: React.Ref<T> }>;
+  type TP = T extends ComponentType<infer P & { ref?: React.Ref<infer T> }> ? { t: T; p: P } : any;
+
+  return StyledComponent as TP['t'] extends Record<any, any>
+    ? ForwardRefExoticComponent<TP['p'] & RefAttributes<TP['t']>>
+    : T;
 };
 
 export default withStyle;

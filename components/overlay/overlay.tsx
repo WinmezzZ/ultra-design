@@ -5,12 +5,16 @@ import { CSSTransition } from 'react-transition-group';
 import withStyle from '../utils/withStyle';
 import { overlayStyle } from './overlay-style';
 
-export interface OverlayProps {
+export interface Props {
   visible: boolean;
   timeout?: number;
 }
 
-const Overlay: FC<OverlayProps & React.HTMLAttributes<any>> = props => {
+type NativeAttrs = Omit<React.KeygenHTMLAttributes<any>, keyof Props>;
+
+export type OverlayProps = Props & NativeAttrs;
+
+const OverlayComponent: FC<OverlayProps> = props => {
   const { visible, timeout, className, ...rest } = props;
 
   return (
@@ -34,8 +38,10 @@ const Overlay: FC<OverlayProps & React.HTMLAttributes<any>> = props => {
   );
 };
 
-Overlay.defaultProps = {
+OverlayComponent.defaultProps = {
   timeout: 300,
 };
 
-export default withStyle(Overlay);
+const Overlay = withStyle(OverlayComponent);
+
+export default Overlay;

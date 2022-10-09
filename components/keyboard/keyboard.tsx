@@ -34,7 +34,7 @@ const defaultProps = {};
 
 export type MergedKeyboardProps = typeof defaultProps & Props;
 
-const Keyboard: React.FC<KeyboardProps> = p => {
+const KeyboardComponent: React.FC<KeyboardProps> = p => {
   const props = useMergeProps(defaultProps, p);
   const { command, shift, option, ctrl, children, className, ...rest } = props;
 
@@ -49,6 +49,8 @@ const Keyboard: React.FC<KeyboardProps> = p => {
   );
 };
 
-Keyboard.displayName = 'UltraKeyboard';
+KeyboardComponent.displayName = 'UltraKeyboard';
 
-export default withStyle(Keyboard);
+const Keyboard = withStyle(KeyboardComponent);
+
+export default Keyboard;
