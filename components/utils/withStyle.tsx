@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { FC, forwardRef, ReactNode, useContext } from 'react';
+import { forwardRef, ForwardRefExoticComponent, ReactNode, useContext } from 'react';
 import { ConfigProviderProps } from '../config-provider';
 import { ConfigContext } from '../config-provider/config-provider';
 
@@ -38,7 +38,7 @@ const withStyle = <T, P>(Component: React.ComponentType<P & { ref?: React.Ref<T>
 
   StyledComponent.displayName = Component.displayName;
 
-  return StyledComponent as FC<P>;
+  return StyledComponent as ForwardRefExoticComponent<P & { ref?: React.Ref<T> }>;
 };
 
 export default withStyle;
