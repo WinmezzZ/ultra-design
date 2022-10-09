@@ -1,4 +1,5 @@
 import React, {
+  forwardRef,
   isValidElement,
   ReactNode,
   useCallback,
@@ -61,7 +62,7 @@ const defaultProps = {
 
 export type MergedSelectProps = typeof defaultProps & SelectProps;
 
-const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithChildren<SelectProps>> = (p, ref) => {
+const SelectComponent = forwardRef<unknown, React.PropsWithChildren<SelectProps>>((p, ref) => {
   const props = useMergeProps(defaultProps, p);
   const { disabled, onChange, value, defaultValue, placeholder, clearable, filterable, children, className, style } =
     props;
@@ -291,6 +292,7 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
       <Trigger
         triggerRef={selfRef}
         visible={dropdownVisivle}
+        showDelay={0}
         onVisibleChange={v => setDropdownVisivle(v)}
         showArrow={false}
         placement="bottomLeft"
@@ -337,10 +339,10 @@ const SelectComponent: React.ForwardRefRenderFunction<unknown, React.PropsWithCh
       </div>
     </div>
   );
-};
+});
 
-const Select = React.forwardRef(SelectComponent);
+SelectComponent.displayName = 'UltraSelect';
 
-Select.displayName = 'UltraSelect';
+const Select = withStyle(SelectComponent);
 
-export default withStyle(Select);
+export default Select;

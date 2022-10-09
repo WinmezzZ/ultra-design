@@ -23,7 +23,7 @@ const defaultProps = {};
 
 export type MergedLayoutProps = typeof defaultProps & LayoutProps;
 
-const Layout = forwardRef<HTMLSelectElement, LayoutPropsWithNativeAttrs>((p, ref) => {
+const LayoutComponent = forwardRef<HTMLSelectElement, LayoutPropsWithNativeAttrs>((p, ref) => {
   const props = useMergeProps(defaultProps, p);
 
   const { className, style, ...rest } = props;
@@ -45,6 +45,8 @@ const Layout = forwardRef<HTMLSelectElement, LayoutPropsWithNativeAttrs>((p, ref
   );
 });
 
-Layout.displayName = 'UltraLayout';
+LayoutComponent.displayName = 'UltraLayout';
 
-export default withStyle(Layout);
+const Layout = withStyle(LayoutComponent);
+
+export default Layout;

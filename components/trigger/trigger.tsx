@@ -30,8 +30,8 @@ const defaultProps = {
   trigger: 'hover',
   defaultVisible: false,
   placement: 'bottom',
-  showDelay: 150,
-  hideDelay: 150,
+  showDelay: 50,
+  hideDelay: 50,
   offset: 12,
   showArrow: true,
   transitionClassName: 'ultra-trigger-layer-fade',
@@ -77,13 +77,13 @@ export interface TriggerProps {
   /**
    * @description.zh-CN 在提示显示前的延迟
    * @description.en-US delay before trigger is shown
-   * @default 100
+   * @default 50
    */
   showDelay?: number;
   /**
    * @description.zh-CN 关闭提示前的延迟
    * @description.en-US delay before trigger is hidden (only work in 'hover' mode)
-   * @default 100
+   * @default 50
    */
   hideDelay?: number;
   /**
@@ -327,4 +327,6 @@ const TriggerComponent = forwardRef<TriggerRef, PropsWithChildren<TriggerProps>>
 
 TriggerComponent.displayName = 'UltraTrigger';
 
-export default withStyle(TriggerComponent);
+const Trigger = withStyle(TriggerComponent);
+
+export default Trigger;

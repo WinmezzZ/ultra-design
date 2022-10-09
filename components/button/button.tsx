@@ -1,5 +1,5 @@
 import { buttonStyles } from './button-style';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import LoadingIcon from './loading-icon';
 import { useMergeProps } from '../utils/mergeProps';
 import { ComponentCommonProps } from '../config-provider/config-provider';
@@ -46,7 +46,7 @@ const defaultProps = {};
 
 export type MergedButtonProps = typeof defaultProps & Props;
 
-const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (p, ref) => {
+const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>((p, ref) => {
   const props = useMergeProps(defaultProps, p);
   const { children, onClick, loading, disabled, type, className, ...rest } = props;
 
@@ -73,10 +73,10 @@ const ButtonComponent: React.ForwardRefRenderFunction<HTMLButtonElement, ButtonP
       {/* {rippleElement} */}
     </button>
   );
-};
+});
 
-const Button = React.forwardRef(ButtonComponent);
+const Button = withStyle(ButtonComponent);
 
 Button.displayName = 'UltraButton';
 
-export default withStyle(Button);
+export default Button;

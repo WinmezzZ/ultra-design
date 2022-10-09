@@ -92,7 +92,7 @@ const defaultProps = {
 
 export type MergedModalrProps = typeof defaultProps & ModalProps;
 
-const Modal: FC<ModalProps> = p => {
+const ModalComponent: FC<ModalProps> = p => {
   const props = useMergeProps(defaultProps, p);
   const {
     title,
@@ -165,6 +165,8 @@ const Modal: FC<ModalProps> = p => {
   );
 };
 
-Modal.displayName = 'UltraModal';
+ModalComponent.displayName = 'UltraModal';
 
-export default withStyle(Modal);
+const Modal = withStyle(ModalComponent);
+
+export default Modal;

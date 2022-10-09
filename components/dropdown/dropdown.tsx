@@ -46,12 +46,10 @@ const defaultProps = {
   transitionClassName: 'ultra-dropdown-layer-slide',
   showArrow: false,
   transitionTimeout: 150,
-  showDelay: 50,
-  hideDelay: 50,
   placement: 'bottomLeft',
 };
 
-const Dropdown = forwardRef<any, DropdownProps>((p, r) => {
+const DropdownComponent = forwardRef<any, DropdownProps>((p, r) => {
   const props = useMergeProps(defaultProps, p);
   const triggerRef = useRef<TriggerRef>(null);
 
@@ -85,6 +83,8 @@ const Dropdown = forwardRef<any, DropdownProps>((p, r) => {
   return <Trigger onVisibleChange={onVisibleChange} ref={triggerRef} {...props} css={dropdownStyles(props)} />;
 });
 
-Dropdown.displayName = 'UltraDropdown';
+DropdownComponent.displayName = 'UltraDropdown';
 
-export default withStyle(Dropdown);
+const Dropdown = withStyle(DropdownComponent);
+
+export default Dropdown;

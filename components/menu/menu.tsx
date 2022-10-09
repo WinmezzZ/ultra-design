@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { menuStyles } from './menu-style';
 import clsx from 'clsx';
 import { SubMenuProps } from './sub-menu';
@@ -38,10 +38,7 @@ const defaultProps = {};
 
 export type MergedMenuProps = typeof defaultProps & MenuProps;
 
-const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, React.PropsWithChildren<MenuProps>> = (
-  p,
-  ref,
-) => {
+const MenuComponent = forwardRef<HTMLUListElement, React.PropsWithChildren<MenuProps>>((p, ref) => {
   const props = useMergeProps(defaultProps, p);
   const { children, className, style, onClick, defaultSelectedKey, selectedKey, horizontal } = props;
   const [activeSubMenu, setActiveSubMenu] = useState(defaultSelectedKey);
@@ -85,10 +82,10 @@ const MenuComponent: React.ForwardRefRenderFunction<HTMLUListElement, React.Prop
       {children && React.Children.toArray(children).map((child: any) => renderItem(child, child.props))}
     </ul>
   );
-};
+});
 
-const Menu = React.forwardRef(MenuComponent);
+MenuComponent.displayName = 'UltraMenu';
 
-Menu.displayName = 'UltraMenu';
+const Menu = withStyle(MenuComponent);
 
-export default withStyle(Menu);
+export default Menu;

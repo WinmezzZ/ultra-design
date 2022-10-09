@@ -112,7 +112,7 @@ export default function () {
       <div className="icon-list">
         <Tabs value={dataMap[0].iconType}>
           {dataMap.map(iconData => (
-            <Tabs.Item label={iconData.iconType} value={iconData.iconType}>
+            <Tabs.Item key={iconData.iconType} label={iconData.iconType} value={iconData.iconType}>
               {iconData.icons.map(icon => (
                 <div className="icon-item" key={icon.id} onClick={() => copyToClickboard(icon.camelCaseName)}>
                   <div className="icon-name">{icon.name}</div>

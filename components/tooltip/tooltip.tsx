@@ -21,7 +21,7 @@ const defaultProps = {
   transitionClassName: 'ultra-tooltip-layer-fade',
 };
 
-const Tooltip = forwardRef<any, TooltipProps>((p, r) => {
+const TooltipComponent = forwardRef<any, TooltipProps>((p, r) => {
   const { title, ...props } = useMergeProps(defaultProps, p);
   const triggerRef = useRef<TriggerRef>(null);
 
@@ -30,6 +30,8 @@ const Tooltip = forwardRef<any, TooltipProps>((p, r) => {
   return <Trigger content={title} ref={triggerRef} {...props} css={tooltipStyles(props)} />;
 });
 
-Tooltip.displayName = 'UltraTooltip';
+TooltipComponent.displayName = 'UltraTooltip';
 
-export default withStyle(Tooltip);
+const Tooltip = withStyle(TooltipComponent);
+
+export default Tooltip;

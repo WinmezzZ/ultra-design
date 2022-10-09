@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import { dropdownItemStyle } from './dropdown-styles';
 import clsx from 'clsx';
 import { useMergeProps } from '../utils/mergeProps';
@@ -49,8 +49,8 @@ const DropdownItemComponent: React.ForwardRefRenderFunction<
   );
 };
 
-const DropdownItem = React.forwardRef(DropdownItemComponent);
+const DropdownItem = withStyle(DropdownItemComponent);
 
 DropdownItem.displayName = 'UltraDropdownItem';
 
-export default withStyle(DropdownItem);
+export default DropdownItem;

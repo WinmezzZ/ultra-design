@@ -22,7 +22,7 @@ const Popover = forwardRef<any, PopoverProps>((p, r) => {
 
   useImperativeHandle(r, () => triggerRef.current?.layerElement, [triggerRef]);
 
-  return <Trigger ref={r} {...props} css={popoverStyles(props)} />;
+  return <Trigger ref={triggerRef} {...props} css={popoverStyles(props)} />;
 });
 
 Popover.displayName = 'UltraPopover';
