@@ -30,7 +30,12 @@ export interface Props {
    * @description.zh-CN 左侧图标
    * @description.en-US left icon
    */
-  icon?: React.ReactNode;
+  leftIcon?: React.ReactNode;
+  /**
+   * @description.zh-CN 右侧图标
+   * @description.en-US  icon
+   */
+  rightIcon?: React.ReactNode;
   /**
    * @description.zh-CN 值可以被清空
    * @description.en-US value can be cleared
@@ -85,7 +90,8 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
     defaultValue,
     disabled,
     readOnly,
-    icon,
+    leftIcon,
+    rightIcon,
     onFocus,
     onBlur,
     onChange,
@@ -150,8 +156,9 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
           className,
         ])}
         css={inputStyles(props)}
+        ref={ref}
       >
-        {icon && <span className="ultra-input__icon">{icon}</span>}
+        {leftIcon && <div className="ultra-input__icon ultra-input__left_icon">{leftIcon}</div>}
         <input
           ref={inputRef}
           type={type}
@@ -167,6 +174,7 @@ const InputComponent: React.ForwardRefRenderFunction<HTMLInputElement, InputProp
           onInput={handleInput}
           {...rest}
         />
+        {rightIcon && <div className="ultra-input__icon  ultra-input__right_icon">{rightIcon}</div>}
         {inputValue && clearable && (
           <span className="ultra-input__clear" onClick={handleClear}>
             {<Close className="ultra-icon" />}
