@@ -15,10 +15,13 @@ export type DateType = 'date' | 'month' | 'year';
 
 export interface DatePanelProps {
   date?: Date;
+  selectedDate?: Date;
   onSelect: (date: Date, type: 'date' | 'month' | 'year', value: number) => void;
 }
 
-const defaultProps = {};
+const defaultProps = {
+  selectedDate: new Date(),
+};
 
 export type MergedDatePanelProps = typeof defaultProps & DatePanelProps;
 
@@ -26,11 +29,11 @@ const weekdays = ['周一', '周二', '周三', '周四', '周五', '周六', '�
 
 const DatePanel: FC<DatePanelProps> = p => {
   const props = useMergeProps(defaultProps, p);
-  const { date = new Date(), onSelect } = props;
+  const { date, selectedDate, onSelect } = props;
 
-  const firstDay = startOfMonth(date).getDay();
+  const firstDay = startOfMonth(selectedDate).getDay();
 
-  const dayCounts = endOfMonth(date).getDate();
+  const dayCounts = endOfMonth(selectedDate).getDate();
 
   const emptyDays = new Array((7 - firstDay) % 7).fill(null);
 
@@ -41,24 +44,24 @@ const DatePanel: FC<DatePanelProps> = p => {
   const handleClickDay = (day: number | null) => {
     if (isNull(day)) return;
 
-    const newDate = set(date, { date: day });
+    const newDate = set(selectedDate, { date: day });
 
     onSelect(newDate, 'date', day);
   };
 
   const handleLastMonth = () => {
-    const newDate = addMonths(date, -1);
+    const newDate = addMonths(selectedDate, -1);
 
     onSelect(newDate, 'month', new Date().getMonth() - 1);
   };
 
   const handleNextMonth = () => {
-    const newDate = addMonths(date, 1);
+    const newDate = addMonths(selectedDate, 1);
 
     onSelect(newDate, 'month', new Date().getMonth() + 1);
   };
 
-  console.log(date, props.date);
+  console.log(date, selectedDate);
 
   return (
     <div css={datePanelStyles(props)}>
@@ -68,16 +71,16 @@ const DatePanel: FC<DatePanelProps> = p => {
         </div>
         <div className="ultra-date-panel__header_date">
           <YearPicker
-            date={props.date}
-            onSelect={d => onSelect(set(date, { year: d.getFullYear() }), 'year', d.getFullYear())}
+            date={date}
+            onSelect={d => onSelect(set(selectedDate, { year: d.getFullYear() }), 'year', d.getFullYear())}
           >
-            <div className="ultra-date-panel__header_date_month">{date.getFullYear()}年</div>
+            <div className="ultra-date-panel__header_date_month">{selectedDate.getFullYear()}年</div>
           </YearPicker>
           <MonthPicker
-            date={props.date}
-            onSelect={d => onSelect(set(date, { month: getMonth(d) }), 'month', d.getMonth())}
+            date={date}
+            onSelect={d => onSelect(set(selectedDate, { month: getMonth(d) }), 'month', d.getMonth())}
           >
-            <div className="ultra-date-panel__header_date_year">{getMonth(date) + 1}月</div>
+            <div className="ultra-date-panel__header_date_year">{getMonth(selectedDate) + 1}月</div>
           </MonthPicker>
         </div>
         <div className="ultra-date-panel__header_arrow" onClick={handleNextMonth}>
@@ -98,8 +101,8 @@ const DatePanel: FC<DatePanelProps> = p => {
             className={clsx([
               'ultra-date-panel__month_day_item',
               isNull(day) && 'hidden',
-              !isNull(day) && props.date && isSameDay(set(date, { date: day }), props.date) && 'active',
-              !isNull(day) && isToday(set(date, { date: day })) && 'today',
+              !isNull(day) && date && isSameDay(set(selectedDate, { date: day }), date) && 'active',
+              !isNull(day) && isToday(set(selectedDate, { date: day })) && 'today',
             ])}
             key={uuid()}
           >

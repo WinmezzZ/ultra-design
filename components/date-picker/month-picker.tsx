@@ -1,15 +1,16 @@
 import { css } from '@emotion/react';
 import clsx from 'clsx';
+import { ConfigProviderProps } from 'ultra-design';
 import { set } from 'date-fns';
 import React, { useState } from 'react';
-import { ConfigProviderProps } from '../config-provider';
-import Dropdown from '../dropdown';
 import { useMergeProps } from '../utils/mergeProps';
+import Dropdown from '../dropdown';
 
 const months = new Array(12).fill(null).map((_, index) => index + 1);
 
 interface MonthPickerProps {
-  date?: Date;
+  date: Date;
+  value?: Date;
   onSelect: (date: Date) => void;
 }
 
@@ -20,7 +21,7 @@ export type MergedMonthPickerProps = typeof defaultProps & MonthPickerProps;
 const MonthPicker: React.FC<MonthPickerProps> = p => {
   const props = useMergeProps({}, p);
   const [monthVisible, setMonthVisible] = useState(false);
-  const { children, date = new Date(), onSelect } = props;
+  const { children, date, value, onSelect } = props;
 
   return (
     <Dropdown
@@ -35,7 +36,7 @@ const MonthPicker: React.FC<MonthPickerProps> = p => {
               key={month}
               className={clsx(
                 'ultra-month-picker__item',
-                props.date && props.date.getMonth() === month && 'active',
+                value && value.getMonth() === month && 'active',
                 new Date().getMonth() === month && 'tomonth',
               )}
               onClick={() => onSelect(set(date, { month }))}

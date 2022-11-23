@@ -32,6 +32,7 @@ const DatePickerComponent = forwardRef<any, DatePickerProps>((p, ref) => {
   const { value, onChange, ...inputProps } = props;
   const [layerVisible, setLayerVisible] = useState(false);
   const [selfValue, setSelfValue] = useState(value);
+  const [selectedDate, setSeleteDate] = useState(selfValue);
 
   useEffect(() => {
     if (value === undefined) return;
@@ -54,7 +55,7 @@ const DatePickerComponent = forwardRef<any, DatePickerProps>((p, ref) => {
       placement="bottomLeft"
       content={
         <div css={datePickerStyles()}>
-          <DatePanel date={selfValue} onSelect={handleSelectDate} />
+          <DatePanel date={selfValue} selectedDate={selectedDate} onSelect={handleSelectDate} />
         </div>
       }
     >
@@ -62,7 +63,7 @@ const DatePickerComponent = forwardRef<any, DatePickerProps>((p, ref) => {
         rightIcon={<Calendar2LineIcon />}
         {...inputProps}
         readOnly
-        value={value ? format(value, 'yyyy-MM-dd') : ''}
+        value={value || selfValue ? format(value! || selfValue, 'yyyy-MM-dd') : ''}
       ></Input>
     </Dropdown>
   );

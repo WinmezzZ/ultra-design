@@ -9,7 +9,8 @@ import { useMergeProps } from '../utils/mergeProps';
 const years = new Array(99).fill(null).map((_, index) => index + 1 + new Date().getFullYear() - 50);
 
 interface YearPickerProps {
-  date?: Date;
+  date: Date;
+  value?: Date;
   onSelect: (date: Date) => void;
 }
 
@@ -20,7 +21,7 @@ export type MergedYearPickerProps = typeof defaultProps & YearPickerProps;
 const YearPicker: React.FC<YearPickerProps> = p => {
   const props = useMergeProps({}, p);
   const [yearVisible, setYearVisible] = useState(false);
-  const { children, date = new Date(), onSelect } = props;
+  const { children, date, value, onSelect } = props;
 
   useEffect(() => {
     if (!yearVisible) return;
@@ -51,7 +52,7 @@ const YearPicker: React.FC<YearPickerProps> = p => {
               key={year}
               className={clsx(
                 'ultra-year-picker__item',
-                props.date && props.date.getFullYear() === year && 'active',
+                value && value.getFullYear() === year && 'active',
                 new Date().getFullYear() === year && 'toyear',
               )}
               onClick={() => onSelect(set(date, { year }))}

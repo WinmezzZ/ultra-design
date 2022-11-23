@@ -25,7 +25,7 @@ const entryInput = path.resolve('components/index.ts');
 
 componentEnties.push(entryInput);
 
-/** @type{import('rollup').Plugin[] */
+/** @type{import('rollup').Plugin[]} */
 const plugins = [
   babel({
     exclude: 'node_modules/**',
@@ -92,7 +92,7 @@ const output = [
 ];
 
 const configs = output.map(item => {
-  /** @type{import('rollup').RollupOptions*/
+  /** @type{import('rollup').RollupOptions} */
   const config = {
     external: item.format === 'umd' ? external : esExtelrnals,
     input: item.format === 'umd' ? entryInput : componentEnties,
