@@ -1,6 +1,6 @@
 {
   "name": "ultra-design",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "keywords": [
     "react",
     "react-component",
@@ -63,7 +63,7 @@
     "react-transition-group": "^4.4.2",
     "ultra-icon": "^0.0.9",
     "ultra-icons": "^0.0.10",
-    "winhooks": "^0.0.4"
+    "winhooks": "^0.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
