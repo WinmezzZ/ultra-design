@@ -15,13 +15,14 @@ export const tabsStyles = (props: TabsStylesProps) => {
     border-radius: ${radius}px;
     border: 1px solid ${borderColor};
     padding: 16px;
-    overflow: hidden;
     .ultra-tabs-header {
       padding: 0 10px;
       display: flex;
       border-bottom: 1px solid ${borderColor};
       overflow-x: auto;
       overflow-y: hidden;
+      overflow: hidden;
+      position: relative;
       &-item {
         padding: 14px 18px;
         cursor: pointer;
@@ -35,34 +36,44 @@ export const tabsStyles = (props: TabsStylesProps) => {
           align-items: center;
         }
 
-        &:after {
-          position: absolute;
-          content: ' ';
-          bottom: -11px;
-          left: 0;
-          right: 0;
-          width: 100%;
-          height: 2px;
-          border-radius: 4px;
-          transform: scaleX(0.8);
-          background-color: ${primaryColor};
-          transition: opacity, transform 200ms ease-in;
-          opacity: 0;
-        }
         &:hover:not(&__disabled) {
           color: ${primaryColor};
+        }
+
+        &:after {
+          transform: scaleX(1);
+          .ultra-tabs-header-item__dir--left {
+            transform-origin: left;
+          }
+          .ultra-tabs-header-item__dir--right {
+            transform-origin: right;
+          }
         }
         &__active {
           color: ${primaryColor};
           &:after {
-            opacity: 1;
             transform: scaleX(1);
+            .ultra-tabs-header-item__dir--left {
+              transform-origin: left;
+            }
+            .ultra-tabs-header-item__dir--right {
+              transform-origin: right;
+            }
           }
         }
         &__disabled {
           cursor: not-allowed;
           color: ${disabledTextColor};
         }
+      }
+
+      &-sub {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 1px;
+        transform: scaleX(0);
+        background-color: ${primaryColor};
       }
     }
 
