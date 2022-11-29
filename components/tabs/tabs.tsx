@@ -8,6 +8,23 @@ import withStyle from '../utils/withStyle';
 import { TabsItemProps } from './tabs-item';
 import { tabsStyles } from './tabs-styles';
 
+const transitionStyles = {
+  entering: {
+    opacity: 1,
+    transition: `transform 0ms, opacity 150ms, width 0ms`,
+  },
+  entered: {
+    opacity: 1,
+    transition: `transform 150ms 0ms, opacity 150ms 0ms, width 150ms`,
+  },
+  exiting: {
+    opacity: 0,
+    transition: `transform 0ms, opacity 150ms, width 0ms`,
+  },
+  exited: { opacity: 0 },
+  unmounted: {},
+};
+
 interface Props {
   /**
    * @description.zh-CN 默认值
@@ -65,14 +82,13 @@ const Tabs: React.FC<TabsProps> = p => {
     });
   }, [tabItems.length]);
 
-  const navActiveStyle: CSSProperties = { opacity: 0 };
-
-  if (navRect && selectedRect) {
-    navActiveStyle.width = selectedRect.width * 0.8;
-    navActiveStyle.transform = `translateX(calc(${selectedRect.left - navRect.left}px + 10%))`;
-    navActiveStyle.opacity = 1;
-    navActiveStyle.transition = `transform 150ms 0ms, opacity 150ms 150ms, width 150ms`;
-  }
+  const navActiveStyle: CSSProperties =
+    navRect && selectedRect
+      ? {
+          width: selectedRect.width * 0.8,
+          transform: `translateX(calc(${selectedRect.left - navRect.left}px + 10%))`,
+        }
+      : {};
 
   useEffect(() => {
     if (typeof value === 'undefined') return;
@@ -105,9 +121,6 @@ const Tabs: React.FC<TabsProps> = p => {
               'ultra-tabs-header-item',
               tab.disabled && 'ultra-tabs-header-item__disabled',
               selfValue === tab.value && 'ultra-tabs-header-item__active',
-              // currentIndex.current >= index
-              //   ? 'ultra-tabs-header-item__dir--right'
-              //   : 'ultra-tabs-header-item__dir--left',
             )}
             key={tab.value}
             onClick={() => handleTabClick(tab, index)}
@@ -117,7 +130,17 @@ const Tabs: React.FC<TabsProps> = p => {
             {tab.label}
           </div>
         ))}
-        <div className="ultra-tabs-header-sub" style={navActiveStyle}></div>
+        <CSSTransition in={selectedRect != null} timeout={300}>
+          {state => (
+            <div
+              className="ultra-tabs-header-sub"
+              style={{
+                ...navActiveStyle,
+                ...transitionStyles[state],
+              }}
+            />
+          )}
+        </CSSTransition>
       </div>
       <div className="ultra-tabs-content">
         {tabItems.map((child: any) => {

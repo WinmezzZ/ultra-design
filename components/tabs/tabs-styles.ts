@@ -93,24 +93,24 @@ export const tabsStyles = (props: TabsStylesProps) => {
 
     .ultra-tabs-item-transition-enter {
       opacity: 0;
-      transform: scale(1.1);
+      /* transform: scale(1.1); */
     }
 
     .ultra-tabs-item-transition-enter-active {
       opacity: 0.8;
-      transform: scale(1);
-      transition: opacity 300ms, transform 300ms;
+      /* transform: scale(1); */
+      transition: opacity 300ms;
     }
 
     .ultra-tabs-item-transition-exit {
       opacity: 1;
-      transform: scale(1);
+      /* transform: scale(1); */
     }
 
     .ultra-tabs-item-transition-exit-active {
       opacity: 0;
       transform: scale(0.9);
-      transition: opacity 300ms, transform 300ms;
+      transition: opacity 300ms;
     }
   `;
 };
