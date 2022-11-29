@@ -1,4 +1,4 @@
-import { PropsWithChildren, useRef } from 'react';
+import { cloneElement, isValidElement, PropsWithChildren, useRef } from 'react';
 
 export interface LazyProps {
   visible: boolean;
@@ -13,7 +13,9 @@ function Lazy({ visible, children }: PropsWithChildren<LazyProps>) {
 
   if (!rendered.current) return null;
 
-  return <div style={{ display: visible ? 'block' : 'none' }}>{children}</div>;
+  if (!isValidElement(children)) return <div style={{ ...(!visible ? { display: 'none' } : {}) }}>{children}</div>;
+
+  return cloneElement(children as React.ReactElement, { style: { ...(!visible ? { display: 'none' } : {}) } });
 }
 
 export default Lazy;

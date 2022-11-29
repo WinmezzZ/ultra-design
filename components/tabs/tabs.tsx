@@ -52,7 +52,9 @@ type NativeAttrs = Omit<React.KeygenHTMLAttributes<any>, keyof Props>;
 
 export type TabsProps = Props & NativeAttrs;
 
-const defaultProps = {};
+const defaultProps = {
+  lazy: true,
+};
 
 export type MergedTabsProps = typeof defaultProps & Props;
 
@@ -143,22 +145,22 @@ const Tabs: React.FC<TabsProps> = p => {
         </CSSTransition>
       </div>
       <div className="ultra-tabs-content">
-        {tabItems.map((child: any) => {
+        {tabItems.map((child: any, index) => {
           const item = (
             <CSSTransition
               classNames="ultra-tabs-item-transition"
               key={child.props.value || uuid()}
-              in={selfValue === child.props.value}
+              in={currentIndex === index}
               timeout={300}
             >
               {React.cloneElement(child, {
-                className: `ultra-tabs-item__${selfValue === child.props.value ? 'active' : 'inactive'}`,
+                className: `ultra-tabs-item__${currentIndex === index ? 'active' : 'inactive'}`,
               })}
             </CSSTransition>
           );
 
           return lazy ? (
-            <Lazy key={child.props.value || uuid()} visible={selfValue === child.props.value}>
+            <Lazy key={child.props.value || uuid()} visible={currentIndex === index}>
               {item}
             </Lazy>
           ) : (

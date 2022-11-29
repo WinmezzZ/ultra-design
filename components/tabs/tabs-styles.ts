@@ -21,7 +21,6 @@ export const tabsStyles = (props: TabsStylesProps) => {
       border-bottom: 1px solid ${borderColor};
       overflow-x: auto;
       overflow-y: hidden;
-      overflow: hidden;
       position: relative;
       &-item {
         padding: 14px 18px;
