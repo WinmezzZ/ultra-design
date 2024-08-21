@@ -74,6 +74,9 @@
     "stylelint": "^14.9.1"
   },
   "dependencies": {
+    "@twind/core": "^1.1.3",
+    "@twind/with-react": "^1.1.3",
+    "framer-motion": "^11.3.28",
     "lodash-es": "^4.17.21"
   }
 }
