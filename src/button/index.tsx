@@ -1,7 +1,7 @@
 import { withStyle } from '@/utils/with-style';
 import { useMergeProps } from '@/utils/use-merge-props';
 import { motion, HTMLMotionProps } from 'framer-motion'
-import { cx } from '@/utils/twind';
+import { tx } from '@/utils/twind';
 
 const buttonSizes = {
   xs: 'h-6 px-3 text-sm',
@@ -39,17 +39,18 @@ export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'type'> {
 }
 
 const Button = withStyle((props: ButtonProps) => {
-  const { loading, variant, className, size, color, ...rest } = useMergeProps({ size: 'md', color: 'blue' }, props)
-  return <motion.button className={cx(
+  const { loading, disabled, variant, className, size, color, ...rest } = useMergeProps({ size: 'md', color: 'blue', variant: 'solid' }, props)
+  return <motion.button className={tx(
     'inline-flex items-center justify-center ',
     'select-none appearance-none outline-none',
     'whitespace-nowrap border transition-colors',
     'disabled:(cursor-not-allowed opacity-50)',
     `focus-visible:(ring ring-${color}-300)`,
     buttonSizes[size],
-    buttonVariants(color),
+    buttonVariants(color)[variant],
     className
-  )} whileTap={{ scale: 0.85 }} {...rest}></motion.button>
+  )} disabled={disabled || loading}
+   whileTap={{ scale: 0.85 }} {...rest}></motion.button>
 })
 
 export default Button;

@@ -9,6 +9,7 @@ import {
 } from '@twind/core'
 // import the twind config
 import config from '../../twind.config'
+// @ts-ignore 
 export const tw = /* #__PURE__ */ twind(
   config,
   typeof document === 'undefined' ? virtual() : cssom('style[data-library]'),
