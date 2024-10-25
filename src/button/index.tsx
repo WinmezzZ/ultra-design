@@ -58,7 +58,7 @@ const Button = withStyle((props: ButtonProps) => {
         'disabled:(cursor-not-allowed opacity-50)',
         `focus-visible:(ring ring-${color}-300)`,
         `rounded${rounded}`,
-        'dark:text-black',
+        'dark:(text-white bg-cyan-500)',
         buttonSizes[size],
         buttonVariants(color)[variant],
         className,

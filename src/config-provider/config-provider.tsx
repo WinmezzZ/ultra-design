@@ -1,24 +1,30 @@
 import _ from 'lodash-es';
-import { createContext, FC, ReactNode } from 'react';
+import {  createContext, FC, ReactElement,  useEffect } from 'react';
 
 export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger';
 
 export interface ComponentCommonProps {
-  size: Size;
-  theme: 'light' | 'dark'
-  children: ReactNode
+  size?: Size;
+  theme?: 'light' | 'dark'
 }
 
-export interface ConfigProviderProps  {}
+export type ConfigProviderProps = ComponentCommonProps
 
-const configContextOptions = {};
+const configContextOptions = {
+  theme: 'light',
+} as const;
 
 export const ConfigContext = createContext<ConfigProviderProps>(configContextOptions);
 
-const ConfigProvider: FC<ComponentCommonProps> = ((props) => {
+const ConfigProvider: FC<ComponentCommonProps & { children: ReactElement }> = ((props) => {
   const { children, ...rest } = props;
 
   const config: ConfigProviderProps = _.merge({}, configContextOptions, rest);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    html.classList.toggle('dark', config.theme === 'dark');
+  }, [config.theme]);
 
   return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
 });

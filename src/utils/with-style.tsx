@@ -1,69 +1,68 @@
 import { ComponentProps, ComponentType, forwardRef, useEffect } from 'react';
-import { injectGlobal, tw } from './twind';
+// import { injectGlobal, tw } from './twind';
 
 export const withStyle = <T extends ComponentType<any>>(Component: T) => {
   const StyledComponent = forwardRef<any, ComponentProps<T>>((props, ref) => {
     StyledComponent.displayName = Component.displayName;
 
+   
   useEffect(() => {
-    injectGlobal(tw(`
-      @layer base {
-        :root {
-          --background: 0 0% 100%;
-          --foreground: 222.2 84% 4.9%;
-          --card: 0 0% 100%;
-          --card-foreground: 222.2 84% 4.9%;
-          --popover: 0 0% 100%;
-          --popover-foreground: 222.2 84% 4.9%;
-          --primary: 221.2 83.2% 53.3%;
-          --primary-foreground: 210 40% 98%;
-          --secondary: 210 40% 96.1%;
-          --secondary-foreground: 222.2 47.4% 11.2%;
-          --muted: 210 40% 96.1%;
-          --muted-foreground: 215.4 16.3% 46.9%;
-          --accent: 210 40% 96.1%;
-          --accent-foreground: 222.2 47.4% 11.2%;
-          --destructive: 0 84.2% 60.2%;
-          --destructive-foreground: 210 40% 98%;
-          --border: 214.3 31.8% 91.4%;
-          --input: 214.3 31.8% 91.4%;
-          --ring: 221.2 83.2% 53.3%;
-          --radius: rem;
-          --chart-1: 12 76% 61%;
-          --chart-2: 173 58% 39%;
-          --chart-3: 197 37% 24%;
-          --chart-4: 43 74% 66%;
-          --chart-5: 27 87% 67%;
-        }
+    // injectGlobal(tw(`
+    //     :root {
+    //       --background: #ffffff;
+    //       --foreground: #1a1a1a;
+    //       --card: #ffffff;
+    //       --card-foreground: #1a1a1a;
+    //       --popover: #ffffff;
+    //       --popover-foreground: #1a1a1a;
+    //       --primary: #3399ff;
+    //       --primary-foreground: #d6e6ff;
+    //       --secondary: #ccd9ff;
+    //       --secondary-foreground: #3b3b3b;
+    //       --muted: #ccd9ff;
+    //       --muted-foreground: #6e6e6e;
+    //       --accent: #ccd9ff;
+    //       --accent-foreground: #3b3b3b;
+    //       --destructive: #ff4d4d;
+    //       --destructive-foreground: #d6e6ff;
+    //       --border: #d9e6ff;
+    //       --input: #d9e6ff;
+    //       --ring: #3399ff;
+    //       --radius: rem;
+    //       --chart-1: #ff4d4d;
+    //       --chart-2: #66cc66;
+    //       --chart-3: #4d6666;
+    //       --chart-4: #ffb366;
+    //       --chart-5: #ffdb4d;
+    //     }
 
-        .dark {
-          --background: 222.2 84% 4.9%;
-          --foreground: 210 40% 98%;
-          --card: 222.2 84% 4.9%;
-          --card-foreground: 210 40% 98%;
-          --popover: 222.2 84% 4.9%;
-          --popover-foreground: 210 40% 98%;
-          --primary: 217.2 91.2% 59.8%;
-          --primary-foreground: 222.2 47.4% 11.2%;
-          --secondary: 217.2 32.6% 17.5%;
-          --secondary-foreground: 210 40% 98%;
-          --muted: 217.2 32.6% 17.5%;
-          --muted-foreground: 215 20.2% 65.1%;
-          --accent: 217.2 32.6% 17.5%;
-          --accent-foreground: 210 40% 98%;
-          --destructive: 0 62.8% 30.6%;
-          --destructive-foreground: 210 40% 98%;
-          --border: 217.2 32.6% 17.5%;
-          --input: 217.2 32.6% 17.5%;
-          --ring: 224.3 76.3% 48%;
-          --chart-1: 220 70% 50%;
-          --chart-2: 160 60% 45%;
-          --chart-3: 30 80% 55%;
-          --chart-4: 280 65% 60%;
-          --chart-5: 340 75% 55%;
-        }
-      }
-      `))
+    //     .dark {
+    //       --background: #1a1a1a;
+    //       --foreground: #d6e6ff;
+    //       --card: #1a1a1a;
+    //       --card-foreground: #d6e6ff;
+    //       --popover: #1a1a1a;
+    //       --popover-foreground: #d6e6ff;
+    //       --primary: #3b3b3b;
+    //       --primary-foreground: #d6e6ff;
+    //       --secondary: #2c2c2c;
+    //       --secondary-foreground: #d6e6ff;
+    //       --muted: #2c2c2c;
+    //       --muted-foreground: #a6a6a6;
+    //       --accent: #2c2c2c;
+    //       --accent-foreground: #d6e6ff;
+    //       --destructive: #4d4d4d;
+    //       --destructive-foreground: #d6e6ff;
+    //       --border: #2c2c2c;
+    //       --input: #2c2c2c;
+    //       --ring: #3b3b3b;
+    //       --chart-1: #3333ff;
+    //       --chart-2: #339966;
+    //       --chart-3: #ff9933;
+    //       --chart-4: #9933ff;
+    //       --chart-5: #ff3399;
+    //     }
+    //   `))
   }, [])
 
     return <Component {...props as any} ref={ref} />;
