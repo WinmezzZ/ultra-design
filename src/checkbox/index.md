@@ -2,7 +2,7 @@
 
 This is an example component.
 
-<!-- ```jsx title="基本用法"
+```jsx title="基本用法"
 import { Checkbox } from 'ultra-design';
 
 export default () => (
@@ -26,7 +26,7 @@ export default () => (
     </Checkbox>
   </div>
 );
-``` -->
+```
 
 #### 组
 
@@ -37,7 +37,7 @@ export default () => (
   <div>
     <CheckboxGroup defaultValue={['1']}>
       <Checkbox value="1">Checkbox1</Checkbox>
-      {/* <Checkbox value="2">Checkbox2</Checkbox> */}
+      <Checkbox value="2">Checkbox2</Checkbox>
     </CheckboxGroup>
   </div>
 );
