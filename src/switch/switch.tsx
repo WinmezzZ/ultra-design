@@ -22,7 +22,7 @@ const Switch = withStyle((props: SwitchProps) => {
     <span 
       className={tx(
         'bg-gray-300 w-14 h-8 px-1 inline-flex justify-start items-center rounded-full cursor-pointer', 
-        'data-[selected=true]:(justify-end bg-blue-500 dark:bg-cyan-500)'
+        'data-[selected=true]:(justify-end bg-primary dark:bg-cyan-500)'
         )} 
       data-selected={selected} 
       onClick={toggleSwitch}
@@ -38,6 +38,6 @@ const Switch = withStyle((props: SwitchProps) => {
       />
     </span>
   );
-});
+})
 
 export default Switch;

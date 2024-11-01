@@ -5,4 +5,9 @@ export default defineConfig({
   themeConfig: {
     name: 'ultra-design',
   },
+  // mako: {},
+  apiParser: {},
+  resolve: {
+    entryFile: './src/index.ts',
+  },
 });

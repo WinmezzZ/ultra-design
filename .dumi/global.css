@@ -1,3 +1,12 @@
-:root {
-  --primary: #7ee7fc;
+.dumi-default-previewer-demo {
+  button {
+    margin-left: 8px;
+  }
+}
+
+.dumi-default-header,
+.dumi-default-sidebar,
+.dumi-default-content-footer,
+.dumi-default-footer {
+  display: none;
 }

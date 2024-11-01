@@ -6,12 +6,14 @@ export type Size = 'mini' | 'small' | 'middle' | 'large' | 'larger';
 export interface ComponentCommonProps {
   size?: Size;
   theme?: 'light' | 'dark'
+  primaryColor?: string
 }
 
 export type ConfigProviderProps = ComponentCommonProps
 
 const configContextOptions = {
   theme: 'light',
+  primaryColor: '#006FEE'
 } as const;
 
 export const ConfigContext = createContext<ConfigProviderProps>(configContextOptions);

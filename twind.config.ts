@@ -1,8 +1,9 @@
-import { defineConfig } from '@twind/core'
+import { defineConfig, autoDarkColor } from '@twind/core'
 import presetTailwind from '@twind/preset-tailwind'
 
-export default defineConfig({
+export default  defineConfig({
   darkMode: 'class',
+  darkColor: autoDarkColor,
   theme: {
     extend: {
       colors: {
@@ -13,26 +14,29 @@ export default defineConfig({
         foreground: 'var(--foreground)',
         primary: {
           DEFAULT: 'var(--primary)',
-          foreground: 'var(--primary-foreground)',
-        },
-        secondary: {
-          DEFAULT: 'var(--secondary)',
-          foreground: 'var(--secondary-foreground)',
-        },
-        destructive: {
-          DEFAULT: 'var(--destructive)',
-          foreground: 'var(--destructive-foreground)',
-        },
-        muted: {
-          DEFAULT: 'var(--muted)',
-          foreground: 'var(--muted-foreground)',
-        },
-        accent: {
-          DEFAULT: 'var(--accent)',
-          foreground: 'var(--accent-foreground)',
-        },
+          50: 'var(--primary-50)',
+          100: 'var(--primary-100)',
+          200: 'var(--primary-200)',
+          300: 'var(--primary-300)',
+          400: 'var(--primary-400)',
+          500: 'var(--primary)',
+          600: 'var(--primary-600)',
+          700: 'var(--primary-700)',
+          800: 'var(--primary-800)',
+          900: 'var(--primary-900)',
+          950: 'var(--primary-950)'
+        }
       },
-
+      borderWidth: {
+        small: 'var(--border-width-small)',
+        medium: 'var(--border-width-medium)',
+        large: 'var(--border-width-large)',
+      },
+      outline: {
+        small: 'var(--border-width-small)',
+        medium: 'var(--border-width-medium)',
+        large: 'var(--border-width-large)',
+      }
     },
   },
   presets: [presetTailwind({ disablePreflight: true })],
