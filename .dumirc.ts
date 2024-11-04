@@ -3,9 +3,10 @@ import { defineConfig } from 'dumi';
 export default defineConfig({
   outputPath: 'docs-dist',
   themeConfig: {
-    name: 'ultra-design',
+    name: ' ',
+    logo: false,
   },
-  // mako: {},
+  mako: {},
   apiParser: {},
   resolve: {
     entryFile: './src/index.ts',

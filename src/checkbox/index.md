@@ -7,7 +7,7 @@ import { Checkbox } from 'ultra-design';
 
 export default () => (
   <div>
-    <Checkbox defaultChecked>Checkbox2</Checkbox>
+    <Checkbox defaultChecked>Checkbox</Checkbox>
   </div>
 );
 ```

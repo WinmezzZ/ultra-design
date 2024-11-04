@@ -41,7 +41,7 @@ const Checkbox = withStyle((props: CheckboxProps) => {
     const next = groupValue.includes(value);
 
     setIsChecked(next);
-  }, [inGroup, groupValue]);
+  }, [value, inGroup, groupValue]);
 
   useEffect(() => {
     if (checked === undefined) return;
@@ -58,8 +58,6 @@ const Checkbox = withStyle((props: CheckboxProps) => {
     setIsChecked(e.target.checked);
     onValueChange?.(e.target.checked);
   };
-
-  console.log(disabled)
 
   return (
     <span className={tx('group inline-flex items-center cursor-pointer')} >
