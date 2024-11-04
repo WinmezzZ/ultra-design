@@ -49,6 +49,7 @@ export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'type'> {
 }
 
 const Button = withStyle<HTMLButtonElement, ButtonProps>((props, ref) => {
+  console.log(ref)
   const { loading, disabled, variant, radius, className, size, color, disableRipple, children, onClick, ...rest } = mergeProps(
     { size: 'md', color: 'primary', variant: 'outline' },
     props,

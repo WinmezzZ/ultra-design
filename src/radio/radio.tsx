@@ -81,7 +81,7 @@ const Radio = withStyle((props: RadioProps) => {
               variants={{
                 checked: {
                   pathLength: 1.1,
-                  transition: { delay: 0.2, type: "spring", duration: 1.5, bounce: 0 },
+                  transition: { delay: 0.1, type: "spring", duration: 0.5, bounce: 0 },
                 },
                 unchecked: { pathLength: 0 },
               }}

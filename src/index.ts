@@ -7,3 +7,5 @@ export type { CheckboxProps, CheckboxGroupProps } from './checkbox';
 export { Radio, RadioGroup } from './radio';
 export type { RadioProps, RadioGroupProps } from './radio';
 export { default as ConfigProvider } from './config-provider/config-provider';
+export { default as Tooltip } from './tooltip/tooltip';
+export type { TooltipProps } from './tooltip/tooltip';
