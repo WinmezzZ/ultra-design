@@ -7,13 +7,13 @@ export interface CheckboxGroupContextProps {
   size?: Size;
   color?: Color;
   disabled?: boolean;
-  value?: (string | number)[];
+  value: (string | number)[];
   updateValue?: (value: (string | number), checked: boolean) => void;
 }
 
 
 export const CheckboxGroupContext = createContext<CheckboxGroupContextProps>({
-  inGroup: true,
+  inGroup: false,
   disabled: false,
   value: [],
   updateValue: () => {},

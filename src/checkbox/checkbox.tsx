@@ -31,19 +31,17 @@ export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Checkbox = withStyle((props: CheckboxProps) => {
   const { children, checked, defaultChecked, disabled, onValueChange, value = '', ...rest } = props;
-  const { value: groupValue = [], inGroup, updateValue, disabled: groupDisabled } = useCheckboxGroup();
+  const { value: groupValue, inGroup, updateValue, disabled: groupDisabled } = useCheckboxGroup();
   const [isChecked, setIsChecked] = useState(defaultChecked ?? false);
   const isDisabled = inGroup ? groupDisabled : disabled;
-
   const id = useId();
 
   useEffect(() => {
-    if (!groupValue || !value) return;
+    if (!value || !inGroup) return;
     const next = groupValue.includes(value);
 
-    if (next === isChecked) return;
     setIsChecked(next);
-  }, [groupValue.join(',')]);
+  }, [inGroup, groupValue]);
 
   useEffect(() => {
     if (checked === undefined) return;
@@ -54,20 +52,26 @@ const Checkbox = withStyle((props: CheckboxProps) => {
     if (isDisabled) return;
     if (inGroup) {
       updateValue?.(value, e.target.checked);
+      return
     }
 
     setIsChecked(e.target.checked);
     onValueChange?.(e.target.checked);
   };
 
-  console.log(isChecked)
+  console.log(disabled)
 
   return (
-    <div className={tx('group flex items-center peer-disabled:(opacity-50 cursor-not-allowed)')} >
+    <span className={tx('group inline-flex items-center cursor-pointer')} >
       <button className={tx('relative flex items-center bg-transparent border-none')} type="button">
         <input
           type="checkbox"
-          className={tx('peer border-(2px solid border) group-hover:scale-105 relative h-5 w-5 cursor-pointer appearance-none rounded-md transition-all duration-500 checked:(border-primary-500 checked:bg-primary-500)')}
+          className={tx(`
+            border-([2px] solid border) group-hover:scale-105 relative h-5 w-5 
+            appearance-none rounded-md transition-all duration-500 
+            checked:(border-primary-500 checked:bg-primary-500)
+            disabled:(opacity-50 cursor-not-allowed)
+          `)}
           onChange={handleChange}
           id={id}
           disabled={isDisabled}
@@ -100,7 +104,7 @@ const Checkbox = withStyle((props: CheckboxProps) => {
       >
         {children}
       </label>
-    </div>
+    </span>
   );
 });
 

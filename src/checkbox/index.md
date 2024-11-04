@@ -7,7 +7,6 @@ import { Checkbox } from 'ultra-design';
 
 export default () => (
   <div>
-    <Checkbox>Checkbox1</Checkbox>
     <Checkbox defaultChecked>Checkbox2</Checkbox>
   </div>
 );
@@ -28,7 +27,7 @@ export default () => (
 );
 ```
 
-#### 组
+#### CheckboxGroup 组
 
 ```jsx
 import { CheckboxGroup, Checkbox } from 'ultra-design';
@@ -43,4 +42,17 @@ export default () => (
 );
 ```
 
-<API id="Checkbox"></API>
+#### orientation 方向
+
+```jsx
+import { CheckboxGroup, Checkbox } from 'ultra-design';
+
+export default () => (
+  <div>
+    <CheckboxGroup orientation="horizontal">
+      <Checkbox value="1">Checkbox1</Checkbox>
+      <Checkbox value="2">Checkbox2</Checkbox>
+    </CheckboxGroup>
+  </div>
+);
+```
