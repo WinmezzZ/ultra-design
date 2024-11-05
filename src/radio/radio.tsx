@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, ReactNode, useEffect, useId, useState } from "react";
 import { motion } from "framer-motion";
-import { withStyle } from "@/utils/with-style";
+import { forwardRef } from "@/utils/forwardRef";
 import { tx } from "@/utils/twind";
 import { useRadioGroup } from "./radio-context";
 
@@ -12,7 +12,7 @@ export interface RadioProps extends InputHTMLAttributes<HTMLSpanElement> {
   children?: ReactNode;
 }
 
-const Radio = withStyle((props: RadioProps) => {
+const Radio = forwardRef<RadioProps>((props) => {
   const { children, checked, defaultChecked, disabled, onValueChange, value = '', ...rest } = props;
   const { value: groupValue, inGroup, updateValue, disabled: groupDisabled } = useRadioGroup();
   const [isChecked, setIsChecked] = useState(defaultChecked ?? false);

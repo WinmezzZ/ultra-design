@@ -4,11 +4,11 @@ import { NumberSize, Size } from '@/types/size';
 import { tx } from '@/utils/twind';
 import { mergeProps } from '@/utils/use-merge-props';
 import { isNumber } from 'lodash-es';
-import { withStyle } from '@/utils/with-style';
 import { Color, ColorMap } from '@/types/color';
 import Ripple from '@/ripple/ripple';
 import { ReactNode } from 'react';
 import { useRipple } from '@/ripple/use-ripple';
+import { forwardRef } from '@/utils/forwardRef';
 
 const buttonSizes = {
   xs: 'h-7 px-3 text-sm',
@@ -48,8 +48,9 @@ export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'type'> {
   disableRipple?: boolean;
 }
 
-const Button = withStyle<HTMLButtonElement, ButtonProps>((props, ref) => {
+const Button = forwardRef<ButtonProps, 'button'>((props, ref) => {
   console.log(ref)
+  console.log(props)
   const { loading, disabled, variant, radius, className, size, color, disableRipple, children, onClick, ...rest } = mergeProps(
     { size: 'md', color: 'primary', variant: 'outline' },
     props,

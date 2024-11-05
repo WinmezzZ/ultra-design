@@ -1,3 +1,5 @@
+import { injectGlobal } from '@/utils/twind';
+import { usePrimaryColor } from '@/utils/use-primary-color';
 import _ from 'lodash-es';
 import {  createContext, FC, ReactElement,  useEffect } from 'react';
 
@@ -22,6 +24,40 @@ const ConfigProvider: FC<ComponentCommonProps & { children: ReactElement }> = ((
   const { children, ...rest } = props;
 
   const config: ConfigProviderProps = _.merge({}, configContextOptions, rest);
+
+  const colorPalette = usePrimaryColor(props.primaryColor);
+
+  useEffect(() => {
+    if (colorPalette) {
+      const primary = colorPalette.primary;
+  
+      injectGlobal(`
+        :root {
+          --primary: ${primary['500']};
+          ${Object.entries(primary).map(([key, value]) => `--primary-${key}: ${value};`).join('\n')}
+        }
+      `)
+    }
+  }, [colorPalette])
+
+  useEffect(() => {
+    if (document.documentElement.style.getPropertyValue('--ud-global-inject')) return;
+    injectGlobal(`
+      :root {
+        --ud-global-inject: true;
+        --background: #ffffff;
+        --foreground: #1a1a1a;
+        --primary: #006FEE;
+        --border: #d9e6ff;
+        --border-width-small: 1px;
+        --border-width-medium: 2px;
+        --border-width-large: 3px;
+        --input: #d9e6ff;
+        --ring: #3399ff;
+        --radius: rem;
+      }
+    `)
+  }, [])
 
   useEffect(() => {
     const html = document.documentElement;

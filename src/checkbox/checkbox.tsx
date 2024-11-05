@@ -1,6 +1,6 @@
 import { ChangeEvent, InputHTMLAttributes, useEffect, useId, useState } from "react";
 import { motion } from "framer-motion";
-import { withStyle } from "@/utils/with-style";
+import { forwardRef } from "@/utils/forwardRef";
 import { tx } from "@/utils/twind";
 import { useCheckboxGroup } from "./checkbox-context";
 
@@ -29,7 +29,7 @@ export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   onValueChange?: (value: boolean) => void;
 }
 
-const Checkbox = withStyle((props: CheckboxProps) => {
+const Checkbox = forwardRef<CheckboxProps>((props) => {
   const { children, checked, defaultChecked, disabled, onValueChange, value = '', ...rest } = props;
   const { value: groupValue, inGroup, updateValue, disabled: groupDisabled } = useCheckboxGroup();
   const [isChecked, setIsChecked] = useState(defaultChecked ?? false);

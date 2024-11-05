@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 import { tx } from '@/utils/twind';
 import { mergeProps } from '@/utils/use-merge-props';
-import { withStyle } from '@/utils/with-style';
+import { forwardRef } from '@/utils/forwardRef';
 import {  cloneElement, useRef, useState } from 'react';
 import { useFloating, useHover, useFocus, useInteractions, useRole, arrow, offset, FloatingPortal, Placement } from '@floating-ui/react';
 
@@ -18,7 +18,7 @@ export interface TooltipProps {
   root?: HTMLElement;
 }
 
-const Tooltip = withStyle<unknown, TooltipProps>((props) => {
+const Tooltip = forwardRef<TooltipProps>((props) => {
   const { open, onOpenChange, placement, content, children, root } = mergeProps({ open: false, root: document.body }, props);
  
   const [isOpen, setIsOpen] = useState(open);
