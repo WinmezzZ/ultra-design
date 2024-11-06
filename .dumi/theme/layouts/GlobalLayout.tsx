@@ -7,7 +7,7 @@ const GlobalLayout: React.FC = () => {
   const [color] = usePrefersColor();
   return <ConfigProvider theme={color} primaryColor="#a855f7">
     <div>
-      {/* <style>{`
+      <style>{`
         .dumi-default-previewer-demo button {
               margin-left: 8px;
           }
@@ -18,7 +18,7 @@ const GlobalLayout: React.FC = () => {
               display: none;
           }
         `}
-      </style> */}
+      </style>
         {outlet as ReactElement}
       </div>
     </ConfigProvider>

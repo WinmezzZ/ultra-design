@@ -33,7 +33,7 @@ const ConfigProvider: FC<ComponentCommonProps & { children: ReactElement }> = ((
   
       injectGlobal(`
         :root {
-          --primary: ${primary['500']};
+          --primary: ${primary['500']} !important;
           ${Object.entries(primary).map(([key, value]) => `--primary-${key}: ${value};`).join('\n')}
         }
       `)
@@ -55,6 +55,10 @@ const ConfigProvider: FC<ComponentCommonProps & { children: ReactElement }> = ((
         --input: #d9e6ff;
         --ring: #3399ff;
         --radius: rem;
+      }
+      .dark {
+        --background: #000000;
+        --foreground: #ffffff;
       }
     `)
   }, [])
