@@ -2,14 +2,13 @@ import { HTMLMotionProps, motion } from 'framer-motion';
 
 import { tx } from '@/utils/twind';
 import { useMergeProps } from '@/utils/use-merge-props';
-import { forwardRef } from '@/utils/forwardRef';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 
 export interface SwitchProps extends Omit<HTMLMotionProps<'span'>, 'type'> {
   color?: string;
 }
 
-const Switch = forwardRef<SwitchProps>((props) => {
+const Switch: FC<SwitchProps> = (props) => {
   const { ...rest } = useMergeProps(
     { size: 'md', color: 'blue', variant: 'solid' },
     props,
@@ -38,6 +37,6 @@ const Switch = forwardRef<SwitchProps>((props) => {
       />
     </span>
   );
-})
+}
 
 export default Switch;

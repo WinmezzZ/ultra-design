@@ -2,8 +2,7 @@ import { Color } from "@/types/color";
 import { Orientation } from "@/types/orientation";
 import { Size } from "@/types/size";
 import { tx } from "@/utils/twind";
-import { forwardRef } from "@/utils/forwardRef";
-import {  useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState, FC } from "react";
 import { RadioGroupContext } from "./radio-context";
 
 
@@ -18,7 +17,7 @@ export interface RadioGroupProps {
   children?: React.ReactNode;
 }
 
-const RadioGroup = forwardRef<RadioGroupProps>((props) => {
+const RadioGroup: FC<RadioGroupProps> = (props) => {
   const { value,  defaultValue, onValueChange, children, orientation, ...rest } = props;
   const [selfVal, setSelfVal] = useState(defaultValue);
 
@@ -45,6 +44,6 @@ const RadioGroup = forwardRef<RadioGroupProps>((props) => {
       </RadioGroupContext.Provider>
     </div>
   );
-});
+};
 
 export default RadioGroup;

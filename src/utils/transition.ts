@@ -51,11 +51,12 @@ export const TRANSITION_DEFAULTS = {
   },
 } as const;
 
-export const TRANSITION_VARIANTS: Variants = {
+export const TRANSITION_VARIANTS = {
   scaleSpring: {
     enter: {
       transform: "scale(1)",
       opacity: 1,
+      translateY: 0,
       transition: {
         type: "spring",
         bounce: 0,
@@ -65,6 +66,7 @@ export const TRANSITION_VARIANTS: Variants = {
     exit: {
       transform: "scale(0.85)",
       opacity: 0,
+      translateY: "-5px",
       transition: {
         type: "easeOut",
         duration: 0.15,
@@ -176,4 +178,4 @@ export const TRANSITION_VARIANTS: Variants = {
       },
     },
   },
-};
+} satisfies Variants;

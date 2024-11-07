@@ -29,7 +29,7 @@ export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   onValueChange?: (value: boolean) => void;
 }
 
-const Checkbox = forwardRef<CheckboxProps>((props) => {
+const Checkbox = forwardRef<CheckboxProps, 'input'>((props, ref) => {
   const { children, checked, defaultChecked, disabled, onValueChange, value = '', ...rest } = props;
   const { value: groupValue, inGroup, updateValue, disabled: groupDisabled } = useCheckboxGroup();
   const [isChecked, setIsChecked] = useState(defaultChecked ?? false);
@@ -74,6 +74,7 @@ const Checkbox = forwardRef<CheckboxProps>((props) => {
           id={id}
           disabled={isDisabled}
           checked={isChecked}
+          ref={ref}
           {...rest}
         />
         <div className={tx('pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white')}>

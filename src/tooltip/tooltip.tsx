@@ -1,10 +1,8 @@
 import { AnimatePresence, LazyMotion, m } from 'framer-motion';
 
 import { tx } from '@/utils/twind';
-import { mergeProps } from '@/utils/use-merge-props';
-import { forwardRef } from '@/utils/forwardRef';
-import {  cloneElement, useRef, useState, useMemo, Children, isValidElement } from 'react';
-import { useFloating, useHover, useFocus, useInteractions, useRole, arrow, offset, FloatingPortal, Placement, FloatingArrow, useClick } from '@floating-ui/react';
+import {  cloneElement, useRef, useState, useMemo, Children, isValidElement, useEffect, FC } from 'react';
+import { useFloating, useHover, useFocus, useInteractions, useRole, arrow, offset, FloatingPortal, Placement, FloatingArrow, useClick, autoUpdate } from '@floating-ui/react';
 import { TRANSITION_VARIANTS } from '@/utils/transition';
 
 const domAnimation = () => import('@/dom-animation').then((res) => res.default);
@@ -13,24 +11,31 @@ const ARROW_HEIGHT = 7;
 const GAP = 2;
 
 export interface TooltipProps {
+  defaultOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   placement?: Placement;
   content?: React.ReactNode;
   children: React.ReactNode;
   root?: HTMLElement;
+  showDelay?: number;
+  hideDelay?: number;
+  showArrow?: boolean;
 }
 
-const Tooltip = forwardRef<TooltipProps>((props) => {
-  const { open, onOpenChange, placement, content, children, root } = mergeProps({ open: false, root: document.body }, props);
- 
-  const [isOpen, setIsOpen] = useState(open);
+const Tooltip: FC<TooltipProps> = (props) => {
+  const { open, onOpenChange, placement, content, children, root, defaultOpen, showDelay = 100, hideDelay = 500, showArrow = false } = props;
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const arrowRef = useRef(null);
+  
+  useEffect(() => {
+    setInternalOpen(open);
+  }, [open]);
 
   const { context, refs, floatingStyles } = useFloating({
-    open: isOpen,
+    open: internalOpen,
     onOpenChange(open) {
-      setIsOpen(open);
+      setInternalOpen(open);
       onOpenChange?.(open);
     },
     placement,
@@ -40,10 +45,11 @@ const Tooltip = forwardRef<TooltipProps>((props) => {
       }),
       offset(ARROW_HEIGHT + GAP)
     ],
+    whileElementsMounted: autoUpdate
   });
  
   const {getReferenceProps, getFloatingProps} = useInteractions([
-    useHover(context),
+    useHover(context, { delay: showDelay, restMs: hideDelay }),
     useFocus(context),
     useClick(context),
     useRole(context),
@@ -57,9 +63,7 @@ const Tooltip = forwardRef<TooltipProps>((props) => {
     if (!isValidElement(children)) {
       return <p {...getReferenceProps()}>{children}</p>;
     } else {
-      const child = children as React.ReactElement & {
-        ref?: React.Ref<any>;
-      };
+      const child = children as React.ReactElement;
 
       return cloneElement(child, { ...getReferenceProps(), ref: refs.setReference });
     }
@@ -71,7 +75,7 @@ const Tooltip = forwardRef<TooltipProps>((props) => {
       {trigger}
       <AnimatePresence>
         <FloatingPortal root={root}>
-          {isOpen && (
+          {internalOpen && (
             <div ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()}>
               <LazyMotion features={domAnimation}>
                 <m.div
@@ -80,7 +84,7 @@ const Tooltip = forwardRef<TooltipProps>((props) => {
                   initial="exit"
                   variants={TRANSITION_VARIANTS.scaleSpring}
                 >
-                  <FloatingArrow context={context} ref={arrowRef} className={tx('fill-background')} />
+                  {showArrow && <FloatingArrow context={context} ref={arrowRef} className={tx('fill-background')} />}
                   <div style={{   
                     boxShadow: '0px 0px 15px 0px rgba(0, 0, 0, .03), 0px 2px 30px 0px rgba(0, 0, 0, .08), 0px 0px 1px 0px rgba(0, 0, 0, .3)',
                   }} className={tx('rounded-lg z-10 px-2.5 py-1 w-full inline-flex flex-col items-center justify-center box-border subpixel-antialiased outline-none box-border bg-background')}>
@@ -94,6 +98,6 @@ const Tooltip = forwardRef<TooltipProps>((props) => {
       </AnimatePresence>
     </>
   );
-});
+};
 
 export default Tooltip; 

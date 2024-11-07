@@ -12,7 +12,7 @@ export interface RadioProps extends InputHTMLAttributes<HTMLSpanElement> {
   children?: ReactNode;
 }
 
-const Radio = forwardRef<RadioProps>((props) => {
+const Radio = forwardRef<RadioProps, 'input'>((props, ref) => {
   const { children, checked, defaultChecked, disabled, onValueChange, value = '', ...rest } = props;
   const { value: groupValue, inGroup, updateValue, disabled: groupDisabled } = useRadioGroup();
   const [isChecked, setIsChecked] = useState(defaultChecked ?? false);
@@ -51,6 +51,7 @@ const Radio = forwardRef<RadioProps>((props) => {
           id={id}
           disabled={isDisabled}
           checked={isChecked}
+          ref={ref}
         />
         <div className={tx('pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white')}>
           <motion.svg

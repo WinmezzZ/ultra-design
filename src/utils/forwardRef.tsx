@@ -4,11 +4,11 @@ import { ComponentPropsWithoutRef, ComponentPropsWithRef, ElementType, forwardRe
 
 export const forwardRef = <
   Props = Record<string, any>,
-  C extends ElementType = 'div',
+  Tag extends ElementType = 'div',
 >(
   render: (
-    props: Merge<ComponentPropsWithoutRef<C>, Props>,
-    ref?: ComponentPropsWithRef<C>['ref']
+    props: Merge<ComponentPropsWithoutRef<Tag>, Props>,
+    ref?: ComponentPropsWithRef<Tag>['ref']
   ) => ReactElement | null
 ) => {
   return internalForwardRef(render);
