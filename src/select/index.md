@@ -5,14 +5,14 @@ This is an example component.
 #### 基本使用
 
 ```jsx
-import { Select, Option } from 'ultra-design';
+import { Select } from 'ultra-design';
 
 export default () => (
-  <Select>
-    <Option label="Apple" />
-    <Option label="Blueberry" />
-    <Option label="Watermelon" />
-    <Option label="Banana" />
+  <Select style={{ width: 200 }} defaultOpen>
+    <Select.Option>Apple</Select.Option>
+    <Select.Option>Blueberry</Select.Option>
+    <Select.Option>Watermelon</Select.Option>
+    <Select.Option>Banana</Select.Option>
   </Select>
 );
 ```

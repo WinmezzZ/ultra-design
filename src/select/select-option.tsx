@@ -1,48 +1,39 @@
-import { forwardRef } from "@/utils/forwardRef";
+import { useListItem } from "@floating-ui/react";
+import { useSelectContext } from "./select-context";
+import { tx } from "@/utils/twind";
+import { Value } from "@/types/value";
 
 export type SelectOptionProps = {
   children: React.ReactNode;
-  value: string | number | symbol;
+  value: Value;
   disabled?: boolean;
 }
 
-const SelectOption = forwardRef<SelectOptionProps, 'li'>((props, ref) => {
-  const { children, value, disabled, ...rest } = props;
-
-  return <li ref={ref} {...rest}>{children}</li>;
-});
-
-export default SelectOption;
-
-
-function Option({ label }: { label: string }) {
+export function Option(props: SelectOptionProps) {
+  const { children, value, disabled } = props;
   const {
     activeIndex,
-    selectedIndex,
+    selectedIndices,
     getItemProps,
     handleSelect
-  } = React.useContext(SelectContext);
+  } = useSelectContext();
 
-  const { ref, index } = useListItem({ label });
-
+  const { ref, index } = useListItem();
   const isActive = activeIndex === index;
-  const isSelected = selectedIndex === index;
+  const isSelected = selectedIndices.has(index);
 
   return (
-    <button
+    <li
       ref={ref}
       role="option"
-      aria-selected={isActive && isSelected}
+      aria-selected={isSelected}
       tabIndex={isActive ? 0 : -1}
-      style={{
-        background: isActive ? "cyan" : "",
-        fontWeight: isSelected ? "bold" : ""
-      }}
+      className={tx('py-1.5 px-2 w-full rounded-md', isActive && 'bg-primary-100', isSelected && 'bg-primary-500 text-white', disabled && 'cursor-not-allowed text-gray-400')}
       {...getItemProps({
-        onClick: () => handleSelect(index)
+        onClick: () => handleSelect(index, value)
       })}
     >
-      {label}
-    </button>
+      {children}
+    </li>
   );
 }

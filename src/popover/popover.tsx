@@ -2,8 +2,9 @@ import { AnimatePresence, LazyMotion, m } from 'framer-motion';
 
 import { tx } from '@/utils/twind';
 import {  cloneElement, useRef, useState, useMemo, Children, isValidElement, useEffect, FC } from 'react';
-import { useFloating, useFocus, useInteractions, useRole, arrow, offset, FloatingPortal, Placement, FloatingArrow, useClick, autoUpdate } from '@floating-ui/react';
+import { useFloating, useFocus, useInteractions, useRole, arrow, offset, FloatingPortal, Placement, FloatingArrow, useClick, autoUpdate, useDismiss, ElementProps, UseFloatingOptions, UseRoleProps } from '@floating-ui/react';
 import { TRANSITION_VARIANTS } from '@/utils/transition';
+import { merge } from 'lodash-es';
 
 const domAnimation = () => import('@/dom-animation').then((res) => res.default);
 
@@ -19,10 +20,13 @@ export interface PopoverProps {
   children: React.ReactNode;
   root?: HTMLElement;
   showArrow?: boolean;
+  interactions?: ElementProps[];
+  floatingProps?: UseFloatingOptions;
+  role?: UseRoleProps['role'];
 }
 
 const Popover: FC<PopoverProps> = (props) => {
-  const { open, onOpenChange, placement, content, children, root, defaultOpen, showArrow = true } = props;
+  const { open, onOpenChange, placement, content, children, root, defaultOpen, showArrow = true, interactions = [], floatingProps = {} } = props;
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const arrowRef = useRef(null);
   
@@ -30,7 +34,7 @@ const Popover: FC<PopoverProps> = (props) => {
     setInternalOpen(open);
   }, [open]);
 
-  const { context, refs, floatingStyles } = useFloating({
+  const { context, refs, floatingStyles } = useFloating(merge<UseFloatingOptions, UseFloatingOptions>( {
     open: internalOpen,
     onOpenChange(open) {
       setInternalOpen(open);
@@ -44,12 +48,14 @@ const Popover: FC<PopoverProps> = (props) => {
       offset(ARROW_HEIGHT + GAP)
     ],
     whileElementsMounted: autoUpdate
-  });
+  }, floatingProps));
  
   const {getReferenceProps, getFloatingProps} = useInteractions([
     useFocus(context),
     useClick(context),
     useRole(context),
+    useDismiss(context),
+    ...interactions
   ]);
 
   const trigger = useMemo(() => {
