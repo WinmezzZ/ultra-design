@@ -6,7 +6,7 @@ export default defineConfig({
     name: ' ',
     logo: false,
   },
-  mako: {},
+  // mako: {},
   apiParser: {},
   resolve: {
     entryFile: './src/index.ts',
