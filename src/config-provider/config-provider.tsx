@@ -48,7 +48,6 @@ const ConfigProvider: FC<ComponentCommonProps & { children: ReactElement }> = ((
         --background: #ffffff;
         --foreground: #1a1a1a;
         --primary: #006FEE;
-        --border: #d9e6ff;
         --border-width-small: 1px;
         --border-width-medium: 2px;
         --border-width-large: 3px;
@@ -59,6 +58,10 @@ const ConfigProvider: FC<ComponentCommonProps & { children: ReactElement }> = ((
       .dark {
         --background: #000000;
         --foreground: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
       }
     `)
   }, [])

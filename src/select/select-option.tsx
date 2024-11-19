@@ -3,7 +3,6 @@ import { useSelectContext } from "./select-context";
 import { tx } from "@/utils/twind";
 import { Value } from "@/types/value";
 import { Checkbox } from "@/checkbox";
-import { useMergedRefs } from "@/utils/use-merge-refs";
 
 export type SelectOptionProps = {
   children: React.ReactNode;
@@ -21,14 +20,9 @@ export function Option(props: SelectOptionProps) {
     getItemProps,
     handleSelect,
     searchValue,
-    listRef
   } = useSelectContext();
 
   const { ref, index } = useListItem({ label: typeof children === "string" ? children : label });
-
-  const refs = useMergedRefs(ref, (node) => {
-    listRef.current[index] = node;
-  });
 
   const isVisible = !searchValue || 
     (typeof children === 'string' && children.toLowerCase().includes(searchValue.toLowerCase()));
@@ -42,12 +36,14 @@ export function Option(props: SelectOptionProps) {
 
   return (
     <li
-      ref={refs}
+      ref={ref}
       role="option"
       aria-selected={isSelected}
+      data-selected={isSelected}
       aria-disabled={disabled}
+      data-disabled={disabled}
       tabIndex={isActive ? 0 : -1}
-      className={tx('flex items-center gap-1 cursor-pointer py-1.5 px-2 w-full rounded-md', isActive && 'bg-primary-100', isSelected && 'text-primary-500', disabled && '!cursor-not-allowed text-gray-400')}
+      className={tx('flex items-center gap-1 cursor-pointer py-1.5 w-full rounded-md', isActive && 'bg-primary-100', isSelected && 'text-primary-500', disabled && '!cursor-not-allowed text-gray-400')}
       {...getItemProps({
         onClick: () => {
           if (!disabled) {
@@ -56,7 +52,7 @@ export function Option(props: SelectOptionProps) {
         }
       })}
     >
-      <Checkbox checked={isSelected} />
+      <Checkbox checked={isSelected} disabled={disabled} />
       {children}
     </li>
   );

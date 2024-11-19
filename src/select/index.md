@@ -8,7 +8,7 @@ This is an example component.
 import { Select } from 'ultra-design';
 
 export default () => (
-  <Select defaultValue="peach" style={{ width: 200 }} searchable multiple>
+  <Select defaultValue="blueberry" style={{ width: 200 }} searchable>
     <Select.Option value="apple">Apple1</Select.Option>
     <Select.Option value="blueberry">Blueberry</Select.Option>
     <Select.Option value="watermelon">Watermelon</Select.Option>

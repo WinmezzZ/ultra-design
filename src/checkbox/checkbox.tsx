@@ -61,11 +61,11 @@ const Checkbox = forwardRef<CheckboxProps, 'input'>((props, ref) => {
 
   return (
     <span className={tx('group inline-flex items-center cursor-pointer')} >
-      <button className={tx('relative flex items-center bg-transparent border-none')} type="button">
+      <button className={tx('relative flex items-center bg-transparent border-none p-0')} type="button">
         <input
           type="checkbox"
           className={tx(`
-            border-([2px] solid border) group-hover:scale-105 relative h-5 w-5 
+            border-([1px] solid border) group-hover:scale-105 relative h-5 w-5 
             appearance-none rounded-md transition-all duration-500 
             checked:(border-primary-500 checked:bg-primary-500)
             disabled:(opacity-50 cursor-not-allowed)
@@ -77,24 +77,25 @@ const Checkbox = forwardRef<CheckboxProps, 'input'>((props, ref) => {
           ref={ref}
           {...rest}
         />
-        <div className={tx('pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white')}>
-        <motion.svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="3.5"
-          stroke="currentColor"
-          className={tx('h-3.5 w-3.5')}
-          initial={false}
-          animate={isChecked ? "checked" : "unchecked"}
-        >
-          <motion.path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M4.5 12.75l6 6 9-13.5"
-            variants={tickVariants}
-          />
-        </motion.svg>
+        <div className={tx('pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white flex items-center justify-center')}>
+          <motion.svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="3.5"
+            stroke="currentColor"
+            className={tx('h-3.5 w-3.5')}
+            initial={false}
+            animate={isChecked ? "checked" : "unchecked"}
+          >
+            <motion.path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.5 12.75l6 6 9-13.5"
+              variants={tickVariants}
+              initial={false}
+            />
+          </motion.svg>
         </div>
       </button>
       <label
