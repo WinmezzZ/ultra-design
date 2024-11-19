@@ -77,6 +77,7 @@
     "@floating-ui/react": "^0.26.25",
     "framer-motion": "^11.11.9",
     "lodash-es": "^4.17.21",
+    "lucide-react": "^0.460.0",
     "tints.dev": "^1.0.3"
   }
 }

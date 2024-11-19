@@ -7,12 +7,16 @@ import { SelectContext } from "./select-context";
 import { AnimatePresence, LazyMotion, m } from 'framer-motion';
 
 import { tx } from '@/utils/twind';
-import { useRef, useState, useMemo, useEffect, ReactNode,  useCallback, ChangeEvent, isValidElement, Children, ReactElement } from 'react';
+import { useRef, useState, useMemo, useEffect, ReactNode,  useCallback, ChangeEvent, isValidElement, Children, ReactElement, useLayoutEffect } from 'react';
 import { useFloating, useInteractions, useRole, arrow, offset, FloatingPortal, FloatingArrow, useClick, autoUpdate, useDismiss, ElementProps, UseFloatingOptions, UseRoleProps } from '@floating-ui/react';
 import { TRANSITION_VARIANTS } from '@/utils/transition';
 import { useMergedRefs } from "@/utils/use-merge-refs";
 import { Value } from "@/types/value";
 import { Option, SelectOptionProps } from "./select-option";
+import { uuid } from "@/utils/uuid";
+import { CircleX } from "lucide-react";
+import { toArray } from "@/utils/to-array";
+import { isNil } from 'lodash-es'
 
 const domAnimation = () => import('@/dom-animation').then((res) => res.default);
 
@@ -41,10 +45,10 @@ export interface SelectProps<T extends K extends true ? Value[] : Value, K exten
 
 function Select<T extends K extends true ? Value[] : Value, K extends boolean>(props: SelectProps<T, K>) {
   const { value, onValueChange, defaultValue, multiple, open, onOpenChange, children, root, defaultOpen, showArrow = true, className, style, searchable, placeholder = "Select..." } = props;
-  const [internalValue, setInternalValue] = useState<Value[]>(multiple ? defaultValue as Value[] : defaultValue ? [defaultValue as Value] : []);
+  const [internalValue, setInternalValue] = useState(toArray(defaultValue));
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const arrowRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set());
   const [searchValue, setSearchValue] = useState("");
   
@@ -57,21 +61,27 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
     setInternalOpen(open);
   }, [open]);
 
-
   useEffect(() => {
     if (!value) return;
-    setInternalValue(multiple ? (value as Value[] || []) : value ? [value as Value] : []);
+    setInternalValue(toArray(value));
   }, [value]);
 
   useEffect(() => {
-    setSelectedIndices(new Set(internalValue.map(v => options.findIndex(option => option.value === v))));
+    const indices = internalValue.map(v => options.findIndex(option => option.value === v));
+    setSelectedIndices(new Set(indices));
   }, [internalValue])
 
   const selectedLabels = useMemo(() => {
-    console.log(internalValue, options);
     return internalValue.map(v => {
       const option = options.find(option => option.value === v);
-      return option?.children || option?.label || "";
+      const label = option?.children || option?.label || "";
+      if (multiple) {
+        return <div key={uuid()} className={tx('inline-flex items-center gap-1 bg-foreground text-background rounded-md px-1.5 py-0.5')}>
+          {label}
+          <CircleX />
+        </div>
+      }
+      return label;
     });
   }, [internalValue, options]);
 
@@ -100,19 +110,17 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
   const handleSelect = useCallback((index: number, value: Value) => {
     setSelectedIndices((prevSelectedIndices) => {
       const newSelectedIndices = new Set(prevSelectedIndices);
-      if (newSelectedIndices.has(index)) {
-        newSelectedIndices.delete(index);
-      } else {
-        newSelectedIndices.add(index);
-      }
+      newSelectedIndices.has(index) ? newSelectedIndices.delete(index) : newSelectedIndices.add(index);
       return newSelectedIndices;
     });
 
-    const v = value;
-    const _internalValue = options.some(option => option.value === v) ? [...internalValue, v] : internalValue.filter(value => value !== v);
-    setInternalValue(_internalValue);
+    const _internalValue = internalValue.includes(value) 
+      ? internalValue.filter(v => v !== value) 
+      : [...internalValue, value];
+      
+    setInternalValue(multiple ? _internalValue : _internalValue.length > 0 ? [_internalValue[_internalValue.length - 1]] : []);
     onValueChange?.(multiple ? _internalValue as T : _internalValue[0] as T);
-  }, []);
+  }, [internalValue, multiple, onValueChange]);
 
   const listNav = useListNavigation(context, {
     listRef: elementsRef,
@@ -143,7 +151,11 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
     [activeIndex, selectedIndices, getItemProps, handleSelect, searchValue]
   );
 
-  useEffect(() => {
+   const minSelectedIndex = useMemo(() => {
+    return Math.min(...Array.from(selectedIndices));
+  }, [selectedIndices]);
+
+  useLayoutEffect(() => {
     if (internalOpen && popoverRef.current && triggerRef.current) {
       let selectRect = triggerRef.current.getBoundingClientRect();
       let popover = popoverRef.current;
@@ -151,6 +163,26 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
       popover.style.width = selectRect.width + "px";
     }
   }, [internalOpen]);
+
+  useLayoutEffect(() => {
+    let popover = popoverRef.current;
+    const elements = elementsRef.current;
+    if (!internalOpen || !popover || !elements.length) return;
+    const topicItem = isNil(activeIndex) ? elements[minSelectedIndex] : elements[activeIndex];
+    if (topicItem) {
+      const itemHeight = topicItem.offsetHeight || 0;
+
+      const floatingHeight = popover.offsetHeight;
+      const top = topicItem.offsetTop - itemHeight;
+      const bottom = top + itemHeight * 3;
+
+      if (top < popover.scrollTop) {
+        popover.scrollTop -= popover.scrollTop - top + 6;
+      } else if (bottom > floatingHeight + popover.scrollTop) {
+        popover.scrollTop += bottom - floatingHeight - popover.scrollTop + 6;
+      }
+    }
+  }, [internalOpen, activeIndex, popoverRef, minSelectedIndex, elementsRef]);
 
   const referenceRefs = useMergedRefs(refs.setReference, triggerRef);
   const floatingRefs = useMergedRefs(refs.setFloating, popoverRef);
@@ -165,7 +197,7 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
         ref={referenceRefs} 
         tabIndex={0} 
         className={tx(`
-          items-center justify-center min-h-4 p-2 min-w-20 cursor-pointer rounded-md border
+          flex gap-1 items-center flex-wrap min-h-4 p-2 min-w-20 cursor-pointer rounded-md border
           border-solid border-gray-200 select-none relative`,
           className
         )}
@@ -174,9 +206,7 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
         })} 
       >
         {
-          selectedLabels.map((label, index) => (
-            <span key={index}>{label}</span>
-          ))
+          selectedLabels
         }
       </div>
 
