@@ -2,7 +2,8 @@ import {
   flip,
   useListNavigation,
   FloatingList,
-  FloatingFocusManager
+  FloatingFocusManager,
+  size
 } from "@floating-ui/react";
 import { SelectContext } from "./select-context";
 import { AnimatePresence, LazyMotion, m } from 'framer-motion';
@@ -23,7 +24,7 @@ const domAnimation = () => import('@/dom-animation').then((res) => res.default);
 const ARROW_HEIGHT = 7;
 const GAP = 2;
 
-export interface SelectProps<T extends K extends true ? Value[] : Value, K extends boolean> {
+export interface SelectProps<T extends K extends true ? Value[] : Value, K extends (boolean | undefined)> {
   className?: string;
   style?: React.CSSProperties;
   defaultOpen?: boolean;
@@ -43,12 +44,13 @@ export interface SelectProps<T extends K extends true ? Value[] : Value, K exten
   multiple?: K;
 }
 
-function Select<T extends K extends true ? Value[] : Value, K extends boolean>(props: SelectProps<T, K>) {
-  const { value, onValueChange, defaultValue, multiple =false, open, onOpenChange, children, root, defaultOpen, showArrow = true, className, style, searchable, placeholder = "Select..." } = props;
+function Select<T extends K extends true ? Value[] : Value, K extends (boolean | undefined) = undefined>(props: SelectProps<T, K>) {
+  const { value, onValueChange, defaultValue, multiple = false, open, onOpenChange, children, root, defaultOpen, showArrow = true, className, style, searchable, placeholder = "Select..." } = props;
   const [internalValue, setInternalValue] = useState(toArray(defaultValue));
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const arrowRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set());
   const [searchValue, setSearchValue] = useState("");
   const listRef = useRef<HTMLUListElement>(null);
@@ -72,12 +74,19 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
     setSelectedIndices(new Set(indices));
   }, [internalValue])
 
-  const { refs, floatingStyles, context } = useFloating({
+  const minSelectedIndex = useMemo(() => {
+    return Math.min(...Array.from(selectedIndices));
+  }, [selectedIndices]);
+
+  const { refs, floatingStyles, context } = useFloating<HTMLInputElement>({
     placement: "bottom-start",
     open: internalOpen,
     onOpenChange(open) {
       setInternalOpen(open);
       onOpenChange?.(open);
+      if (open) {
+        setActiveIndex(minSelectedIndex)
+      }
     },
     whileElementsMounted: autoUpdate,
     middleware: [
@@ -85,7 +94,24 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
         element: arrowRef,
       }),
       offset(ARROW_HEIGHT + GAP),
-      flip()
+      flip({
+        padding: {
+          top: 3,
+          bottom: 3,
+        }
+      }),
+      size({
+        apply({ elements, availableHeight }) {
+          Object.assign(elements.floating.style, {
+            width: elements.reference.getBoundingClientRect().width + "px",
+            maxHeight: `${Math.max(200, availableHeight)}px`,
+          });
+        },
+        padding: {
+          top: 3,
+          bottom: 3,
+        }
+      })
     ],
   });
 
@@ -108,11 +134,17 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
     const _internalValue = internalValue.includes(value) 
       ? internalValue.filter(v => v !== value) 
       : [...internalValue, value];
-      
 
-      console.log('multiple', multiple)
+    if (_internalValue.length > 0) {
+      setActiveIndex(null)
+    }
     setInternalValue(multiple ? _internalValue : (_internalValue.length > 0 ? [_internalValue[_internalValue.length - 1]] : []));
     onValueChange?.(multiple ? _internalValue as T : _internalValue[0] as T);
+
+    if (!multiple) {
+      setInternalOpen(false);
+      refs.domReference.current?.focus();
+    }
   }, [internalValue, multiple, onValueChange]);
 
   const selectedLabels = useMemo(() => {
@@ -135,9 +167,14 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
   const listNav = useListNavigation(context, {
     listRef: elementsRef,
     activeIndex,
-    selectedIndex: null,
+    selectedIndex: minSelectedIndex,
     onNavigate: setActiveIndex,
     loop: true,
+    virtual: true,
+    allowEscape: true,
+    focusItemOnOpen: true,
+    virtualItemRef: searchInputRef,
+    scrollItemIntoView: true
   });
   const click = useClick(context);
   const dismiss = useDismiss(context);
@@ -148,37 +185,6 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
     getFloatingProps,
     getItemProps
   } = useInteractions([listNav, click, dismiss, role]);
-
-   const minSelectedIndex = useMemo(() => {
-    return Math.min(...Array.from(selectedIndices));
-  }, [selectedIndices]);
-
-  useLayoutEffect(() => {
-    if (internalOpen && popoverRef.current && triggerRef.current) {
-      let selectRect = triggerRef.current.getBoundingClientRect();
-      let popover = popoverRef.current;
-
-      popover.style.width = selectRect.width + "px";
-    }
-  }, [internalOpen]);
-
-  useLayoutEffect(() => {
-    if (!internalOpen) return;
-    
-    requestAnimationFrame(() => {
-      const elements = elementsRef.current;
-      const list = listRef.current;
-      if (!elements.length || !list) return;
-
-      if (list.offsetHeight < list.scrollHeight) {
-        const item = elements[minSelectedIndex];
-
-        if (item) {
-          list.scrollTop = item.offsetTop - list.offsetHeight / 2 + item.offsetHeight / 2 + 9;
-        }
-      }
-    })
-  }, [internalOpen, popoverRef, minSelectedIndex, elementsRef.current.length, listRef.current]);
 
   const referenceRefs = useMergedRefs(refs.setReference, triggerRef);
   const floatingRefs = useMergedRefs(refs.setFloating, popoverRef);
@@ -193,7 +199,7 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
         ref={referenceRefs} 
         tabIndex={0} 
         className={tx(`
-          flex gap-1 items-center flex-wrap p-2 min-h-[40px] min-w-[200px] cursor-pointer rounded-md border
+          flex gap-1 items-center flex-wrap p-2 min-h-[40px] min-w-[200px] cursor-pointer rounded-md border outline-none
           border-solid border-gray-200 select-none relative`,
           className
         )}
@@ -204,9 +210,29 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
         {
           selectedLabels
         }
+        {searchable && (
+          <div className={tx('flex-auto inline-grid col-end-3 col-start-1 grid-cols-[0px_min-content] row-end-2 row-start-1')}>
+            <input
+              autoCapitalize="off"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+              ref={searchInputRef}
+              tabIndex={1}
+              type="text"
+              value={searchValue}
+              onChange={handleSearchChange}
+              placeholder={placeholder}
+              className={tx(`
+                w-full min-w-[2px] inline bg-transparent border-none outline-none h-full pl-1 appearance-none
+              `)}
+            />
+          </div>
+        )}
       </div>
 
       <SelectContext.Provider value={{
+        multiple,
         activeIndex,
         selectedIndices,
         getItemProps,
@@ -217,11 +243,16 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
         <AnimatePresence>
           <FloatingPortal root={root}>
             {internalOpen && (
-              <FloatingFocusManager initialFocus={1} context={context}>
-                <div ref={floatingRefs} style={{
-                  ...floatingStyles,
-                  boxShadow: '0px 0px 15px 0px rgba(0, 0, 0, .03), 0px 2px 30px 0px rgba(0, 0, 0, .08), 0px 0px 1px 0px rgba(0, 0, 0, .3)',
-                }} {...getFloatingProps()}  className={tx('py-3 box-border subpixel-antialiased outline-none box-border bg-background [&_*]:box-border ')}>
+              <FloatingFocusManager initialFocus={-1} context={context}>
+                <div 
+                  ref={floatingRefs} 
+                  style={{
+                    ...floatingStyles,
+                    boxShadow: '0px 0px 15px 0px rgba(0, 0, 0, .03), 0px 2px 30px 0px rgba(0, 0, 0, .08), 0px 0px 1px 0px rgba(0, 0, 0, .3)',
+                  }} 
+                  {...getFloatingProps()} 
+                  className={tx('py-3 box-border subpixel-antialiased outline-none box-border bg-background [&_*]:box-border ')}
+                >
                   <LazyMotion features={domAnimation}>
                     <m.div
                       animate="enter"
@@ -230,26 +261,11 @@ function Select<T extends K extends true ? Value[] : Value, K extends boolean>(p
                       variants={TRANSITION_VARIANTS.scaleSpringOpacity}
                     >
                       {showArrow && <FloatingArrow context={context} ref={arrowRef} className={tx('fill-background')} />}
-                      {searchable && (
-                        <div className="py-2 px-3">
-                          <input
-                              autoFocus
-                              tabIndex={1}
-                              type="text"
-                              value={searchValue}
-                              onChange={handleSearchChange}
-                              placeholder={placeholder}
-                              className={tx(`
-                                w-full bg-transparent border-none outline-none h-8 rounded-md mb-2 p-2
-                                placeholder:text-gray-400 border-gray-200 border-1 border-solid
-                                `)}
-                            />
-                          </div>
-                        )}
+                      
                       <ul
                         ref={listRef}
                         className={tx(`
-                          px-3 gap-0.5 rounded-lg z-10 w-full inline-flex flex-col m-0 p-0 overflow-y-auto max-h-60 list-none 
+                          px-3 gap-0.5 rounded-lg z-10 w-full inline-flex flex-col m-0 p-0 list-none 
                         `)}
                       >
                         <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>

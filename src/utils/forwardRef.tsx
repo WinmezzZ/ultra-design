@@ -1,5 +1,4 @@
-import { Merge } from '@/types/generic';
-import { ComponentPropsWithoutRef, ComponentPropsWithRef, ElementType, forwardRef as internalForwardRef, ReactElement } from 'react';
+import { PropsWithoutRef, ComponentPropsWithRef, ElementType, forwardRef as internalForwardRef, ReactElement } from 'react';
 
 
 export const forwardRef = <
@@ -7,7 +6,7 @@ export const forwardRef = <
   Tag extends ElementType = 'div',
 >(
   render: (
-    props: Merge<ComponentPropsWithoutRef<Tag>, Props>,
+    props: PropsWithoutRef<Props>,
     ref?: ComponentPropsWithRef<Tag>['ref']
   ) => ReactElement | null
 ) => {

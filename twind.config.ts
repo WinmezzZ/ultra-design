@@ -2,8 +2,6 @@ import { defineConfig, autoDarkColor } from '@twind/core'
 import presetTailwind from '@twind/preset-tailwind'
 import { gray } from '@twind/preset-tailwind/colors'
 
-console.log(gray)
-
 export default  defineConfig({
   darkMode: 'class',
   darkColor: autoDarkColor,

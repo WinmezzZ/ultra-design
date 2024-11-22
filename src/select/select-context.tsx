@@ -3,6 +3,7 @@ import { useInteractions } from "@floating-ui/react";
 import { Value } from "@/types/value";
 
 export type SelectContextProps = {
+  multiple: boolean;
   open: boolean;
   activeIndex: number | null;
   selectedIndices: Set<number>;

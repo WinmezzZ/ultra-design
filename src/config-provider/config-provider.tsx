@@ -54,6 +54,7 @@ const ConfigProvider: FC<ComponentCommonProps & { children: ReactElement }> = ((
         --input: #d9e6ff;
         --ring: #3399ff;
         --radius: rem;
+        font-size: 14px;
       }
       .dark {
         --background: #000000;
